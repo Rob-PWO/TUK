@@ -1,0 +1,340 @@
+/* ==========================================================================
+   TACKLEUK — Shared interaction layer (vanilla JS, no dependencies)
+   Defensive: every feature checks for its elements, so one file powers
+   every page. Conversion features: predictive search, cart drawer + free
+   delivery progress, quick-view, sticky buy bar, countdown, toasts,
+   wishlist, filters, tabs, recently-viewed.
+   ========================================================================== */
+(function () {
+  "use strict";
+  const $ = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const money = (n) => "£" + n.toFixed(2);
+  const FREE_DELIVERY = 150;
+
+  /* ---- tiny global store (persisted) ---------------------------------- */
+  const store = {
+    get cart() { try { return JSON.parse(localStorage.getItem("tuk_cart") || "[]"); } catch { return []; } },
+    set cart(v) { localStorage.setItem("tuk_cart", JSON.stringify(v)); },
+    get wish() { try { return JSON.parse(localStorage.getItem("tuk_wish") || "[]"); } catch { return []; } },
+    set wish(v) { localStorage.setItem("tuk_wish", JSON.stringify(v)); },
+  };
+
+  /* ---- toast ----------------------------------------------------------- */
+  let toastWrap;
+  function toast(msg, sub) {
+    if (!toastWrap) {
+      toastWrap = document.createElement("div");
+      toastWrap.className = "toast-wrap";
+      document.body.appendChild(toastWrap);
+    }
+    const t = document.createElement("div");
+    t.className = "toast";
+    t.innerHTML =
+      '<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>' +
+      '<div><div>' + msg + '</div>' + (sub ? '<div style="font-weight:500;opacity:.75;font-size:.8rem">' + sub + '</div>' : '') + '</div>';
+    toastWrap.appendChild(t);
+    requestAnimationFrame(() => t.classList.add("show"));
+    setTimeout(() => { t.classList.remove("show"); setTimeout(() => t.remove(), 300); }, 3200);
+  }
+
+  /* ---- header scroll shadow ------------------------------------------- */
+  const header = $(".header");
+  if (header) {
+    const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* ---- predictive search ---------------------------------------------- */
+  const search = $(".search");
+  if (search) {
+    const input = $("input", search);
+    const sug = $(".s-suggest", search);
+    if (input && sug) {
+      const show = () => sug.classList.add("open");
+      const hide = () => sug.classList.remove("open");
+      input.addEventListener("focus", show);
+      input.addEventListener("input", () => { input.value.length ? show() : show(); });
+      document.addEventListener("click", (e) => { if (!search.contains(e.target)) hide(); });
+      input.addEventListener("keydown", (e) => { if (e.key === "Escape") { hide(); input.blur(); } });
+    }
+  }
+
+  /* ---- cart count badges ---------------------------------------------- */
+  function cartCount() { return store.cart.reduce((s, i) => s + i.qty, 0); }
+  function cartTotal() { return store.cart.reduce((s, i) => s + i.price * i.qty, 0); }
+  function syncCount() {
+    const n = cartCount();
+    $$("[data-cart-count]").forEach((el) => { el.textContent = n; el.style.display = n ? "" : "none"; });
+  }
+
+  /* ---- free delivery progress ----------------------------------------- */
+  function syncProgress() {
+    const total = cartTotal();
+    const pct = Math.min(100, (total / FREE_DELIVERY) * 100);
+    const remain = Math.max(0, FREE_DELIVERY - total);
+    $$("[data-ship-bar]").forEach((b) => (b.style.width = pct + "%"));
+    $$("[data-ship-msg]").forEach((m) => {
+      m.innerHTML = remain <= 0
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your order qualifies for <b>FREE delivery</b>!'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> Add <b>' + money(remain) + '</b> more for FREE delivery';
+    });
+  }
+
+  /* ---- cart drawer ----------------------------------------------------- */
+  const drawer = $("#cartDrawer");
+  const overlay = $("#overlay");
+  function openDrawer() { if (drawer) { renderDrawer(); drawer.classList.add("open"); overlay && overlay.classList.add("open"); document.body.style.overflow = "hidden"; } }
+  function closeAll() {
+    drawer && drawer.classList.remove("open");
+    $$(".modal.open").forEach((m) => m.classList.remove("open"));
+    $$(".filters.open").forEach((f) => f.classList.remove("open"));
+    overlay && overlay.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+  overlay && overlay.addEventListener("click", closeAll);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeAll(); });
+  $$("[data-open-cart]").forEach((b) => b.addEventListener("click", (e) => { e.preventDefault(); openDrawer(); }));
+  $$("[data-close]").forEach((b) => b.addEventListener("click", closeAll));
+
+  function renderDrawer() {
+    const body = $("[data-cart-body]", drawer);
+    if (!body) return;
+    const cart = store.cart;
+    if (!cart.length) {
+      body.innerHTML = '<div style="text-align:center;padding:60px 10px;color:var(--ink-500)">' +
+        '<svg viewBox="0 0 24 24" width="54" height="54" fill="none" stroke="currentColor" stroke-width="1.4" style="margin:0 auto 14px;opacity:.4"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>' +
+        '<p style="font-weight:700;color:var(--navy-900);font-family:var(--display)">Your basket is empty</p>' +
+        '<p style="font-size:.85rem;margin-top:6px">Let\'s find you some gear.</p>' +
+        '<a href="category.html" class="btn btn-primary" style="margin-top:18px">Start shopping</a></div>';
+    } else {
+      body.innerHTML = cart.map((it, i) =>
+        '<div class="cart-line">' +
+        '<div class="ph"><img src="' + it.img + '" alt="" loading="lazy"></div>' +
+        '<div class="ci"><div class="n">' + it.name + '</div>' +
+        (it.variant ? '<div class="meta">' + it.variant + '</div>' : '') +
+        '<div class="row"><div class="qty-sm"><button data-dec="' + i + '">−</button><span>' + it.qty + '</span><button data-inc="' + i + '">+</button></div>' +
+        '<div class="price">' + money(it.price * it.qty) + '</div></div>' +
+        '<button class="rm" data-rm="' + i + '">Remove</button></div></div>'
+      ).join("");
+      $$("[data-inc]", body).forEach((b) => b.onclick = () => chQty(+b.dataset.inc, 1));
+      $$("[data-dec]", body).forEach((b) => b.onclick = () => chQty(+b.dataset.dec, -1));
+      $$("[data-rm]", body).forEach((b) => b.onclick = () => { const c = store.cart; c.splice(+b.dataset.rm, 1); store.cart = c; afterCart(); renderDrawer(); });
+    }
+    const sub = $("[data-cart-sub]", drawer);
+    if (sub) sub.textContent = money(cartTotal());
+    syncProgress();
+  }
+  function chQty(i, d) { const c = store.cart; if (!c[i]) return; c[i].qty = Math.max(1, c[i].qty + d); store.cart = c; afterCart(); renderDrawer(); }
+
+  function afterCart() { syncCount(); syncProgress(); }
+
+  function addToCart(p, openIt = true) {
+    const c = store.cart;
+    const ex = c.find((i) => i.id === p.id && i.variant === p.variant);
+    if (ex) ex.qty += p.qty || 1; else c.push({ ...p, qty: p.qty || 1 });
+    store.cart = c;
+    afterCart();
+    toast(p.name + " added to basket", "Total " + money(cartTotal()));
+    if (openIt) openDrawer();
+  }
+
+  /* ---- add-to-cart buttons (data-attrs) -------------------------------- */
+  $$("[data-add]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const d = btn.dataset;
+      const qtyEl = d.qtyFrom ? $(d.qtyFrom) : null;
+      addToCart({
+        id: d.add, name: d.name, price: +d.price, img: d.img,
+        variant: d.variant || (qtyEl ? null : null),
+        qty: qtyEl ? +qtyEl.value || 1 : 1,
+      }, d.silent !== "true");
+      pushRecent(d);
+    });
+  });
+
+  /* ---- quick view ------------------------------------------------------ */
+  const qvModal = $("#quickView");
+  $$("[data-quickview]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (!qvModal) return;
+      const d = btn.dataset;
+      $("[data-qv-img]", qvModal).src = d.img;
+      $("[data-qv-name]", qvModal).textContent = d.name;
+      $("[data-qv-brand]", qvModal).textContent = d.brand || "";
+      $("[data-qv-price]", qvModal).textContent = money(+d.price);
+      $("[data-qv-desc]", qvModal).textContent = d.desc || "";
+      const addBtn = $("[data-qv-add]", qvModal);
+      addBtn.dataset.add = d.quickview; addBtn.dataset.name = d.name;
+      addBtn.dataset.price = d.price; addBtn.dataset.img = d.img;
+      qvModal.classList.add("open"); overlay && overlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+    });
+  });
+  if (qvModal) {
+    const addBtn = $("[data-qv-add]", qvModal);
+    addBtn && addBtn.addEventListener("click", () => {
+      addToCart({ id: addBtn.dataset.add, name: addBtn.dataset.name, price: +addBtn.dataset.price, img: addBtn.dataset.img, qty: 1 }, false);
+      closeAll(); setTimeout(openDrawer, 260);
+    });
+  }
+
+  /* ---- wishlist -------------------------------------------------------- */
+  function syncWish() {
+    const w = store.wish;
+    $$("[data-wish]").forEach((b) => b.classList.toggle("on", w.includes(b.dataset.wish)));
+    $$("[data-wish-count]").forEach((el) => { el.textContent = w.length; el.style.display = w.length ? "" : "none"; });
+  }
+  $$("[data-wish]").forEach((b) => b.addEventListener("click", (e) => {
+    e.preventDefault(); e.stopPropagation();
+    const id = b.dataset.wish; const w = store.wish; const i = w.indexOf(id);
+    if (i > -1) { w.splice(i, 1); toast("Removed from wishlist"); } else { w.push(id); toast("Saved to wishlist ❤"); }
+    store.wish = w; syncWish();
+  }));
+
+  /* ---- qty steppers (generic) ----------------------------------------- */
+  $$("[data-qty]").forEach((q) => {
+    const inp = $("input", q);
+    $("[data-qminus]", q) && $("[data-qminus]", q).addEventListener("click", () => inp.value = Math.max(1, (+inp.value || 1) - 1));
+    $("[data-qplus]", q) && $("[data-qplus]", q).addEventListener("click", () => inp.value = (+inp.value || 1) + 1);
+  });
+
+  /* ---- PDP gallery ----------------------------------------------------- */
+  const gallery = $(".gallery");
+  if (gallery) {
+    const main = $(".main img", gallery);
+    $$(".thumbs button", gallery).forEach((t) => t.addEventListener("click", () => {
+      $$(".thumbs button", gallery).forEach((x) => x.classList.remove("active"));
+      t.classList.add("active");
+      const img = $("img", t); if (img && main) main.src = img.src.replace("w=160", "w=900");
+    }));
+  }
+
+  /* ---- tabs ------------------------------------------------------------ */
+  $$("[data-tabs]").forEach((group) => {
+    const btns = $$("[data-tab]", group);
+    btns.forEach((b) => b.addEventListener("click", () => {
+      btns.forEach((x) => x.classList.remove("active"));
+      b.classList.add("active");
+      const tgt = b.dataset.tab;
+      $$(".tabpanel", group.parentElement).forEach((p) => p.classList.toggle("active", p.dataset.panel === tgt));
+    }));
+  });
+
+  /* ---- filter accordions + mobile filter toggle ----------------------- */
+  $$(".filter-group h5").forEach((h) => h.addEventListener("click", () => h.parentElement.classList.toggle("collapsed")));
+  $$("[data-filter-toggle]").forEach((b) => b.addEventListener("click", () => {
+    const f = $(".filters"); if (f) { f.classList.add("open"); overlay && overlay.classList.add("open"); document.body.style.overflow = "hidden"; }
+  }));
+  $$("[data-filter-close]").forEach((b) => b.addEventListener("click", closeAll));
+
+  /* ---- sticky buy bar (PDP) ------------------------------------------- */
+  const stickyBar = $(".sticky-bar");
+  const buyAnchor = $("[data-buy-anchor]");
+  if (stickyBar && buyAnchor) {
+    const io = new IntersectionObserver(([e]) => stickyBar.classList.toggle("show", !e.isIntersecting && e.boundingClientRect.top < 0), { threshold: 0 });
+    io.observe(buyAnchor);
+  }
+
+  /* ---- countdown to dispatch cut-off (today 15:00) -------------------- */
+  $$("[data-countdown]").forEach((el) => {
+    function tick() {
+      const now = new Date();
+      const cutoff = new Date(now); cutoff.setHours(15, 0, 0, 0);
+      let label = "for same-day dispatch";
+      if (now >= cutoff) { cutoff.setDate(cutoff.getDate() + 1); label = "for next-day dispatch"; }
+      let diff = Math.floor((cutoff - now) / 1000);
+      const h = String(Math.floor(diff / 3600)).padStart(2, "0");
+      const m = String(Math.floor((diff % 3600) / 60)).padStart(2, "0");
+      const s = String(diff % 60).padStart(2, "0");
+      el.innerHTML = 'Order within <span class="cd">' + h + ":" + m + ":" + s + '</span> ' + label;
+    }
+    tick(); setInterval(tick, 1000);
+  });
+
+  /* ---- "viewing now" social proof ------------------------------------- */
+  $$("[data-viewing]").forEach((el) => {
+    const base = 6 + Math.floor(Math.random() * 18);
+    el.querySelector("[data-viewing-n]").textContent = base;
+    setInterval(() => {
+      const n = Math.max(3, base + Math.floor(Math.random() * 7) - 3);
+      const t = el.querySelector("[data-viewing-n]"); if (t) t.textContent = n;
+    }, 4000);
+  });
+
+  /* ---- hero slider ----------------------------------------------------- */
+  const hero = $("[data-hero]");
+  if (hero) {
+    const slides = $$(".hero-slide", hero);
+    const dots = $$(".hero-dots button", hero);
+    let idx = 0;
+    function go(i) {
+      idx = (i + slides.length) % slides.length;
+      slides.forEach((s, k) => s.style.display = k === idx ? "flex" : "none");
+      dots.forEach((d, k) => d.classList.toggle("active", k === idx));
+    }
+    if (slides.length > 1) {
+      dots.forEach((d, k) => d.addEventListener("click", () => go(k)));
+      go(0); setInterval(() => go(idx + 1), 6000);
+    }
+  }
+
+  /* ---- carousels ------------------------------------------------------- */
+  $$("[data-carousel]").forEach((c) => {
+    const track = $(".carousel-track", c);
+    if (!track) return;
+    const scope = c.closest("section") || document; // nav arrows may live in the section header
+    const prev = $("[data-prev]", scope), next = $("[data-next]", scope);
+    const step = () => Math.min(track.clientWidth * 0.8, 600);
+    prev && prev.addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
+    next && next.addEventListener("click", () => track.scrollBy({ left: step(), behavior: "smooth" }));
+  });
+
+  /* ---- recently viewed ------------------------------------------------- */
+  function pushRecent(d) {
+    if (!d || !d.add) return;
+    try {
+      let r = JSON.parse(localStorage.getItem("tuk_recent") || "[]");
+      r = r.filter((x) => x.id !== d.add);
+      r.unshift({ id: d.add, name: d.name, price: d.price, img: d.img });
+      localStorage.setItem("tuk_recent", JSON.stringify(r.slice(0, 8)));
+    } catch {}
+  }
+
+  /* ---- delivery / payment selectors ----------------------------------- */
+  $$("[data-ship-opt]").forEach((o) => o.addEventListener("click", () => {
+    $$("[data-ship-opt]").forEach((x) => x.classList.remove("sel"));
+    o.classList.add("sel");
+  }));
+  $$("[data-pay-method] .pm-head").forEach((h) => h.addEventListener("click", () => {
+    $$("[data-pay-method]").forEach((x) => x.classList.remove("sel"));
+    h.parentElement.classList.add("sel");
+  }));
+
+  /* ---- voucher demo ---------------------------------------------------- */
+  $$("[data-voucher]").forEach((form) => form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const v = $("input", form).value.trim().toUpperCase();
+    if (v) toast(v === "FISH10" ? "Code FISH10 applied — 10% off!" : "Voucher \"" + v + "\" applied", v === "FISH10" ? "You saved on this order" : "Checking eligibility…");
+    $("input", form).value = "";
+  }));
+
+  /* ---- newsletter demo ------------------------------------------------- */
+  $$("[data-newsletter]").forEach((form) => form.addEventListener("submit", (e) => {
+    e.preventDefault(); toast("You're subscribed! 🎣", "Check your inbox for 10% off"); form.reset();
+  }));
+
+  /* ---- back to top ----------------------------------------------------- */
+  const btt = $(".back-to-top");
+  if (btt) {
+    window.addEventListener("scroll", () => btt.classList.toggle("show", window.scrollY > 600), { passive: true });
+    btt.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  }
+
+  /* ---- init ------------------------------------------------------------ */
+  syncCount(); syncWish(); syncProgress();
+  window.TUK = { addToCart, toast, openDrawer };
+})();

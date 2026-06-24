@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" fill="none">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#F3FAFE"/><stop offset="1" stop-color="#E7F4FD"/>
+ </linearGradient>
+ <radialGradient id="halo" cx="50%" cy="44%" r="48%">
+  <stop offset="0" stop-color="#ffffff" stop-opacity=".9"/>
+  <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+ </radialGradient>
+</defs>
+<rect width="600" height="600" fill="url(#bg)"/>
+<circle cx="300" cy="270" r="240" fill="url(#halo)"/>
+<g opacity="0.05" stroke="#0A2540" stroke-width="1">
+ <path d="M0 150 H600 M0 300 H600 M0 450 H600 M150 0 V600 M300 0 V600 M450 0 V600"/>
+</g>
+<g transform="translate(300,285)" stroke="#0A2540" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none">
+<path d="M-120 0 q60 -70 150 0 q-90 70 -150 0 Z" fill="#1391DB" fill-opacity=".07"/>
+ <circle cx="60" cy="-6" r="10" fill="#0A2540" stroke="none"/>
+ <path d="M30 50 v40 m40 -50 v44 m-90 -40 v36" stroke-width="7"/>
+ <path d="M120 0 h44" stroke-width="7"/>
+</g>
+<g opacity="0.5" transform="translate(508,52)">
+ <text x="0" y="0" font-family="Manrope,Arial,sans-serif" font-size="22" font-weight="800" fill="#0A2540" text-anchor="end" opacity="0.35">TACKLEUK</text>
+</g>
+</svg>
