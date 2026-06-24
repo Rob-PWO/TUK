@@ -270,7 +270,8 @@ h4{font-size:1.05rem;font-weight:700}
 .header.scrolled{box-shadow:var(--sh-sm)}
 .header-main{border-bottom:1px solid var(--line)}
 .header-main .container{display:flex;align-items:center;gap:26px;height:84px}
-.logo{display:flex;flex-direction:column;line-height:1;flex:none}
+.logo{display:flex;align-items:center;line-height:1;flex:none}
+.logo img{height:46px;width:auto;max-width:100%;display:block}
 .logo .wm{font-family:var(--display);font-weight:800;font-size:1.9rem;letter-spacing:-.035em;color:var(--navy-800)}
 .logo .wm .uk{color:var(--blue-500)}
 .logo .tag{font-family:"Caveat",cursive;font-size:1.08rem;line-height:.82;letter-spacing:.005em;text-transform:lowercase;color:var(--navy-700);font-weight:600;margin-top:2px;margin-left:3px}
@@ -903,3 +904,8 @@ h4{font-size:1.05rem;font-weight:700}
 @media(max-width:860px){
   .fbt{grid-template-columns:1fr;gap:18px}
 }
+
+/* real logo image sizing (header / footer / mobile menu) */
+.footer .logo img{height:40px}
+.menu-drawer .md-head .logo img{height:34px}
+@media(max-width:860px){ .logo img{height:40px} }

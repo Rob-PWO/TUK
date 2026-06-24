@@ -143,7 +143,7 @@
     md.className = "menu-drawer";
     md.setAttribute("aria-label", "Main menu");
     md.innerHTML =
-      '<div class="md-head"><a href="index.html" class="logo"><span class="wm">TACKLE<span class="uk">UK</span></span><span class="tag">the home of fishing</span></a>' +
+      '<div class="md-head"><a href="index.html" class="logo"><img src="assets/img/logo-white.webp" alt="TackleUK - the home of fishing" height="34"></a>' +
       '<button class="drawer-close" type="button" aria-label="Close menu"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>' +
       '<div class="md-usp">' + ic.van + " FREE next-day delivery over £150</div>" +
       '<div class="md-body">' + cats + "</div>" +
