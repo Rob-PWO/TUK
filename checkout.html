@@ -7,7 +7,7 @@
 <meta name="description" content="Secure checkout at Tackleuk. SSL encrypted, Klarna available, free next-day delivery over £150.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/tuk.css">
 </head>
 <body>
@@ -40,10 +40,13 @@
     <div>
       <!-- express -->
       <div class="co-card" style="text-align:center;padding:20px 26px">
-        <p class="text-sm muted mb-2 font-semibold">Express checkout — skip the form</p>
-        <div class="flex gap-2" style="max-width:480px;margin:0 auto">
-          <div class="paypal-btn" style="flex:1">Pay with <span style="margin-left:5px">PayPal</span></div>
-          <div class="paypal-btn" style="flex:1;background:#FFB3C7;color:#0A0A0A">Klarna.</div>
+        <p class="text-sm muted mb-2 font-semibold">Express checkout - skip the form</p>
+        <div style="max-width:480px;margin:0 auto">
+          <button type="button" class="applepay-btn w-full" aria-label="Pay with Apple Pay" style="margin-bottom:9px"><svg viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg> Pay</button>
+          <div class="flex gap-2">
+            <div class="paypal-btn" style="flex:1">Pay with <span style="margin-left:5px">PayPal</span></div>
+            <div class="paypal-btn" style="flex:1;background:#FFB3C7;color:#0A0A0A">Klarna.</div>
+          </div>
         </div>
         <div class="express"><div class="or">OR PAY BY CARD BELOW</div></div>
       </div>
@@ -63,9 +66,9 @@
       <!-- delivery address -->
       <div class="co-card">
         <h3><span class="n">2</span> Delivery address</h3>
-        <div class="field full mb-3"><label>Find your address</label><input class="input" placeholder="Start typing your postcode…"><span class="text-xs muted">Powered by address lookup — start with your postcode</span></div>
+        <div class="field full mb-3"><label>Find your address</label><input class="input" placeholder="Start typing your postcode…"><span class="text-xs muted">Powered by address lookup - start with your postcode</span></div>
         <div class="form-grid">
-          <div class="field full"><label>Address line 1 <span class="req">*</span></label><input class="input" placeholder="27–29 Forest Hill"></div>
+          <div class="field full"><label>Address line 1 <span class="req">*</span></label><input class="input" placeholder="27-29 Forest Hill"></div>
           <div class="field full"><label>Address line 2</label><input class="input" placeholder="Optional"></div>
           <div class="field"><label>Town / City <span class="req">*</span></label><input class="input" placeholder="Yeovil"></div>
           <div class="field"><label>County</label><input class="input" placeholder="Somerset"></div>
@@ -80,7 +83,7 @@
         <h3><span class="n">3</span> Delivery method</h3>
         <div class="ship-opt sel" data-ship-opt><span class="radio"></span><div class="so-main"><div class="t">Free Next-Day Delivery <span class="pr">FREE</span></div><div class="d">Order before 3pm today · Estimated Wed 25 Jun</div></div></div>
         <div class="ship-opt" data-ship-opt><span class="radio"></span><div class="so-main"><div class="t">Saturday Delivery <span class="pr" style="color:var(--ink-700)">£24.99</span></div><div class="d">Guaranteed before 1pm Saturday 28 Jun</div></div></div>
-        <div class="ship-opt" data-ship-opt><span class="radio"></span><div class="so-main"><div class="t">Click & Collect — Yeovil Store <span class="pr">FREE</span></div><div class="d">Ready to collect from tomorrow, 9am</div></div></div>
+        <div class="ship-opt" data-ship-opt><span class="radio"></span><div class="so-main"><div class="t">Click & Collect - Yeovil Store <span class="pr">FREE</span></div><div class="d">Ready to collect from tomorrow, 9am</div></div></div>
       </div>
 
       <!-- payment -->
@@ -107,7 +110,7 @@
             <div class="pm-body"><p class="muted text-sm" style="padding:4px 0">You'll be securely redirected to PayPal to complete your payment.</p></div>
           </div>
           <div class="pay-method" data-pay-method>
-            <div class="pm-head"><span class="radio"></span><span class="pm-name">Klarna — Pay in 3 or spread the cost</span><span class="pm-logos"><span class="pay" style="height:24px"><svg viewBox="0 0 56 30" width="44"><rect width="56" height="30" rx="4" fill="#FFB3C7"/><text x="28" y="20" font-family="Arial" font-weight="800" font-size="12" fill="#0A0A0A" text-anchor="middle">Klarna</text></svg></span></span></div>
+            <div class="pm-head"><span class="radio"></span><span class="pm-name">Klarna - Pay in 3 or spread the cost</span><span class="pm-logos"><span class="pay" style="height:24px"><svg viewBox="0 0 56 30" width="44"><rect width="56" height="30" rx="4" fill="#FFB3C7"/><text x="28" y="20" font-family="Arial" font-weight="800" font-size="12" fill="#0A0A0A" text-anchor="middle">Klarna</text></svg></span></span></div>
             <div class="pm-body"><p class="muted text-sm" style="padding:4px 0">3 interest-free instalments of <b>£254.99</b>, or spread over up to 36 months. 18+, T&Cs apply, credit subject to status.</p></div>
           </div>
         </div>
@@ -141,13 +144,9 @@
       </div>
 
       <div class="trust-checkout">
-        <div class="tc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> Free next-day delivery — order before 3pm</div>
+        <div class="tc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> Free next-day delivery - order before 3pm</div>
         <div class="tc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 60-day returns, no quibble</div>
         <div class="tc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 5v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V5l-8-3z"/></svg> Trusted by 28,000+ reviewers · 4.7/5</div>
-      </div>
-
-      <div class="text-center text-sm muted">
-        <p>Need a hand? Call us on <b style="color:var(--navy-900)">01935 476777</b></p>
       </div>
     </div>
   </div>

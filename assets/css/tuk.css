@@ -1,5 +1,5 @@
 /* ==========================================================================
-   TACKLEUK — Redesign Design System
+   TACKLEUK - Redesign Design System
    Bespoke, framework-free CSS. Brand-locked palette, conversion-first UI.
    --------------------------------------------------------------------------
    Sections:
@@ -271,9 +271,9 @@ h4{font-size:1.05rem;font-weight:700}
 .header-main{border-bottom:1px solid var(--line)}
 .header-main .container{display:flex;align-items:center;gap:26px;height:84px}
 .logo{display:flex;flex-direction:column;line-height:1;flex:none}
-.logo .wm{font-family:var(--display);font-weight:800;font-size:1.85rem;letter-spacing:-.03em;color:var(--navy-800)}
+.logo .wm{font-family:var(--display);font-weight:800;font-size:1.9rem;letter-spacing:-.035em;color:var(--navy-800)}
 .logo .wm .uk{color:var(--blue-500)}
-.logo .tag{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-400);font-weight:600;margin-top:3px;margin-left:2px}
+.logo .tag{font-family:"Caveat",cursive;font-size:1.08rem;line-height:.82;letter-spacing:.005em;text-transform:lowercase;color:var(--navy-700);font-weight:600;margin-top:2px;margin-left:3px}
 
 /* search */
 .search{flex:1;position:relative;max-width:680px}
@@ -311,7 +311,7 @@ h4{font-size:1.05rem;font-weight:700}
 
 /* nav */
 .nav{background:#fff;border-bottom:1px solid var(--line)}
-.nav .container{display:flex;align-items:center;gap:2px;height:52px}
+.nav .container{display:flex;align-items:center;justify-content:space-between;gap:4px;height:52px}
 .nav-item{position:relative}
 .nav-link{display:flex;align-items:center;gap:6px;height:52px;padding:0 16px;font-family:var(--display);font-weight:700;font-size:.92rem;color:var(--navy-800);border-bottom:3px solid transparent;transition:var(--t-fast)}
 .nav-link:hover{color:var(--blue-600);border-bottom-color:var(--blue-500)}
@@ -783,9 +783,14 @@ h4{font-size:1.05rem;font-weight:700}
   .tile.lg{grid-column:span 2}
 }
 @media(max-width:860px){
-  :root{--header-h:118px}
-  .nav,.announce-side,.search .s-cat,.trustbar .ti:nth-child(n+4){display:none}
-  .header-main .container{height:68px;gap:14px}
+  :root{--header-h:64px}
+  .trustbar,.nav,.announce-side,.search .s-cat,.mega{display:none}
+  .hamburger{display:flex;order:0}
+  .header-main .container{height:auto;flex-wrap:wrap;gap:10px 12px;padding-block:11px}
+  .logo{order:1;margin-right:auto}
+  .header-tools{order:2}
+  .search{order:3;flex-basis:100%;max-width:100%;width:100%}
+  .search input{padding:11px 0}
   .tool .lbl{display:none}
   .products{grid-template-columns:repeat(2,1fr);gap:14px}
   .usp-strip{grid-template-columns:1fr 1fr}
@@ -818,4 +823,83 @@ h4{font-size:1.05rem;font-weight:700}
   body{padding-bottom:62px}
   .sticky-bar{bottom:62px}
   .back-to-top{bottom:74px}
+}
+
+/* ==========================================================================
+   22. ADDED COMPONENTS — logo script, mobile menu, key points, express pay,
+       frequently-bought-together
+   ========================================================================== */
+
+/* hamburger trigger (hidden on desktop; shown <=860 in the media query above) */
+.hamburger{display:none;flex:none;width:44px;height:44px;border-radius:var(--r-sm);align-items:center;justify-content:center;color:var(--navy-800);transition:var(--t-fast)}
+.hamburger:hover{background:var(--bg-soft)}
+.hamburger svg{width:26px;height:26px}
+
+/* off-canvas mobile menu */
+.menu-drawer{position:fixed;top:0;left:0;height:100%;width:min(370px,88%);background:#fff;z-index:96;display:flex;flex-direction:column;transform:translateX(-100%);transition:transform var(--t);box-shadow:var(--sh-lg)}
+.menu-drawer.open{transform:translateX(0)}
+.menu-drawer .md-head{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--line);background:var(--navy-900)}
+.menu-drawer .md-head .logo .wm{color:#fff}
+.menu-drawer .md-head .logo .tag{color:var(--blue-300)}
+.menu-drawer .md-head .drawer-close{background:rgba(255,255,255,.12);color:#fff}
+.menu-drawer .md-head .drawer-close:hover{background:rgba(255,255,255,.22)}
+.md-usp{background:var(--sky-50);border-radius:var(--r);padding:11px 14px;margin:10px 18px 4px;font-size:.82rem;color:var(--ink-700);display:flex;align-items:center;gap:9px;font-weight:600}
+.md-usp svg{width:18px;height:18px;color:var(--green-600);flex:none}
+.md-body{flex:1;overflow-y:auto;padding:4px 0}
+.menu-cat{border-bottom:1px solid var(--line-2)}
+.menu-cat>a,.menu-cat>button{display:flex;align-items:center;justify-content:space-between;width:100%;padding:15px 20px;font-family:var(--display);font-weight:700;font-size:1rem;color:var(--navy-800);text-align:left;background:none}
+.menu-cat>a:hover,.menu-cat>button:hover{background:var(--bg-soft)}
+.menu-cat>a svg,.menu-cat>button svg{width:20px;height:20px;color:var(--ink-400);transition:transform var(--t-fast);flex:none}
+.menu-cat.open>button svg.chev{transform:rotate(180deg);color:var(--blue-600)}
+.menu-cat .sub{display:none;flex-direction:column;padding:0 14px 12px}
+.menu-cat.open .sub{display:flex;animation:fade .2s ease}
+.menu-cat .sub a{padding:10px 14px;color:var(--ink-600);font-size:.92rem;border-radius:var(--r-xs)}
+.menu-cat .sub a:hover{background:var(--sky-50);color:var(--blue-700)}
+.menu-cat .sub a.all{font-weight:700;color:var(--blue-600)}
+.menu-cat>a.is-clear{color:var(--red-600)}
+.md-foot{border-top:1px solid var(--line);padding:8px 20px 18px}
+.md-foot a{display:flex;align-items:center;gap:13px;padding:12px 0;color:var(--ink-700);font-weight:600;font-size:.94rem}
+.md-foot a svg{width:21px;height:21px;color:var(--ink-400)}
+.md-foot a:hover{color:var(--blue-600)}
+
+/* PDP — key points box */
+.key-points{background:var(--sky-50);border:1px solid var(--sky-100);border-radius:var(--r);padding:15px 17px;margin:2px 0 18px}
+.key-points .kp-title{font-family:var(--display);font-weight:800;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-700);margin-bottom:11px;display:flex;align-items:center;gap:7px}
+.key-points .kp-title svg{width:15px;height:15px}
+.key-points ul{display:grid;gap:9px}
+.key-points li{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;color:var(--ink-800);line-height:1.4}
+.key-points li svg{width:18px;height:18px;color:var(--green-600);flex:none;margin-top:1px}
+.key-points li b{color:var(--navy-900);font-weight:700}
+
+/* express checkout buttons (Apple Pay / PayPal) */
+.express-pay{display:flex;flex-direction:column;gap:9px}
+.express-pay.row{flex-direction:row}
+.express-pay.row>*{flex:1}
+.express-label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-400);text-align:center;margin-bottom:10px}
+.applepay-btn{background:#000;color:#fff;border-radius:var(--r-sm);height:50px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:600;font-size:1.06rem;cursor:pointer;transition:var(--t-fast);letter-spacing:.01em}
+.applepay-btn:hover{background:#1c1c1e}
+.applepay-btn svg{height:20px;width:auto;margin-bottom:2px}
+
+/* PDP — accepted payment row */
+.pay-accept{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:14px;font-size:.78rem;color:var(--ink-500)}
+.pay-accept .marks{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.pay-accept .marks .pay{height:26px;background:#fff;border:1px solid var(--line);border-radius:5px;padding:3px 6px;display:flex;align-items:center}
+.pay-accept .marks .pay svg{height:18px;width:auto}
+
+/* PDP — frequently bought together */
+.fbt{display:grid;grid-template-columns:1fr 290px;gap:30px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:24px}
+.fbt-items{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fbt-item{display:flex;flex-direction:column;align-items:center;gap:7px;width:124px;text-align:center}
+.fbt-item .ph{width:96px;height:96px;border-radius:var(--r);background:var(--bg-soft);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.fbt-item .ph img{width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply}
+.fbt-item .nm{font-size:.77rem;font-weight:600;color:var(--navy-800);line-height:1.25}
+.fbt-item .pr{font-family:var(--display);font-weight:800;font-size:.85rem;color:var(--navy-900)}
+.fbt-plus{font-size:1.5rem;color:var(--ink-300);font-weight:300;flex:none}
+.fbt-buy{background:var(--bg-soft);border-radius:var(--r);padding:20px;text-align:center}
+.fbt-buy .tot{font-size:.85rem;color:var(--ink-600)}
+.fbt-buy .tot b{font-family:var(--display);font-weight:800;font-size:1.5rem;color:var(--navy-900);display:block;margin-top:2px}
+.fbt-buy .save{color:var(--green-600);font-weight:700;font-size:.82rem;margin:6px 0 12px}
+
+@media(max-width:860px){
+  .fbt{grid-template-columns:1fr;gap:18px}
 }

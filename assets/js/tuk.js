@@ -1,5 +1,5 @@
 /* ==========================================================================
-   TACKLEUK — Shared interaction layer (vanilla JS, no dependencies)
+   TACKLEUK - Shared interaction layer (vanilla JS, no dependencies)
    Defensive: every feature checks for its elements, so one file powers
    every page. Conversion features: predictive search, cart drawer + free
    delivery progress, quick-view, sticky buy bar, countdown, toasts,
@@ -90,6 +90,7 @@
     drawer && drawer.classList.remove("open");
     $$(".modal.open").forEach((m) => m.classList.remove("open"));
     $$(".filters.open").forEach((f) => f.classList.remove("open"));
+    $$(".menu-drawer.open").forEach((m) => m.classList.remove("open"));
     overlay && overlay.classList.remove("open");
     document.body.style.overflow = "";
   }
@@ -97,6 +98,71 @@
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeAll(); });
   $$("[data-open-cart]").forEach((b) => b.addEventListener("click", (e) => { e.preventDefault(); openDrawer(); }));
   $$("[data-close]").forEach((b) => b.addEventListener("click", closeAll));
+
+  /* ---- mobile menu (hamburger + off-canvas, built from the existing nav) */
+  (function buildMobileMenu() {
+    const hostRow = $(".header-main .container");
+    const nav = $(".nav");
+    if (!hostRow || !nav || $(".menu-drawer")) return;
+
+    const burger = document.createElement("button");
+    burger.className = "hamburger";
+    burger.type = "button";
+    burger.setAttribute("aria-label", "Open menu");
+    burger.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+    hostRow.insertBefore(burger, hostRow.firstChild);
+
+    const chevD = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+    const chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+
+    let cats = "";
+    $$(".nav-item", nav).forEach((item) => {
+      const link = $(".nav-link", item);
+      if (!link) return;
+      const label = link.textContent.trim();
+      const href = link.getAttribute("href") || "category.html";
+      const isClear = link.classList.contains("clearance");
+      const subLinks = $$(".mega ul li a", item);
+      if (subLinks.length) {
+        const subs = subLinks.map((a) => '<a href="' + (a.getAttribute("href") || "category.html") + '">' + a.textContent.trim() + "</a>").join("");
+        cats += '<div class="menu-cat"><button type="button">' + label + chevD + '</button><div class="sub"><a class="all" href="' + href + '">Shop all ' + label + "</a>" + subs + "</div></div>";
+      } else {
+        cats += '<div class="menu-cat"><a class="' + (isClear ? "is-clear" : "") + '" href="' + href + '">' + label + chevR + "</a></div>";
+      }
+    });
+
+    const ic = {
+      account: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+      wish: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+      help: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+      store: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+      van: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
+    };
+
+    const md = document.createElement("aside");
+    md.className = "menu-drawer";
+    md.setAttribute("aria-label", "Main menu");
+    md.innerHTML =
+      '<div class="md-head"><a href="index.html" class="logo"><span class="wm">TACKLE<span class="uk">UK</span></span><span class="tag">the home of fishing</span></a>' +
+      '<button class="drawer-close" type="button" aria-label="Close menu"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>' +
+      '<div class="md-usp">' + ic.van + " FREE next-day delivery over £150</div>" +
+      '<div class="md-body">' + cats + "</div>" +
+      '<div class="md-foot">' +
+      '<a href="#">' + ic.account + " My Account</a>" +
+      '<a href="#">' + ic.wish + " Wishlist</a>" +
+      '<a href="#">' + ic.help + " Help &amp; Contact</a>" +
+      '<a href="#">' + ic.store + " Store Finder</a>" +
+      "</div>";
+    document.body.appendChild(md);
+
+    burger.addEventListener("click", () => {
+      md.classList.add("open");
+      overlay && overlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+    });
+    $(".drawer-close", md).addEventListener("click", closeAll);
+    $$(".menu-cat > button", md).forEach((b) => b.addEventListener("click", () => b.parentElement.classList.toggle("open")));
+  })();
 
   function renderDrawer() {
     const body = $("[data-cart-body]", drawer);
@@ -318,7 +384,7 @@
   $$("[data-voucher]").forEach((form) => form.addEventListener("submit", (e) => {
     e.preventDefault();
     const v = $("input", form).value.trim().toUpperCase();
-    if (v) toast(v === "FISH10" ? "Code FISH10 applied — 10% off!" : "Voucher \"" + v + "\" applied", v === "FISH10" ? "You saved on this order" : "Checking eligibility…");
+    if (v) toast(v === "FISH10" ? "Code FISH10 applied - 10% off!" : "Voucher \"" + v + "\" applied", v === "FISH10" ? "You saved on this order" : "Checking eligibility…");
     $("input", form).value = "";
   }));
 
@@ -333,6 +399,17 @@
     window.addEventListener("scroll", () => btt.classList.toggle("show", window.scrollY > 600), { passive: true });
     btt.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
   }
+
+  /* ---- frequently bought together: add the whole bundle --------------- */
+  $$("[data-bundle-add]").forEach((btn) => btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const wrap = btn.closest("[data-bundle]") || document;
+    $$("[data-bundle-item]", wrap).forEach((it) => {
+      const d = it.dataset;
+      addToCart({ id: d.id, name: d.name, price: +d.price, img: d.img, qty: 1 }, false);
+    });
+    openDrawer();
+  }));
 
   /* ---- init ------------------------------------------------------------ */
   syncCount(); syncWish(); syncProgress();

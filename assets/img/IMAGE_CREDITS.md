@@ -2,7 +2,7 @@
 
 Stock photography sourced via the Openverse API (openverse.org), aggregating
 Creative Commons-licensed images from Flickr, Wikimedia Commons and others.
-These are prototype placeholders — verify each licence before production use.
+These are prototype placeholders - verify each licence before production use.
 
 | File | Source image |
 |------|--------------|

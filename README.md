@@ -1,11 +1,11 @@
-# TACKLEUK — Website Redesign (Conversion-First Prototype)
+# TACKLEUK - Website Redesign (Conversion-First Prototype)
 
 A ground-up redesign of the Tackleuk storefront, built as **live, self-contained
 HTML pages** for stakeholder review. Brand identity (logo wordmark + navy / cyan-blue /
 red colour scheme) is retained; everything else is rebuilt around modern e-commerce
 conversion best practice.
 
-> **Status:** High-fidelity, interactive prototype. No backend — cart, wishlist and
+> **Status:** High-fidelity, interactive prototype. No backend - cart, wishlist and
 > "recently viewed" persist in `localStorage` so the flows feel real end-to-end.
 
 ---
@@ -24,15 +24,15 @@ conversion best practice.
 
 ## Conversion features built in
 
-- **Urgency & stock cues** — free-delivery progress bar, low-stock badges ("Only 3 left"),
+- **Urgency & stock cues** - free-delivery progress bar, low-stock badges ("Only 3 left"),
   live "order within HH:MM:SS for same-day dispatch" countdown, "X people viewing now".
-- **Frictionless add-to-cart** — slide-in **cart drawer** with cross-sell, sticky buy bar
+- **Frictionless add-to-cart** - slide-in **cart drawer** with cross-sell, sticky buy bar
   on PDP, quick-add and **quick-view** modal from every grid, toast confirmations.
-- **Smart discovery** — predictive search with popular terms + product suggestions, and a
+- **Smart discovery** - predictive search with popular terms + product suggestions, and a
   visual **mega menu**.
-- **Trust & social proof** — Trustpilot strip, verified-review cards, ratings breakdown,
+- **Trust & social proof** - Trustpilot strip, verified-review cards, ratings breakdown,
   price-match / 60-day-returns / secure-checkout reassurance, Klarna messaging, payment marks.
-- **Mobile-first** — responsive down to 360px with an app-style bottom nav, off-canvas
+- **Mobile-first** - responsive down to 360px with an app-style bottom nav, off-canvas
   filters, and full-width CTAs.
 
 All interactions are real: add items, watch the basket count, free-delivery bar and
@@ -44,18 +44,18 @@ survives page navigation via `localStorage`.
 ## Design system
 
 - **Brand:** Navy `#0A2540` + brand cyan-blue `#1391DB` (primary CTA). Red `#D81E2C`
-  reserved for deals/urgency, green `#16894E` for in-stock/savings — your scheme, working harder.
+  reserved for deals/urgency, green `#16894E` for in-stock/savings - your scheme, working harder.
 - **Type:** Manrope (display) + Inter (body), via Google Fonts.
-- **Tokens & components:** `assets/css/tuk.css` — CSS custom properties, a lean utility
+- **Tokens & components:** `assets/css/tuk.css` - CSS custom properties, a lean utility
   layer, and componentised UI (buttons, cards, drawer, modal, filters, forms…). One file,
   no framework, no build step.
-- **Behaviour:** `assets/js/tuk.js` — dependency-free, defensive (every feature checks for
+- **Behaviour:** `assets/js/tuk.js` - dependency-free, defensive (every feature checks for
   its elements), so one script powers all pages.
 
 ### Imagery
 Product/lifestyle visuals are **crafted on-brand SVGs** (`assets/img/`) so the prototype
 renders identically everywhere with zero broken images and a consistent look. They are
-placeholders — real product photography drops straight into the same `<img>` slots.
+placeholders - real product photography drops straight into the same `<img>` slots.
 Regenerate with `python3 tools/generate_assets.py`.
 
 ---
