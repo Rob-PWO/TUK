@@ -786,7 +786,7 @@ h4{font-size:1.05rem;font-weight:700}
 @media(max-width:860px){
   :root{--header-h:64px}
   .trustbar,.nav,.announce-side,.search .s-cat,.mega{display:none}
-  .hamburger{display:flex;order:0}
+  .header .hamburger{display:flex;order:0}
   .header-main .container{height:auto;flex-wrap:wrap;gap:10px 12px;padding-block:11px}
   .logo{order:1;margin-right:auto}
   .header-tools{order:2}
