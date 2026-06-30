@@ -42,27 +42,33 @@
   }
   .tdw h1, .tdw h2, .tdw h3, .tdw h4 { font-family:var(--tuk-head); font-weight:700; color:var(--tuk-navy); line-height:1.2; }
 
-  /* ── Hero intro ── */
+  /* ── Hero intro (full-bleed navy band — matches contact hero) ── */
   .t-intro {
-    background:var(--tuk-navy); color:#c3d6e2;
-    border-radius:16px; padding:clamp(28px,4.5vw,46px);
-    margin-bottom:28px; box-shadow:var(--shadow-lg); position:relative; overflow:hidden;
+    background:var(--tuk-navy); color:#c3d6e2; text-align:center;
+    margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); margin-bottom:36px;
+    padding:clamp(54px,7vw,78px) 24px clamp(46px,6vw,62px);
+    position:relative; overflow:hidden;
   }
   .t-intro::after {
-    content:''; position:absolute; top:-60px; right:-60px; width:260px; height:260px;
-    border-radius:50%; background:rgba(255,255,255,.05); pointer-events:none;
+    content:''; position:absolute; top:-70px; right:-70px; width:280px; height:280px;
+    border-radius:50%; background:rgba(255,255,255,.045); pointer-events:none;
   }
-  .t-intro::before {
-    content:''; display:block; width:54px; height:4px; border-radius:4px;
-    background:var(--tuk-blue); margin-bottom:22px; position:relative;
-  }
+  .t-intro-inner { max-width:780px; margin:0 auto; position:relative; }
+  .t-hero-rule { width:54px; height:4px; background:var(--tuk-blue); border-radius:4px; margin:0 auto 26px; }
   .t-intro h1 {
-    font-size:clamp(26px,3.6vw,38px); font-weight:700; color:#fff; margin-bottom:14px;
-    line-height:1.18; letter-spacing:-.3px; position:relative;
+    font-size:clamp(28px,4.4vw,44px); font-weight:700; color:#fff;
+    line-height:1.16; letter-spacing:-.4px; margin-bottom:16px;
   }
-  .t-intro p { margin-bottom:12px; font-size:clamp(15px,1.6vw,16.5px); line-height:1.7; color:#c3d6e2; position:relative; }
+  .t-intro p { font-size:clamp(15.5px,1.7vw,18px); line-height:1.7; color:#c3d6e2; margin:0 auto 12px; max-width:620px; }
   .t-intro p:last-child { margin-bottom:0; }
   .t-intro strong { color:#fff; }
+  .t-intro-note {
+    margin:24px auto 0; max-width:600px; text-align:left;
+    background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16);
+    border-radius:var(--radius-sm); padding:16px 20px;
+  }
+  .t-intro-note p { color:#dbe8f0; font-size:14.5px; margin:0; max-width:none; }
+  .t-intro-foot { margin-top:20px; color:rgba(255,255,255,.6); font-size:13px; }
 
   /* ── Cards ── */
   .t-card {
@@ -269,18 +275,17 @@
 
   <!-- INTRO -->
   <div class="t-intro">
-    <h1>My Parcel Shows as Delivered — But I Haven’t Received It</h1>
-    <p>We’re sorry to hear your parcel has not reached you. We take every report seriously and will do everything within our power to investigate and resolve your case.</p>
-    <p>Please read this page carefully. Parcel disputes are a formal investigation process conducted with our carriers — <strong>DHL</strong> and <strong>Royal Mail</strong>. Following each step correctly gives your case the best possible chance of a positive outcome.</p>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;margin-top:1px;">2</div>
-            <p style="color:rgba(255,255,255,.9);font-size:13.5px;line-height:1.6;margin:0;">We are unable to offer a refund or replacement until the investigation has been <strong style="color:#fff;">formally concluded</strong>. Not all cases are decided in the customer’s favour.</p>
-          </div>
-        </div>
+    <div class="t-intro-inner">
+      <div class="t-hero-rule"></div>
+      <h1>My Parcel Shows as Delivered — But I Haven’t Received It</h1>
+      <p>We’re sorry to hear your parcel has not reached you. We take every report seriously and will do everything within our power to investigate and resolve your case.</p>
+      <p>Please read this page carefully. Parcel disputes are a formal investigation process conducted with our carriers — <strong>DHL</strong> and <strong>Royal Mail</strong>. Following each step correctly gives your case the best possible chance of a positive outcome.</p>
+      <div class="t-intro-note">
+        <p>We are unable to offer a refund or replacement until the investigation has been <strong>formally concluded</strong>. Not all cases are decided in the customer’s favour.</p>
       </div>
-      <p style="color:rgba(255,255,255,.65);font-size:12.5px;">
-        Please quote your order number in any future correspondence.
-      </p>
+      <p class="t-intro-foot">Please quote your order number in any future correspondence.</p>
+    </div>
+  </div>
 
 
 
