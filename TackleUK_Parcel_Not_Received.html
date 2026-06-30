@@ -858,9 +858,45 @@
     if(el){ el.value = yyyy+'-'+mm+'-'+dd; el.max = yyyy+'-'+mm+'-'+dd; }
   })();
 
+  /* Hide the site breadcrumb on this page. The breadcrumb lives in the host
+     page, outside our block, so target it there. Prefer elements explicitly
+     marked as a breadcrumb; fall back to a plain "Home / ..." trail sitting
+     just before our container. */
+  function hideCrumb(){
+    try{
+      var hid = 0;
+      var marked = document.querySelectorAll(
+        '#breadcrumb,[id*="breadcrumb" i],[class*="breadcrumb" i],[class*="bread-crumb" i],nav[aria-label*="readcrumb" i]'
+      );
+      for(var i=0;i<marked.length;i++){
+        if(marked[i] && !marked[i].closest('.tdw')){ marked[i].style.display='none'; hid++; }
+      }
+      if(hid) return;
+      /* Fallback: a "Home / ... " trail immediately before our block */
+      var isCrumb = function(el){
+        if(!el || el.nodeType!==1) return false;
+        var t = (el.textContent||'').trim().toLowerCase();
+        return t.length<80 && t.indexOf('home')===0 && t.indexOf('/')>-1;
+      };
+      var cur = document.querySelector('.tdw');
+      for(var up=0; up<6 && cur; up++){
+        var sib = cur.previousElementSibling, steps=0;
+        while(sib && steps<6){
+          if(isCrumb(sib)){ sib.style.display='none'; return; }
+          sib = sib.previousElementSibling; steps++;
+        }
+        cur = cur.parentElement;
+      }
+    }catch(e){}
+  }
+
   bind();
+  hideCrumb();
   setTimeout(bind,300);
   setTimeout(bind,1000);
   setTimeout(bind,2500);
+  setTimeout(hideCrumb,300);
+  setTimeout(hideCrumb,1200);
+  setTimeout(hideCrumb,2500);
 })();
 </script>
