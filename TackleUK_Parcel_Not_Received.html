@@ -1,0 +1,809 @@
+<!-- TackleUK: Parcel Not Received – Dispute Process Page -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap');
+
+  /* ── Tokens (aligned to the TackleUK contact/help-centre design system) ── */
+  :root {
+    /* Brand palette */
+    --tuk-navy:#0d3b54; --tuk-navy-deep:#0a2f44;
+    --tuk-blue:#1f93cf; --tuk-blue-dark:#16719f; --tuk-blue-soft:#eaf4fa;
+    --tuk-ink:#1c2a31; --tuk-muted:#5d6c75;
+    --tuk-line:#e3e8ec; --tuk-line-2:#d3dbe1;
+    --tuk-surface:#f5f7f9; --tuk-green:#1f9d57;
+
+    /* Type */
+    --tuk-head:'Rubik','Segoe UI',system-ui,-apple-system,Arial,sans-serif;
+    --tuk-body:'Open Sans','Segoe UI',system-ui,-apple-system,Arial,sans-serif;
+
+    /* Back-compat aliases — remapped onto the new palette so existing
+       class rules and inline var() references inherit the new design. */
+    --tn:#0d3b54;   /* navy */
+    --tt:#1f93cf;   /* blue (formerly teal) */
+    --td:#16719f;   /* blue-dark */
+    --tg:#1f9d57;   /* green */
+    --ta:#c97d0a;   /* amber (warning) */
+    --tr:#c0392b;   /* red (legal) */
+    --tb:#d3dbe1;   /* line-2 */
+    --tm:#5d6c75;   /* muted */
+    --bg:#f5f7f9; --white:#ffffff;
+
+    --radius:12px; --radius-sm:8px;
+    --shadow:0 2px 12px rgba(13,59,84,.07);
+    --shadow-lg:0 16px 38px rgba(13,59,84,.16);
+    --transition:.18s ease;
+  }
+
+  /* ── Reset & base ── */
+  .tdw *, .tdw *::before, .tdw *::after { box-sizing:border-box; margin:0; padding:0; }
+  .tdw {
+    color:var(--tuk-ink); font-family:var(--tuk-body);
+    font-size:16px; line-height:1.65; max-width:1080px; margin:0 auto; padding:0 24px 56px;
+    -webkit-font-smoothing:antialiased; text-align:left;
+  }
+  .tdw h1, .tdw h2, .tdw h3, .tdw h4 { font-family:var(--tuk-head); font-weight:700; color:var(--tuk-navy); line-height:1.2; }
+
+  /* ── Hero intro ── */
+  .t-intro {
+    background:var(--tuk-navy); color:#c3d6e2;
+    border-radius:16px; padding:clamp(28px,4.5vw,46px);
+    margin-bottom:28px; box-shadow:var(--shadow-lg); position:relative; overflow:hidden;
+  }
+  .t-intro::after {
+    content:''; position:absolute; top:-60px; right:-60px; width:260px; height:260px;
+    border-radius:50%; background:rgba(255,255,255,.05); pointer-events:none;
+  }
+  .t-intro::before {
+    content:''; display:block; width:54px; height:4px; border-radius:4px;
+    background:var(--tuk-blue); margin-bottom:22px; position:relative;
+  }
+  .t-intro h1 {
+    font-size:clamp(26px,3.6vw,38px); font-weight:700; color:#fff; margin-bottom:14px;
+    line-height:1.18; letter-spacing:-.3px; position:relative;
+  }
+  .t-intro p { margin-bottom:12px; font-size:clamp(15px,1.6vw,16.5px); line-height:1.7; color:#c3d6e2; position:relative; }
+  .t-intro p:last-child { margin-bottom:0; }
+  .t-intro strong { color:#fff; }
+
+  /* ── Cards ── */
+  .t-card {
+    background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow);
+    border:1px solid var(--tuk-line); margin-bottom:24px; overflow:hidden;
+  }
+  .t-card-head {
+    padding:18px 24px; border-bottom:1px solid var(--tuk-line);
+    display:flex; align-items:center; gap:12px;
+  }
+  .t-card-head .t-icon {
+    width:42px; height:42px; border-radius:10px; display:flex; align-items:center;
+    justify-content:center; font-size:18px; flex-shrink:0;
+    background:var(--tuk-blue-soft); color:var(--tuk-navy);
+  }
+  .t-card-head h2 { font-family:var(--tuk-head); font-size:18px; font-weight:700; color:var(--tuk-navy); }
+  .t-card-body { padding:24px; }
+
+  /* ── Warning banner ── */
+  .t-warn {
+    background:#fff8ec; border:1px solid #f3d699; border-left:4px solid var(--ta);
+    border-radius:var(--radius-sm); padding:18px 22px; margin-bottom:24px;
+  }
+  .t-warn-title { font-family:var(--tuk-head); font-weight:700; color:#9a6700; font-size:13px; text-transform:uppercase; letter-spacing:.07em; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  .t-warn p { font-size:14.5px; color:#6b4d10; line-height:1.65; margin-bottom:8px; }
+  .t-warn p:last-child { margin-bottom:0; }
+  .t-warn strong { color:#5a3d00; }
+
+  /* ── Info strip ── */
+  .t-info-strip { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px; }
+  .t-info-chip {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--white); border:1px solid var(--tuk-line); border-radius:var(--radius-sm);
+    padding:11px 16px; font-size:14px; color:var(--tuk-muted); box-shadow:var(--shadow);
+  }
+  .t-info-chip strong { font-family:var(--tuk-head); color:var(--tuk-navy); font-weight:700; }
+
+  /* ── Section title ── */
+  .t-sec-title { font-family:var(--tuk-head); font-size:18px; font-weight:700; color:var(--tuk-navy); margin-bottom:6px; }
+  .t-sec-sub { font-size:14.5px; color:var(--tuk-muted); margin-bottom:20px; }
+
+  /* ── Progress ── */
+  .t-prog-wrap { margin-bottom:22px; }
+  .t-prog-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .t-prog-meta span { font-size:14px; color:var(--tuk-muted); }
+  .t-prog-meta strong { font-family:var(--tuk-head); font-size:14px; color:var(--tuk-navy); }
+  .t-prog-track { height:8px; background:var(--tuk-line); border-radius:4px; overflow:hidden; }
+  .t-prog-bar { height:100%; background:linear-gradient(90deg,var(--tuk-blue),var(--tuk-blue-dark)); border-radius:4px; width:0%; transition:width .5s cubic-bezier(.4,0,.2,1); }
+
+  /* ── Step items ── */
+  .t-steps { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .t-step {
+    background:var(--white); border:1px solid var(--tuk-line); border-radius:var(--radius-sm);
+    transition:border-color var(--transition), background var(--transition), box-shadow var(--transition);
+    position:relative; overflow:hidden;
+  }
+  .t-step::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+    background:var(--tuk-line-2); transition:background var(--transition);
+  }
+  .t-step:hover { border-color:var(--tuk-blue); box-shadow:0 6px 18px rgba(13,59,84,.08); }
+  .t-step.done::before { background:var(--tuk-green); }
+  .t-step.done { border-color:#bfe3cc; background:#f3fbf6; }
+  .t-step label {
+    display:flex; align-items:flex-start; gap:14px; cursor:pointer;
+    padding:16px 18px 16px 20px; -webkit-user-select:none; user-select:none;
+  }
+  .t-step-num {
+    width:28px; height:28px; border-radius:50%; border:2px solid var(--tuk-line-2);
+    display:flex; align-items:center; justify-content:center; font-family:var(--tuk-head);
+    font-size:13px; font-weight:700; color:var(--tuk-muted); flex-shrink:0; margin-top:1px;
+    transition:all var(--transition); background:var(--white);
+  }
+  .t-step.done .t-step-num { background:var(--tuk-green); border-color:var(--tuk-green); color:#fff; }
+  .t-step input[type=checkbox] { display:none; }
+  .t-step .s-body { flex:1; }
+  .t-step .s-title { font-family:var(--tuk-head); font-weight:600; color:var(--tuk-navy); font-size:16px; line-height:1.4; }
+  .t-step.done .s-title { color:var(--tuk-green); }
+  .t-step .s-detail { font-size:14px; color:var(--tuk-muted); margin-top:6px; line-height:1.6; }
+  .t-step .s-detail strong { color:var(--tuk-ink); }
+  .t-step .s-tip {
+    display:none; margin-top:10px; font-size:13px; color:#147544;
+    background:#eaf7ef; border-radius:6px; padding:9px 12px;
+    border-left:3px solid var(--tuk-green);
+  }
+  .t-step.done .s-tip { display:block; }
+
+  /* ── Gate ── */
+  .t-gate {
+    background:var(--tuk-surface); border:2px dashed var(--tuk-line-2); border-radius:var(--radius-sm);
+    padding:32px 24px; text-align:center; color:var(--tuk-muted); margin-top:16px;
+  }
+  .t-gate-icon { font-size:30px; margin-bottom:10px; opacity:.65; }
+  .t-gate strong { font-family:var(--tuk-head); color:var(--tuk-navy); }
+  .t-gate p { font-size:14px; color:var(--tuk-muted); margin-top:6px; }
+
+  /* ── Form ── */
+  .t-form { display:none; }
+  .t-form.open { display:block; }
+  .t-form-intro {
+    background:var(--tuk-blue-soft); border-radius:var(--radius-sm); padding:14px 18px;
+    margin-bottom:24px; font-size:14px; color:var(--tuk-blue-dark); border:1px solid #cbe5f2;
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .t-field { margin-bottom:20px; }
+  .t-field label { display:block; font-family:var(--tuk-head); font-weight:600; font-size:14px; color:var(--tuk-navy); margin-bottom:6px; }
+  .t-field .fn { font-size:12.5px; color:var(--tuk-muted); margin-top:-2px; margin-bottom:6px; }
+  .t-field input[type=text],
+  .t-field input[type=email],
+  .t-field input[type=date],
+  .t-field textarea,
+  .t-field select {
+    width:100%; border:1px solid var(--tuk-line-2); border-radius:var(--radius-sm);
+    padding:12px 14px; font-size:15px; color:var(--tuk-ink); background:var(--white);
+    font-family:var(--tuk-body); transition:border-color var(--transition), box-shadow var(--transition);
+    appearance:none; -webkit-appearance:none;
+  }
+  .t-field input:focus, .t-field textarea:focus, .t-field select:focus {
+    outline:none; border-color:var(--tuk-blue); box-shadow:0 0 0 3px rgba(31,147,207,.16);
+  }
+  .t-field input:hover:not(:focus), .t-field textarea:hover:not(:focus), .t-field select:hover:not(:focus) {
+    border-color:#b3c2cb;
+  }
+  .t-field textarea { min-height:96px; resize:vertical; line-height:1.6; }
+  .t-field select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235d6c75' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:36px; }
+  .t-row2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media(max-width:580px){ .t-row2 { grid-template-columns:1fr; } }
+
+  /* ── Section divider ── */
+  .t-divider { border:none; border-top:1px solid var(--tuk-line); margin:28px 0; }
+
+  /* ── Affidavit ── */
+  .t-aff {
+    background:#fdf4f3; border:1px solid #ecc4bf; border-radius:var(--radius-sm);
+    padding:20px 22px; margin-bottom:24px;
+  }
+  .t-aff-title { font-family:var(--tuk-head); font-weight:700; color:var(--tr); font-size:12.5px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+  .t-aff p { font-size:13.5px; color:#6b2b22; margin-bottom:8px; line-height:1.6; }
+  .t-aff p:last-of-type { margin-bottom:0; }
+  .t-aff strong { color:#5a201a; }
+  .t-aff-ck { display:flex; align-items:flex-start; gap:10px; margin-top:14px; cursor:pointer; }
+  .t-aff-ck input { margin-top:3px; accent-color:var(--tr); width:16px; height:16px; flex-shrink:0; cursor:pointer; }
+  .t-aff-ck span { font-family:var(--tuk-body); font-size:13.5px; font-weight:600; color:var(--tuk-navy); line-height:1.5; }
+
+  /* ── Submit button ── */
+  .t-btn-row { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:4px; }
+  .t-btn-hint { font-size:12.5px; color:var(--tuk-muted); }
+  .t-btn {
+    background:var(--tuk-blue); color:#fff; border:none; font-family:var(--tuk-head);
+    padding:14px 30px; font-size:15.5px; font-weight:600; border-radius:var(--radius-sm);
+    cursor:pointer; letter-spacing:.01em; display:inline-flex; align-items:center; gap:8px;
+    box-shadow:0 6px 16px rgba(31,147,207,.28); transition:background var(--transition), transform var(--transition), box-shadow var(--transition);
+  }
+  .t-btn:hover:not(:disabled) { background:var(--tuk-blue-dark); transform:translateY(-2px); box-shadow:0 10px 22px rgba(31,147,207,.32); }
+  .t-btn:active:not(:disabled) { transform:translateY(0); }
+  .t-btn:disabled { background:#aebcc4; cursor:not-allowed; box-shadow:none; }
+  .t-btn-arrow { font-size:16px; transition:transform var(--transition); }
+  .t-btn:hover:not(:disabled) .t-btn-arrow { transform:translateX(3px); }
+
+  /* ── Ticket panel ── */
+  .t-ticket { display:none; margin-top:24px; border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow-lg); border:1px solid var(--tuk-line); }
+  .t-ticket-head {
+    background:var(--tuk-navy);
+    padding:18px 24px; display:flex; align-items:center; gap:12px;
+  }
+  .t-ticket-head-icon { font-size:22px; }
+  .t-ticket-head-text h3 { font-family:var(--tuk-head); color:#fff; font-size:16px; font-weight:700; margin-bottom:2px; }
+  .t-ticket-head-text p { color:#c3d6e2; font-size:13px; }
+  .t-ticket-info { background:var(--tuk-blue-soft); border-bottom:1px solid #cbe5f2; padding:15px 24px; font-size:14px; color:var(--tuk-blue-dark); line-height:1.6; }
+  .t-ticket-info strong { color:var(--tuk-navy); }
+
+  /* ── DHL block ── */
+  .t-dhl {
+    background:#fff8ec; border-bottom:1px solid #f3d699; padding:20px 24px;
+  }
+  .t-dhl-title { font-family:var(--tuk-head); font-weight:700; color:#9a6700; font-size:13px; text-transform:uppercase; letter-spacing:.07em; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  .t-dhl p { font-size:14px; color:#6b4d10; line-height:1.6; margin-bottom:10px; }
+  .t-dhl p:last-of-type { margin-bottom:0; }
+  .t-dhl strong { color:#5a3d00; }
+  .t-dhl-btn {
+    display:inline-flex; align-items:center; gap:8px; background:var(--tuk-blue); color:#fff;
+    font-family:var(--tuk-head); padding:11px 20px; border-radius:var(--radius-sm); font-size:14px; font-weight:600;
+    text-decoration:none; margin:4px 0 12px; transition:background var(--transition);
+  }
+  .t-dhl-btn:hover { background:var(--tuk-blue-dark); }
+
+  /* ── Loader ── */
+  .t-loader { background:var(--white); padding:40px; text-align:center; color:var(--tuk-muted); }
+  .t-loader-spinner {
+    width:36px; height:36px; border:3px solid var(--tuk-line); border-top-color:var(--tuk-blue);
+    border-radius:50%; margin:0 auto 14px; animation:spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .t-loader p { font-size:14px; }
+
+  iframe#tukFrame { display:none; width:100%; border:none; }
+
+  @media (prefers-reduced-motion:reduce){
+    .tdw *, .tdw *::before, .tdw *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+  }
+</style>
+
+<div class="tdw">
+
+  <!-- INTRO -->
+  <div class="t-intro">
+    <h1>My Parcel Shows as Delivered — But I Haven’t Received It</h1>
+    <p>We’re sorry to hear your parcel has not reached you. We take every report seriously and will do everything within our power to investigate and resolve your case.</p>
+    <p>Please read this page carefully. Parcel disputes are a formal investigation process conducted with our carriers — <strong>DHL</strong> and <strong>Royal Mail</strong>. Following each step correctly gives your case the best possible chance of a positive outcome.</p>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;margin-top:1px;">2</div>
+            <p style="color:rgba(255,255,255,.9);font-size:13.5px;line-height:1.6;margin:0;">We are unable to offer a refund or replacement until the investigation has been <strong style="color:#fff;">formally concluded</strong>. Not all cases are decided in the customer’s favour.</p>
+          </div>
+        </div>
+      </div>
+      <p style="color:rgba(255,255,255,.65);font-size:12.5px;">
+        Please quote your order number in any future correspondence.
+      </p>
+
+
+
+
+
+  <!-- LEGAL WARNING -->
+  <div class="t-warn">
+    <div class="t-warn-title">⚠ Important Notice — Please Read Before Continuing</div>
+    <p>Parcel disputes are treated as <strong>formal fraud investigations</strong>. All claims are cross-referenced against carrier GPS data, proof of delivery records, route manifests, and doorstep camera footage. <strong>Both DHL and Royal Mail</strong> retain detailed records of every scan event, GPS waypoint, and delivery attempt.</p>
+    <p>In some cases <strong>an investigator may attend your delivery address</strong>. You will be asked to sign a <strong>statutory legal affidavit</strong>. Making a false statement is a criminal offence under the Perjury Act 1911 and the Fraud Act 2006, carrying up to seven years’ imprisonment.</p>
+    <p>Fraudulent claims are referred to our legal team and, where appropriate, to Action Fraud and local trading standards.</p>
+  </div>
+
+  <!-- WHAT TO EXPECT -->
+  <div class="t-info-strip">
+    <div class="t-info-chip">🕐 <strong>6–12 weeks</strong> average resolution time</div>
+    <div class="t-info-chip">📋 Legal affidavit required</div>
+    <div class="t-info-chip">🕵 Investigator may visit your address</div>
+  </div>
+
+  <div class="t-card">
+    <div class="t-card-head">
+      <div class="t-icon" style="background:var(--tuk-blue-soft);color:var(--tuk-navy);">ℹ</div>
+      <h2>What to Expect</h2>
+    </div>
+    <div class="t-card-body">
+      <p style="font-size:14px;color:var(--tm);margin-bottom:10px;">Carrier investigations are thorough and cannot be rushed. <strong style="color:var(--tn);">We are unable to offer any refund or replacement until the investigation is formally concluded.</strong> Not every case is decided in the customer’s favour — where a courier concludes a parcel was delivered correctly, we are bound by that finding.</p>
+    </div>
+  </div>
+
+  <!-- STEPS -->
+  <div class="t-card">
+    <div class="t-card-head">
+      <div class="t-icon" style="background:var(--tuk-blue-soft);color:var(--tuk-navy);">✓</div>
+      <h2>Before You Proceed — Complete All Steps</h2>
+    </div>
+    <div class="t-card-body">
+      <p class="t-sec-sub">Confirm you have carried out each step below. The dispute form unlocks once all five are complete.</p>
+
+      <div class="t-prog-wrap">
+        <div class="t-prog-meta">
+          <span>Steps completed</span>
+          <strong id="tukPT">0 of 5</strong>
+        </div>
+        <div class="t-prog-track">
+          <div class="t-prog-bar" id="tukPB"></div>
+        </div>
+      </div>
+
+      <ul class="t-steps">
+        <li class="t-step" id="tukS0">
+          <label>
+            <input type="checkbox" id="tukC0">
+            <div class="t-step-num">1</div>
+            <div class="s-body">
+              <div class="s-title">Check with all members of your household</div>
+              <div class="s-detail">Please confirm that no one else at your address — family members, housemates, or carers — has accepted, signed for, or put away the parcel without telling you.</div>
+              <div class="s-tip">✓ Good. This is one of the most common reasons a parcel appears undelivered.</div>
+            </div>
+          </label>
+        </li>
+        <li class="t-step" id="tukS1">
+          <label>
+            <input type="checkbox" id="tukC1">
+            <div class="t-step-num">2</div>
+            <div class="s-body">
+              <div class="s-title">Check with neighbours and any safe places</div>
+              <div class="s-detail">Drivers frequently leave parcels with a nearby neighbour or in a safe place (shed, porch, behind a bin). Check your tracking app or delivery card for any note. Knock on at least two or three neighbouring doors before proceeding.</div>
+              <div class="s-tip">✓ Noted. Please include details (e.g. “checked No. 14 and No. 16”) in your dispute description.</div>
+            </div>
+          </label>
+        </li>
+        <li class="t-step" id="tukS2">
+          <label>
+            <input type="checkbox" id="tukC2">
+            <div class="t-step-num">3</div>
+            <div class="s-body">
+              <div class="s-title">Review any doorbell, CCTV, or dashcam footage</div>
+              <div class="s-detail">Review footage for the date and time shown in your tracking record and export any relevant clips.<br><br><strong>Important:</strong> Investigators routinely check <strong>Google Maps Street View</strong> of your address for visible cameras. If one is found, you must upload footage covering both the <em>time of delivery</em> and the period during which the parcel <em>may have been removed</em>. Failure to provide footage from a confirmed camera will result in your claim being closed.</div>
+              <div class="s-tip">✓ Have footage ready to attach to the support ticket. Even footage showing no delivery is valuable.</div>
+            </div>
+          </label>
+        </li>
+        <li class="t-step" id="tukS3">
+          <label>
+            <input type="checkbox" id="tukC3">
+            <div class="t-step-num">4</div>
+            <div class="s-body">
+              <div class="s-title">Check your courier’s tracking record in full</div>
+              <div class="s-detail">Log in to the relevant portal and review the full delivery record:<br>
+                • <strong>Royal Mail:</strong> royalmail.com/track-your-item<br>
+                • <strong>DHL:</strong> dhl.com/gb-en/home/tracking.html<br><br>
+                Note any discrepancies — wrong door colour, incorrect GPS pin, or unrecognised signature.
+              </div>
+              <div class="s-tip">✓ Discrepancies in the tracking record are strong supporting evidence — describe them clearly in your submission.</div>
+            </div>
+          </label>
+        </li>
+        <li class="t-step" id="tukS4">
+          <label>
+            <input type="checkbox" id="tukC4">
+            <div class="t-step-num">5</div>
+            <div class="s-body">
+              <div class="s-title">Obtain a Crime Reference Number</div>
+              <div class="s-detail">Report the theft to the police and obtain a Crime Reference Number (CRN) online at <strong>report.police.uk</strong> or by calling <strong>101</strong>. This is mandatory — we cannot process a dispute without a CRN.</div>
+              <div class="s-tip">✓ Keep your CRN to hand — you will need to enter it in the form below.</div>
+            </div>
+          </label>
+        </li>
+      </ul>
+
+      <div class="t-gate" id="tukGate">
+        <div class="t-gate-icon">🔒</div>
+        <strong>Complete all 5 steps above to unlock the dispute form</strong>
+        <p>Each step is required before your case can be submitted</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISPUTE FORM -->
+  <div class="t-form" id="tukForm">
+    <div class="t-card">
+      <div class="t-card-head">
+        <div class="t-icon" style="background:var(--tuk-blue-soft);color:var(--tuk-navy);">📄</div>
+        <h2>Your Dispute Details</h2>
+      </div>
+      <div class="t-card-body">
+        <div class="t-form-intro">
+          ℹ&nbsp; Complete all fields accurately. This information will be shared with your courier as part of the formal investigation.
+        </div>
+
+        <div class="t-row2">
+          <div class="t-field">
+            <label for="tF_name">Full Name *</label>
+            <input type="text" id="tF_name" placeholder="As it appears on your order">
+          </div>
+          <div class="t-field">
+            <label for="tF_email">Email Address *</label>
+            <input type="email" id="tF_email" placeholder="Order confirmation email">
+          </div>
+        </div>
+        <div class="t-row2">
+          <div class="t-field">
+            <label for="tF_order">Order Number *</label>
+            <div class="fn">Found in your confirmation email, e.g. 2552080</div>
+            <input type="text" id="tF_order" placeholder="e.g. 2552080">
+          </div>
+          <div class="t-field">
+            <label for="tF_crn">Crime Reference Number *</label>
+            <div class="fn">Issued via 101 or report.police.uk</div>
+            <input type="text" id="tF_crn" placeholder="e.g. 01/123456/24">
+          </div>
+        </div>
+        <div class="t-row2">
+          <div class="t-field">
+            <label for="tF_carrier">Courier *</label>
+            <select id="tF_carrier">
+              <option value="">-- Please select --</option>
+              <option value="Royal Mail">Royal Mail</option>
+              <option value="DHL">DHL</option>
+              <option value="Unknown">I’m not sure</option>
+            </select>
+          </div>
+          <div class="t-field">
+            <label for="tF_date">Tracking Shown As Delivered On *</label>
+            <input type="date" id="tF_date">
+          </div>
+        </div>
+        <div class="t-field">
+          <label for="tF_tracking">Tracking Number *</label>
+          <div class="fn">Royal Mail: e.g. AB123456789GB &nbsp;|&nbsp; DHL: e.g. 1234567890</div>
+          <input type="text" id="tF_tracking" placeholder="">
+        </div>
+        <div class="t-field">
+          <label for="tF_address">Full Delivery Address *</label>
+          <div class="fn">Exact address including postcode</div>
+          <textarea id="tF_address" placeholder="House/flat number, street, town, postcode"></textarea>
+        </div>
+        <div class="t-field">
+          <label for="tF_neighbours">Neighbours / Safe Places Checked *</label>
+          <div class="fn">List which neighbours you spoke to and any safe places checked</div>
+          <textarea id="tF_neighbours" placeholder="e.g. Checked No. 14 (Mr Smith) and No. 16, checked back gate and shed — parcel not found"></textarea>
+        </div>
+        <div class="t-field">
+          <label for="tF_footage">Doorbell / CCTV Footage *</label>
+          <div class="fn">Describe what your footage shows. If a camera is present, account for footage at the time of delivery AND when the parcel may have been removed. You will be able to upload footage files at the next step.</div>
+          <textarea id="tF_footage" placeholder="e.g. Ring doorbell active — no delivery operative visible. / No camera at my property."></textarea>
+        </div>
+        <div class="t-field">
+          <label for="tF_tracking_notes">Courier Tracking Notes</label>
+          <div class="fn">Describe what the tracking portal shows — photo, GPS pin, signature etc.</div>
+          <textarea id="tF_tracking_notes" placeholder="e.g. DHL photo shows a blue front door — my door is red."></textarea>
+        </div>
+        <div class="t-field">
+          <label for="tF_additional">Anything Else We Should Know</label>
+          <textarea id="tF_additional" placeholder="Any other context that may assist the investigation"></textarea>
+        </div>
+
+        <hr class="t-divider">
+
+        <div class="t-aff">
+          <div class="t-aff-title">📋 Legal Declaration — Affidavit Required</div>
+          <p>By submitting this dispute you acknowledge that you will be required to <strong>sign and return a statutory legal affidavit</strong> within 2–3 business days. This must be completed before your case can be formally opened.</p>
+          <p><strong>A legal affidavit is a sworn statement.</strong> Signing it falsely constitutes perjury under the Perjury Act 1911 — a criminal offence carrying up to seven years’ imprisonment and potential civil liability.</p>
+          <label class="t-aff-ck">
+            <input type="checkbox" id="tukAff">
+            <span>I understand I will be required to sign a legal affidavit and confirm that all information provided is truthful and accurate.</span>
+          </label>
+        </div>
+
+        <div class="t-btn-row">
+          <span class="t-btn-hint">Your details will be pre-filled into the support ticket on the next screen</span>
+          <button class="t-btn" id="tukSubmit" disabled="">
+            Next Step <span class="t-btn-arrow">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IFRAME TICKET PANEL -->
+  <div class="t-ticket" id="tukPanel">
+    <div class="t-ticket-head">
+      <div class="t-ticket-head-icon">⚠️</div>
+      <div class="t-ticket-head-text">
+        <h3>One more step — submit your dispute below</h3>
+        <p>Your details have been pre-filled. Complete the CAPTCHA and click Submit.</p>
+      </div>
+    </div>
+    <div class="t-ticket-info">
+      <strong>Your dispute has NOT yet been submitted.</strong> Please attach any CCTV or doorbell footage using the Attachments field, complete the CAPTCHA, then click <strong>Submit</strong> to send your case to our team.
+    </div>
+
+    <!-- DHL disclaimer block — shown only when DHL selected -->
+    <div id="tukDHL" style="display:none;" class="t-dhl">
+      <div class="t-dhl-title">⚠ DHL Customers — Mandatory Disclaimer Form Required</div>
+      <p>Because your parcel was sent via <strong>DHL</strong>, you must download, sign, and attach the DHL Disclaimer Form before we can proceed. <strong>We cannot open a case without this document.</strong></p>
+      <p>Your <strong>actual handwritten or electronic signature</strong> must be present — a typed name is not accepted. Print and sign by hand, photograph clearly, or sign digitally.</p>
+      <a href="https://www.tackleuk.co.uk/site-assets/files/DHL%20Disclaimer%20Form%20Template.pdf" target="_blank" class="t-dhl-btn">⬇ Download DHL Disclaimer Form (PDF)</a>
+      <p>Once signed, attach it using the <strong>Attachments</strong> field below before clicking Submit.</p>
+    </div>
+
+    <div id="tukLoader" class="t-loader">
+      <div class="t-loader-spinner"></div>
+      <p>Loading ticket form…</p>
+    </div>
+    <iframe id="tukFrame" src="about:blank" scrolling="no"></iframe>
+  </div>
+
+
+  <!-- COMPLETION PANEL — shown when ticket is submitted -->
+  <div id="tukDone" style="display:none; margin-top:24px;">
+    <div style="background:linear-gradient(140deg,#13703f 0%,#1f9d57 100%);border-radius:var(--radius);padding:40px 36px;text-align:center;box-shadow:var(--shadow-lg);position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.05);pointer-events:none;"></div>
+      <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 20px;border:2px solid rgba(255,255,255,.3);">✓</div>
+      <h2 style="color:#fff;font-size:22px;font-weight:700;margin-bottom:12px;line-height:1.3;">Your dispute has been submitted — thank you.</h2>
+      <p style="color:rgba(255,255,255,.9);font-size:14.5px;line-height:1.75;max-width:560px;margin:0 auto 20px;">We have received your case and will begin reviewing it alongside the records held by your courier. You do not need to contact us again at this stage — we will be in touch directly.</p>
+      <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-sm);padding:18px 22px;max-width:560px;margin:0 auto 24px;text-align:left;">
+        <p style="color:#fff;font-weight:700;font-size:13.5px;margin-bottom:10px;letter-spacing:.04em;text-transform:uppercase;font-family:var(--tuk-head);">What happens next</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;margin-top:1px;">1</div>
+            <p style="color:rgba(255,255,255,.9);font-size:13.5px;line-height:1.6;margin:0;">Our team will review your case alongside the records held by your courier. This process takes an average of <strong style="color:#fff;">6–12 weeks</strong> and cannot be rushed. We will contact you as soon as we have a meaningful update.</p>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;margin-top:1px;">2</div>
+            <p style="color:rgba(255,255,255,.9);font-size:13.5px;line-height:1.6;margin:0;">We are unable to offer a refund or replacement until the investigation has been <strong style="color:#fff;">formally concluded</strong>. Not all cases are decided in the customer’s favour.</p>
+          </div>
+        </div>
+      </div>
+      <p style="color:rgba(255,255,255,.7);font-size:12.5px;">Please quote your order number in any future correspondence.</p>
+    </div>
+  </div>
+
+
+
+<!-- JS bootstrap: img onerror fires even inside ajax-injected innerHTML -->
+<img src="x" onerror="
+  var s=document.createElement('script');
+  s.text=document.getElementById('tukJS').textContent;
+  document.head.appendChild(s);
+  this.parentNode.removeChild(this);
+" style="display:none">
+
+<script id="tukJS" type="text/plain">
+(function(){
+  var done = 0;
+  var total = 5;
+  var aff = false;
+  var pending = null;
+
+  function g(id){ return document.getElementById(id); }
+  function v(id){ var e=g(id); return e?e.value:''; }
+
+  function tick(idx){
+    var cb = g('tukC'+idx);
+    var st = g('tukS'+idx);
+    if(!cb||!st) return;
+    if(cb.checked){ st.classList.add('done'); done++; }
+    else { st.classList.remove('done'); done--; }
+    prog();
+  }
+
+  function prog(){
+    var pct = Math.round((done/total)*100);
+    var pb = g('tukPB'); if(pb) pb.style.width=pct+'%';
+    var pt = g('tukPT'); if(pt) pt.textContent=done+' of '+total;
+    var gate = g('tukGate');
+    var form = g('tukForm');
+    if(!gate||!form) return;
+    if(done>=total){
+      gate.style.display='none';
+      form.classList.add('open');
+      form.scrollIntoView({behavior:'smooth',block:'start'});
+    } else {
+      gate.style.display='block';
+      form.classList.remove('open');
+    }
+  }
+
+  function affChange(){
+    var cb=g('tukAff'); var btn=g('tukSubmit');
+    if(!cb||!btn) return;
+    aff=cb.checked; btn.disabled=!aff;
+  }
+
+  function submit(){
+    var req=['tF_name','tF_email','tF_order','tF_carrier','tF_tracking','tF_address','tF_crn','tF_date','tF_neighbours','tF_footage'];
+    for(var i=0;i<req.length;i++){ if(!v(req[i]).trim()){ alert('Please complete all required fields (marked *).'); return; } }
+    var msg=[];
+    msg.push('=== PARCEL NOT RECEIVED - FORMAL DISPUTE ===');
+    msg.push('Name: '+v('tF_name'));
+    msg.push('Email: '+v('tF_email'));
+    msg.push('Order: '+v('tF_order'));
+    var courierVal = v('tF_carrier');
+    msg.push('Courier: '+courierVal);
+    if(courierVal==='DHL') msg.push('DHL Disclaimer Form: Customer confirmed download and will attach signed copy.');
+    msg.push('Tracking: '+v('tF_tracking'));
+    msg.push('Address: '+v('tF_address'));
+    var rawDate=v('tF_date');
+    var fmtDate=rawDate;
+    if(rawDate){ var dp=rawDate.split('-'); if(dp.length===3) fmtDate=dp[2]+'/'+dp[1]+'/'+dp[0]; }
+    msg.push('Delivered (tracking): '+fmtDate);
+    msg.push('Crime Reference: '+v('tF_crn'));
+    msg.push('Neighbours checked: '+v('tF_neighbours'));
+    msg.push('CCTV/footage: '+v('tF_footage'));
+    msg.push('Tracking notes: '+(v('tF_tracking_notes')||'(none)'));
+    msg.push('Additional: '+(v('tF_additional')||'(none)'));
+    msg.push('DECLARATION: Customer confirmed affidavit requirement. All info is truthful.');
+    msg.push('--- Submitted via Parcel Dispute page ---');
+    pending={
+      subject:'Parcel Not Received - Formal Dispute - Order '+v('tF_order'),
+      message:msg.join('\n'),
+      department:'4',
+      email:v('tF_email')
+    };
+    g('tukForm').style.display='none';
+    var panel=g('tukPanel'); panel.style.display='block';
+    /* Show DHL block if DHL selected */
+    var dhlBlock=g('tukDHL');
+    if(dhlBlock) dhlBlock.style.display=(v('tF_carrier')==='DHL')?'block':'none';
+    panel.scrollIntoView({behavior:'smooth',block:'start'});
+    var frame=g('tukFrame');
+    frame.src='https://www.tackleuk.co.uk/contact/new-support-ticket';
+  }
+
+  function inject(data){
+    var frame=g('tukFrame');
+    var doc;
+    try{ doc=frame.contentDocument||frame.contentWindow.document; }catch(e){ return; }
+
+    /* ── Remove unwanted elements from DOM entirely (no CSS hiding which can clip captcha) ── */
+    var removeSelectors = [
+      '#top','header','#menu','#breadcrumb','#main-top','#main-bottom',
+      'footer','#site-builder-toolbar','section#promotion',
+      '.trustpilot-reviews','.contact-info',
+      'div.row','div.row1','.card-header'
+    ];
+    removeSelectors.forEach(function(sel){
+      var els = doc.querySelectorAll(sel);
+      els.forEach(function(el){ if(el && el.parentNode) el.parentNode.removeChild(el); });
+    });
+    /* Remove Contact Us h1 specifically */
+    var h1s = doc.querySelectorAll('h1');
+    h1s.forEach(function(h){ if(h.textContent.trim()==='Contact Us' && h.parentNode) h.parentNode.removeChild(h); });
+
+    /* ── Strip padding/margin from wrappers so form sits flush ── */
+    var s = doc.createElement('style');
+    s.textContent = [
+      /* Strip body/wrapper padding so form sits flush — nothing else */
+      'html,body{background:transparent!important;margin:0!important;padding:0!important;}',
+      'section#background,section#outer-wrapper,section#content,main.container,.raw-html-embed',
+        '{padding:0!important;margin:0!important;background:transparent!important;max-width:100%!important;}',
+      /* Let Bootstrap render the card/fields naturally — just remove the header */
+      '.card-header{display:none!important;}',
+      '.card.shadow{margin:0!important;}',
+      /* Captcha must never be clipped */
+      '.recaptcha{overflow:visible!important;}',
+      '.recaptcha iframe{border:none!important;}'
+    ].join('');
+    doc.head.appendChild(s);
+
+    var sel=doc.getElementById('DepartmentId'); if(sel) sel.value=data.department;
+    var subj=doc.getElementById('Subject'); if(subj) subj.value=data.subject;
+    var msg=doc.getElementById('Message'); if(msg) msg.value=data.message;
+    /* Populate email field */
+    var emailInputs=doc.querySelectorAll('input[type="email"],input[name*="mail"],input[id*="mail"]');
+    emailInputs.forEach(function(ei){ if(!ei.closest('.mailchimp-form')) ei.value=data.email; });
+
+    /* ── Explicitly render reCAPTCHA — the ES module may not auto-fire inside iframe ── */
+    function renderCaptcha(){
+      try {
+        var w = frame.contentWindow;
+        var captchaDiv = doc.querySelector('.recaptcha');
+        if(!captchaDiv) return;
+        /* Already rendered — has a child iframe */
+        if(captchaDiv.querySelector('iframe')) return;
+        var sitekey = captchaDiv.getAttribute('data-sitekey');
+        if(w.grecaptcha && w.grecaptcha.render) {
+          w.grecaptcha.render(captchaDiv, { sitekey: sitekey });
+        } else if(w.grecaptcha && w.grecaptcha.ready) {
+          w.grecaptcha.ready(function(){
+            if(!captchaDiv.querySelector('iframe'))
+              w.grecaptcha.render(captchaDiv, { sitekey: sitekey });
+          });
+        }
+      } catch(e){}
+    }
+    /* Try immediately, then retry in case API not ready yet */
+    renderCaptcha();
+    setTimeout(renderCaptcha, 1000);
+    setTimeout(renderCaptcha, 2500);
+
+    g('tukLoader').style.display='none';
+    frame.style.height='700px';
+    frame.style.display='block';
+    var lastH=0,stable=0;
+    var t=setInterval(function(){
+      try{
+        /* Measure the form card directly — avoids picking up hidden page chrome */
+        var card=doc.querySelector('.card.shadow')||doc.querySelector('.card')||doc.querySelector('div.form');
+        var h=card ? (card.getBoundingClientRect().bottom + (doc.defaultView||doc.parentWindow).pageYOffset + 40) : Math.max(doc.documentElement.scrollHeight,doc.body?doc.body.scrollHeight:0);
+        h=Math.round(h);
+        if(h===lastH){stable++;if(stable>=3)clearInterval(t);}else{stable=0;lastH=h;}
+        if(h>100) frame.style.height=h+'px';
+      }catch(e){clearInterval(t);}
+    },300);
+    setTimeout(function(){clearInterval(t);},15000);
+    /* Watch for the form card being hidden — this is the reliable signal that
+       the AJAX submission succeeded. The success div text approach was firing early
+       because the hidden div was being detected before actual submission. */
+    var formWasVisible = false;
+    var sp=setInterval(function(){
+      try{
+        var formCard = doc.querySelector('.card.shadow');
+        var formDiv  = doc.querySelector('div.form');
+
+        /* Wait until we've confirmed the form is visible first */
+        if(!formWasVisible){
+          if(formCard && formCard.style.display!=='none') formWasVisible=true;
+          if(formDiv  && formDiv.style.display!=='none')  formWasVisible=true;
+          return;
+        }
+
+        /* Now watch for the form card to be hidden — means AJAX succeeded */
+        var formGone = (formCard && formCard.style.display==='none') ||
+                       (formDiv  && formDiv.style.display==='none' && !doc.querySelector('.card.shadow'));
+
+        /* Also accept: success div visible AND form no longer displayed */
+        var successDiv = doc.querySelector('.success.alert-success');
+        var successVisible = successDiv && successDiv.style.display!=='' && successDiv.style.display!=='none';
+
+        if((formGone || successVisible) && !doc.tukFired){
+          doc.tukFired = true;
+          clearInterval(sp);
+
+          /* Show completion panel on the parent page */
+          try {
+            var parentDoc = window.parent.document;
+            var donePanel = parentDoc.getElementById('tukDone');
+            var ticketPanel = parentDoc.getElementById('tukPanel');
+            if(donePanel){
+              if(ticketPanel) ticketPanel.style.display='none';
+              donePanel.style.display='block';
+              setTimeout(function(){
+                try{ donePanel.scrollIntoView({behavior:'smooth',block:'end'}); }catch(e){}
+              }, 150);
+            }
+          } catch(e){}
+        }
+      }catch(e){clearInterval(sp);}
+    },500);
+    setTimeout(function(){clearInterval(sp);},300000);
+  }
+  function bind(){
+    for(var i=0;i<total;i++){
+      (function(idx){
+        var cb=g('tukC'+idx);
+        if(cb&&!cb._b){ cb._b=1; cb.addEventListener('change',function(){tick(idx);}); }
+      })(i);
+    }
+    var a=g('tukAff'); if(a&&!a._b){ a._b=1; a.addEventListener('change',affChange); }
+    var btn=g('tukSubmit'); if(btn&&!btn._b){ btn._b=1; btn.addEventListener('click',submit); }
+    var frame=g('tukFrame');
+    if(frame&&!frame._b){
+      frame._b=1;
+      frame.addEventListener('load',function(){ if(pending) setTimeout(function(){inject(pending);},3000); });
+    }
+  }
+
+  /* Set date field default to today */
+  (function(){
+    var d = new Date();
+    var yyyy = d.getFullYear();
+    var mm = String(d.getMonth()+1).padStart(2,'0');
+    var dd = String(d.getDate()).padStart(2,'0');
+    var el = g('tF_date');
+    if(el){ el.value = yyyy+'-'+mm+'-'+dd; el.max = yyyy+'-'+mm+'-'+dd; }
+  })();
+
+  bind();
+  setTimeout(bind,300);
+  setTimeout(bind,1000);
+  setTimeout(bind,2500);
+})();
+</script>
