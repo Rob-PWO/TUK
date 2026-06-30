@@ -97,14 +97,27 @@
   .t-warn p:last-child { margin-bottom:0; }
   .t-warn strong { color:#5a3d00; }
 
-  /* ── Info strip ── */
-  .t-info-strip { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px; }
-  .t-info-chip {
-    display:inline-flex; align-items:center; gap:8px;
-    background:var(--white); border:1px solid var(--tuk-line); border-radius:var(--radius-sm);
-    padding:11px 16px; font-size:14px; color:var(--tuk-muted); box-shadow:var(--shadow);
+  /* ── Key facts box ── */
+  .t-facts {
+    background:var(--white); border:1px solid var(--tuk-line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:22px 24px; margin-bottom:24px;
   }
-  .t-info-chip strong { font-family:var(--tuk-head); color:var(--tuk-navy); font-weight:700; }
+  .t-facts-lead { font-size:14.5px; color:var(--tuk-muted); line-height:1.6; margin-bottom:18px; }
+  .t-facts-lead strong { font-family:var(--tuk-head); color:var(--tuk-navy); font-weight:700; }
+  .t-facts-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .t-fact { display:flex; align-items:flex-start; gap:12px; }
+  .t-fact + .t-fact { border-left:1px solid var(--tuk-line); padding-left:20px; }
+  .t-fact-ic {
+    width:40px; height:40px; border-radius:10px; background:var(--tuk-blue-soft);
+    display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;
+  }
+  .t-fact-txt { display:flex; flex-direction:column; }
+  .t-fact-txt strong { font-family:var(--tuk-head); font-size:15px; font-weight:700; color:var(--tuk-navy); line-height:1.3; }
+  .t-fact-txt span { font-size:13px; color:var(--tuk-muted); line-height:1.5; margin-top:3px; }
+  @media(max-width:640px){
+    .t-facts-grid { grid-template-columns:1fr; gap:16px; }
+    .t-fact + .t-fact { border-left:0; padding-left:0; border-top:1px solid var(--tuk-line); padding-top:16px; }
+  }
 
   /* ── Section title ── */
   .t-sec-title { font-family:var(--tuk-head); font-size:18px; font-weight:700; color:var(--tuk-navy); margin-bottom:6px; }
@@ -299,11 +312,23 @@
     <p>Fraudulent claims are referred to our legal team and, where appropriate, to Action Fraud and local trading standards.</p>
   </div>
 
-  <!-- WHAT TO EXPECT -->
-  <div class="t-info-strip">
-    <div class="t-info-chip">🕐 <strong>6–12 weeks</strong> average resolution time</div>
-    <div class="t-info-chip">📋 Legal affidavit required</div>
-    <div class="t-info-chip">🕵 Investigator may visit your address</div>
+  <!-- KEY FACTS -->
+  <div class="t-facts">
+    <p class="t-facts-lead">Before you begin, here is what raising a parcel dispute typically involves:</p>
+    <div class="t-facts-grid">
+      <div class="t-fact">
+        <span class="t-fact-ic">🕐</span>
+        <span class="t-fact-txt"><strong>6–12 weeks to resolve</strong><span>Carrier investigations are thorough and cannot be rushed.</span></span>
+      </div>
+      <div class="t-fact">
+        <span class="t-fact-ic">📋</span>
+        <span class="t-fact-txt"><strong>Legal affidavit required</strong><span>You will be asked to sign a sworn statement of your account.</span></span>
+      </div>
+      <div class="t-fact">
+        <span class="t-fact-ic">🕵</span>
+        <span class="t-fact-txt"><strong>A visit is possible</strong><span>An investigator may attend your delivery address.</span></span>
+      </div>
+    </div>
   </div>
 
   <div class="t-card">
