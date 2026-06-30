@@ -790,11 +790,15 @@
     g('tukLoader').style.display='none';
     frame.style.height='700px';
     frame.style.display='block';
+    /* All success detection is scoped to the isolated form so we never pick
+       up another (hidden) form's success alert elsewhere on the page. */
+    var scope = formEl || doc;
+    var sCard = function(){ return (scope.querySelector && (scope.querySelector('.card.shadow')||scope.querySelector('.card')||scope.querySelector('div.form'))) || formEl; };
+
     var lastH=0,stable=0;
     var t=setInterval(function(){
       try{
-        /* Measure the form card directly - avoids picking up hidden page chrome */
-        var card=doc.querySelector('.card.shadow')||doc.querySelector('.card')||doc.querySelector('div.form');
+        var card=sCard();
         var h=card ? (card.getBoundingClientRect().bottom + (doc.defaultView||doc.parentWindow).pageYOffset + 40) : Math.max(doc.documentElement.scrollHeight,doc.body?doc.body.scrollHeight:0);
         h=Math.round(h);
         if(h===lastH){stable++;if(stable>=3)clearInterval(t);}else{stable=0;lastH=h;}
@@ -802,50 +806,72 @@
       }catch(e){clearInterval(t);}
     },300);
     setTimeout(function(){clearInterval(t);},15000);
-    /* Watch for the form card being hidden - this is the reliable signal that
-       the AJAX submission succeeded. The success div text approach was firing early
-       because the hidden div was being detected before actual submission. */
+
+    /* Show our "submitted, we'll be in touch" panel on the parent page. */
+    function fireDone(){
+      if(doc.tukFired) return; doc.tukFired = true;
+      try{ clearInterval(sp); }catch(e){}
+      try {
+        var parentDoc = window.parent.document;
+        var donePanel = parentDoc.getElementById('tukDone');
+        var ticketPanel = parentDoc.getElementById('tukPanel');
+        if(donePanel){
+          if(ticketPanel) ticketPanel.style.display='none';
+          donePanel.style.display='block';
+          setTimeout(function(){ try{ donePanel.scrollIntoView({behavior:'smooth',block:'end'}); }catch(e){} }, 150);
+        }
+      } catch(e){}
+    }
+
+    /* Primary signal: observe the actual POST to the ticket endpoint. After it
+       succeeds we confirm it wasn't a validation re-render before firing. */
+    var w = frame.contentWindow;
+    function confirmAndFire(){
+      setTimeout(function(){
+        try{
+          var sd = scope.querySelector('.success.alert-success') || scope.querySelector('.alert-success');
+          var ok = (sd && sd.offsetHeight>0) || (formEl && !doc.contains(formEl));
+          var hasErr = false;
+          var errs = scope.querySelectorAll('.field-validation-error,.input-validation-error');
+          for(var i=0;i<errs.length;i++){ if(errs[i].offsetHeight>0 && (errs[i].textContent||'').trim()){ hasErr=true; break; } }
+          if(ok || !hasErr) fireDone();
+        }catch(e){ fireDone(); }
+      }, 900);
+    }
+    try{
+      if(w && w.fetch && !w._tukF){
+        w._tukF=1; var of=w.fetch;
+        w.fetch=function(input,init){
+          var url=(typeof input==='string'?input:(input&&input.url))||'';
+          var m=((init&&init.method)||(input&&input.method)||'GET').toUpperCase();
+          var pr=of.apply(this,arguments);
+          if(/new-support-ticket/i.test(url) && m==='POST'){
+            try{ pr.then(function(resp){ if(resp && resp.status<400) confirmAndFire(); }); }catch(e){}
+          }
+          return pr;
+        };
+      }
+      if(w && w.XMLHttpRequest && !w._tukX){
+        w._tukX=1; var XP=w.XMLHttpRequest.prototype, oo=XP.open, osd=XP.send;
+        XP.open=function(method,url){ this._tukM=(method||'').toUpperCase(); this._tukU=url||''; return oo.apply(this,arguments); };
+        XP.send=function(){ var x=this;
+          try{ x.addEventListener('load',function(){ if(/new-support-ticket/i.test(x._tukU||'') && x._tukM==='POST' && x.status<400) confirmAndFire(); }); }catch(e){}
+          return osd.apply(this,arguments);
+        };
+      }
+    }catch(e){}
+
+    /* Backup signal: poll the form's own UI in case the network hook is missed. */
     var formWasVisible = false;
     var sp=setInterval(function(){
       try{
-        var formCard = doc.querySelector('.card.shadow');
-        var formDiv  = doc.querySelector('div.form');
-
-        /* Wait until we've confirmed the form is visible first */
-        if(!formWasVisible){
-          if(formCard && formCard.style.display!=='none') formWasVisible=true;
-          if(formDiv  && formDiv.style.display!=='none')  formWasVisible=true;
-          return;
-        }
-
-        /* Now watch for the form card to be hidden - means AJAX succeeded */
-        var formGone = (formCard && formCard.style.display==='none') ||
-                       (formDiv  && formDiv.style.display==='none' && !doc.querySelector('.card.shadow'));
-
-        /* Also accept: the success alert being revealed. The native form shows
-           it by removing the Bootstrap 'd-none' class (not an inline style). */
-        var successDiv = doc.querySelector('.success.alert-success');
-        var successVisible = successDiv && !successDiv.classList.contains('d-none') &&
-                             successDiv.style.display!=='none';
-
-        if((formGone || successVisible) && !doc.tukFired){
-          doc.tukFired = true;
-          clearInterval(sp);
-
-          /* Show completion panel on the parent page */
-          try {
-            var parentDoc = window.parent.document;
-            var donePanel = parentDoc.getElementById('tukDone');
-            var ticketPanel = parentDoc.getElementById('tukPanel');
-            if(donePanel){
-              if(ticketPanel) ticketPanel.style.display='none';
-              donePanel.style.display='block';
-              setTimeout(function(){
-                try{ donePanel.scrollIntoView({behavior:'smooth',block:'end'}); }catch(e){}
-              }, 150);
-            }
-          } catch(e){}
-        }
+        var card = sCard();
+        if(!formWasVisible){ if(card && card.offsetHeight>0) formWasVisible=true; return; }
+        var successDiv = scope.querySelector('.success.alert-success') || scope.querySelector('.alert-success');
+        var successVisible = !!(successDiv && successDiv.offsetHeight>0);
+        var formRemoved = formEl && !doc.contains(formEl);
+        var cardHidden  = card && card.style.display==='none';
+        if(successVisible || formRemoved || cardHidden) fireDone();
       }catch(e){clearInterval(sp);}
     },500);
     setTimeout(function(){clearInterval(sp);},300000);
