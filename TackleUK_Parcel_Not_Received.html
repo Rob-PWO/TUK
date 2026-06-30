@@ -709,31 +709,47 @@
     var doc;
     try{ doc=frame.contentDocument||frame.contentWindow.document; }catch(e){ return; }
 
-    /* ── Remove unwanted elements from DOM entirely (no CSS hiding which can clip captcha) ── */
-    var removeSelectors = [
-      '#top','header','#menu','#breadcrumb','#main-top','#main-bottom',
-      'footer','#site-builder-toolbar','section#promotion',
-      '.trustpilot-reviews','.contact-info',
-      'div.row','div.row1','.card-header'
-    ];
-    removeSelectors.forEach(function(sel){
-      var els = doc.querySelectorAll(sel);
-      els.forEach(function(el){ if(el && el.parentNode) el.parentNode.removeChild(el); });
-    });
-    /* Remove Contact Us h1 specifically */
-    var h1s = doc.querySelectorAll('h1');
-    h1s.forEach(function(h){ if(h.textContent.trim()==='Contact Us' && h.parentNode) h.parentNode.removeChild(h); });
+    /* ── Isolate ONLY the native support-ticket form ──────────────────────
+       The contact page now also embeds the help centre (#tuk-contact-app)
+       and a modal wrapper (#tuk-ticket-app), so rather than listing every
+       element to strip, lift the actual ticket form to the top of the iframe
+       body and hide everything else. The form is a petite-vue component
+       (v-scope="AjaxForm"); moving the node keeps its submit handler and
+       hidden tokens intact. */
+    var formEl = doc.querySelector('form[action*="new-support-ticket"]')
+              || (doc.getElementById('Message') && doc.getElementById('Message').closest('form'))
+              || doc.querySelector('form.form')
+              || doc.querySelector('.card.shadow');
 
-    /* ── Strip padding/margin from wrappers so form sits flush ── */
+    if(formEl && doc.body){
+      doc.body.insertBefore(formEl, doc.body.firstChild);
+      /* The page hides the inline form (form[action="/contact/new-support-ticket"]
+         {display:none}) until its modal opens — force it visible here. */
+      formEl.style.setProperty('display','block','important');
+      Array.prototype.slice.call(doc.body.children).forEach(function(c){
+        if(c===formEl) return;
+        var tag=(c.tagName||'').toUpperCase();
+        if(tag==='SCRIPT'||tag==='STYLE'||tag==='LINK'||tag==='TEMPLATE') return;
+        c.style.display='none';
+      });
+    } else {
+      /* Fallback: strip the known page chrome if the form can't be located */
+      ['#top','header','#menu','#breadcrumb','#main-top','#main-bottom',
+       'footer','#site-builder-toolbar','section#promotion','#tuk-contact-app',
+       '#tuk-ticket-app','.trustpilot-reviews','.contact-info',
+       'div.row','div.row1','.card-header'].forEach(function(sel){
+        doc.querySelectorAll(sel).forEach(function(el){ if(el&&el.parentNode) el.parentNode.removeChild(el); });
+      });
+    }
+
+    /* ── Strip wrapper padding so the form sits flush; hide the card header ── */
     var s = doc.createElement('style');
     s.textContent = [
-      /* Strip body/wrapper padding so form sits flush - nothing else */
       'html,body{background:transparent!important;margin:0!important;padding:0!important;}',
-      'section#background,section#outer-wrapper,section#content,main.container,.raw-html-embed',
-        '{padding:0!important;margin:0!important;background:transparent!important;max-width:100%!important;}',
-      /* Let Bootstrap render the card/fields naturally - just remove the header */
+      /* Belt-and-braces: only the ticket form shows as a top-level element */
+      'body > *:not(form):not(.card){display:none!important;}',
+      'form.form,.card.shadow{margin:0!important;max-width:100%!important;}',
       '.card-header{display:none!important;}',
-      '.card.shadow{margin:0!important;}',
       /* Captcha must never be clipped */
       '.recaptcha{overflow:visible!important;}',
       '.recaptcha iframe{border:none!important;}'
@@ -806,9 +822,11 @@
         var formGone = (formCard && formCard.style.display==='none') ||
                        (formDiv  && formDiv.style.display==='none' && !doc.querySelector('.card.shadow'));
 
-        /* Also accept: success div visible AND form no longer displayed */
+        /* Also accept: the success alert being revealed. The native form shows
+           it by removing the Bootstrap 'd-none' class (not an inline style). */
         var successDiv = doc.querySelector('.success.alert-success');
-        var successVisible = successDiv && successDiv.style.display!=='' && successDiv.style.display!=='none';
+        var successVisible = successDiv && !successDiv.classList.contains('d-none') &&
+                             successDiv.style.display!=='none';
 
         if((formGone || successVisible) && !doc.tukFired){
           doc.tukFired = true;
