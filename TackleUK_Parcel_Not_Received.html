@@ -143,8 +143,15 @@
     background:var(--tuk-line-2); transition:background var(--transition);
   }
   .t-step:hover { border-color:var(--tuk-blue); box-shadow:0 6px 18px rgba(13,59,84,.08); }
-  .t-step.t-done::before { background:var(--tuk-green); }
-  .t-step.t-done { border-color:#bfe3cc; background:#f3fbf6; }
+  /* Completed state is tied strictly to THIS step's own checkbox.
+     The .t-done class is a JS fallback for browsers without :has(). */
+  .t-step.t-done,
+  .t-step:has(.t-step-cb:checked) { border-color:#bfe3cc; background:#f3fbf6; }
+  .t-step.t-done::before,
+  .t-step:has(.t-step-cb:checked)::before { background:var(--tuk-green); }
+
+  /* Visually-hidden checkbox — toggled via its label's for= association */
+  .t-step-cb { position:absolute; width:1px; height:1px; opacity:0; margin:0; pointer-events:none; }
   .t-step label {
     display:flex; align-items:flex-start; gap:14px; cursor:pointer;
     padding:16px 18px 16px 20px; -webkit-user-select:none; user-select:none;
@@ -160,12 +167,13 @@
     border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg);
     opacity:0; transition:opacity var(--transition);
   }
+  .t-step-cb:checked ~ label .t-step-num,
   .t-step.t-done .t-step-num { background:var(--tuk-green); border-color:var(--tuk-green); }
-  .t-step.t-done:hover .t-step-num { border-color:var(--tuk-green); }
+  .t-step-cb:checked ~ label .t-step-num::after,
   .t-step.t-done .t-step-num::after { opacity:1; }
-  .t-step input[type=checkbox] { display:none; }
   .t-step .s-body { flex:1; }
   .t-step .s-title { font-family:var(--tuk-head); font-weight:600; color:var(--tuk-navy); font-size:16px; line-height:1.4; }
+  .t-step-cb:checked ~ label .s-title,
   .t-step.t-done .s-title { color:var(--tuk-green); }
   .t-step .s-detail { font-size:14px; color:var(--tuk-muted); margin-top:6px; line-height:1.6; }
   .t-step .s-detail strong { color:var(--tuk-ink); }
@@ -174,6 +182,7 @@
     background:#eaf7ef; border-radius:6px; padding:9px 12px;
     border-left:3px solid var(--tuk-green);
   }
+  .t-step-cb:checked ~ label .s-tip,
   .t-step.t-done .s-tip { display:block; }
 
   /* ── Gate ── */
@@ -369,8 +378,8 @@
 
       <ul class="t-steps">
         <li class="t-step" id="tukS0">
-          <label>
-            <input type="checkbox" id="tukC0">
+          <input type="checkbox" id="tukC0" class="t-step-cb">
+          <label for="tukC0">
             <div class="t-step-num"></div>
             <div class="s-body">
               <div class="s-title">Check with all members of your household</div>
@@ -380,8 +389,8 @@
           </label>
         </li>
         <li class="t-step" id="tukS1">
-          <label>
-            <input type="checkbox" id="tukC1">
+          <input type="checkbox" id="tukC1" class="t-step-cb">
+          <label for="tukC1">
             <div class="t-step-num"></div>
             <div class="s-body">
               <div class="s-title">Check with neighbours and any safe places</div>
@@ -391,8 +400,8 @@
           </label>
         </li>
         <li class="t-step" id="tukS2">
-          <label>
-            <input type="checkbox" id="tukC2">
+          <input type="checkbox" id="tukC2" class="t-step-cb">
+          <label for="tukC2">
             <div class="t-step-num"></div>
             <div class="s-body">
               <div class="s-title">Review any doorbell, CCTV, or dashcam footage</div>
@@ -402,8 +411,8 @@
           </label>
         </li>
         <li class="t-step" id="tukS3">
-          <label>
-            <input type="checkbox" id="tukC3">
+          <input type="checkbox" id="tukC3" class="t-step-cb">
+          <label for="tukC3">
             <div class="t-step-num"></div>
             <div class="s-body">
               <div class="s-title">Check your courier’s tracking record in full</div>
@@ -417,8 +426,8 @@
           </label>
         </li>
         <li class="t-step" id="tukS4">
-          <label>
-            <input type="checkbox" id="tukC4">
+          <input type="checkbox" id="tukC4" class="t-step-cb">
+          <label for="tukC4">
             <div class="t-step-num"></div>
             <div class="s-body">
               <div class="s-title">Obtain a Crime Reference Number</div>
