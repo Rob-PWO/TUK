@@ -150,12 +150,19 @@
     padding:16px 18px 16px 20px; -webkit-user-select:none; user-select:none;
   }
   .t-step-num {
-    width:28px; height:28px; border-radius:50%; border:2px solid var(--tuk-line-2);
-    display:flex; align-items:center; justify-content:center; font-family:var(--tuk-head);
-    font-size:13px; font-weight:700; color:var(--tuk-muted); flex-shrink:0; margin-top:1px;
-    transition:all var(--transition); background:var(--white);
+    width:24px; height:24px; border-radius:6px; border:2px solid var(--tuk-line-2);
+    flex-shrink:0; margin-top:1px; position:relative; background:var(--white);
+    transition:all var(--transition);
   }
-  .t-step.done .t-step-num { background:var(--tuk-green); border-color:var(--tuk-green); color:#fff; }
+  .t-step:hover .t-step-num { border-color:var(--tuk-blue); }
+  .t-step-num::after {
+    content:''; position:absolute; left:7px; top:3px; width:5px; height:10px;
+    border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg);
+    opacity:0; transition:opacity var(--transition);
+  }
+  .t-step.done .t-step-num { background:var(--tuk-green); border-color:var(--tuk-green); }
+  .t-step.done:hover .t-step-num { border-color:var(--tuk-green); }
+  .t-step.done .t-step-num::after { opacity:1; }
   .t-step input[type=checkbox] { display:none; }
   .t-step .s-body { flex:1; }
   .t-step .s-title { font-family:var(--tuk-head); font-weight:600; color:var(--tuk-navy); font-size:16px; line-height:1.4; }
@@ -364,7 +371,7 @@
         <li class="t-step" id="tukS0">
           <label>
             <input type="checkbox" id="tukC0">
-            <div class="t-step-num">1</div>
+            <div class="t-step-num"></div>
             <div class="s-body">
               <div class="s-title">Check with all members of your household</div>
               <div class="s-detail">Please confirm that no one else at your address — family members, housemates, or carers — has accepted, signed for, or put away the parcel without telling you.</div>
@@ -375,7 +382,7 @@
         <li class="t-step" id="tukS1">
           <label>
             <input type="checkbox" id="tukC1">
-            <div class="t-step-num">2</div>
+            <div class="t-step-num"></div>
             <div class="s-body">
               <div class="s-title">Check with neighbours and any safe places</div>
               <div class="s-detail">Drivers frequently leave parcels with a nearby neighbour or in a safe place (shed, porch, behind a bin). Check your tracking app or delivery card for any note. Knock on at least two or three neighbouring doors before proceeding.</div>
@@ -386,7 +393,7 @@
         <li class="t-step" id="tukS2">
           <label>
             <input type="checkbox" id="tukC2">
-            <div class="t-step-num">3</div>
+            <div class="t-step-num"></div>
             <div class="s-body">
               <div class="s-title">Review any doorbell, CCTV, or dashcam footage</div>
               <div class="s-detail">Review footage for the date and time shown in your tracking record and export any relevant clips.<br><br><strong>Important:</strong> Investigators routinely check <strong>Google Maps Street View</strong> of your address for visible cameras. If one is found, you must upload footage covering both the <em>time of delivery</em> and the period during which the parcel <em>may have been removed</em>. Failure to provide footage from a confirmed camera will result in your claim being closed.</div>
@@ -397,7 +404,7 @@
         <li class="t-step" id="tukS3">
           <label>
             <input type="checkbox" id="tukC3">
-            <div class="t-step-num">4</div>
+            <div class="t-step-num"></div>
             <div class="s-body">
               <div class="s-title">Check your courier’s tracking record in full</div>
               <div class="s-detail">Log in to the relevant portal and review the full delivery record:<br>
@@ -412,7 +419,7 @@
         <li class="t-step" id="tukS4">
           <label>
             <input type="checkbox" id="tukC4">
-            <div class="t-step-num">5</div>
+            <div class="t-step-num"></div>
             <div class="s-body">
               <div class="s-title">Obtain a Crime Reference Number</div>
               <div class="s-detail">Report the theft to the police and obtain a Crime Reference Number (CRN) online at <strong>report.police.uk</strong> or by calling <strong>101</strong>. This is mandatory — we cannot process a dispute without a CRN.</div>
@@ -605,16 +612,24 @@
   function g(id){ return document.getElementById(id); }
   function v(id){ var e=g(id); return e?e.value:''; }
 
+  /* Recount checked steps straight from the DOM each time — avoids the
+     counter drifting out of sync if a change event ever fires twice. */
+  function recount(){
+    done = 0;
+    for(var i=0;i<total;i++){
+      var c = g('tukC'+i), s = g('tukS'+i);
+      if(c && c.checked){ done++; if(s) s.classList.add('done'); }
+      else if(s){ s.classList.remove('done'); }
+    }
+  }
+
   function tick(idx){
-    var cb = g('tukC'+idx);
-    var st = g('tukS'+idx);
-    if(!cb||!st) return;
-    if(cb.checked){ st.classList.add('done'); done++; }
-    else { st.classList.remove('done'); done--; }
+    recount();
     prog();
   }
 
   function prog(){
+    recount();
     var pct = Math.round((done/total)*100);
     var pb = g('tukPB'); if(pb) pb.style.width=pct+'%';
     var pt = g('tukPT'); if(pt) pt.textContent=done+' of '+total;
@@ -624,10 +639,12 @@
     if(done>=total){
       gate.style.display='none';
       form.classList.add('open');
+      form.style.display='block';      /* inline — beats any host-site CSS */
       form.scrollIntoView({behavior:'smooth',block:'start'});
     } else {
       gate.style.display='block';
       form.classList.remove('open');
+      form.style.display='none';
     }
   }
 
