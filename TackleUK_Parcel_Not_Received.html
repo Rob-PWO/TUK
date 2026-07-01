@@ -807,9 +807,20 @@
     },300);
     setTimeout(function(){clearInterval(t);},15000);
 
+    /* Nothing may confirm until the user has actually submitted the ticket.
+       submitted is set by the form's real submit event, the Submit button
+       click, and by observing the POST — so the panel can never appear early. */
+    var submitted=false;
+    function markSubmitted(){ submitted=true; }
+    try{
+      if(formEl && formEl.addEventListener) formEl.addEventListener('submit', markSubmitted, true);
+      var sbtn = scope.querySelector && (scope.querySelector('button[type=submit]')||scope.querySelector('.btn-primary')||scope.querySelector('button'));
+      if(sbtn && sbtn.addEventListener) sbtn.addEventListener('click', markSubmitted, true);
+    }catch(e){}
+
     /* Show our "submitted, we'll be in touch" panel on the parent page. */
     function fireDone(){
-      if(doc.tukFired) return; doc.tukFired = true;
+      if(doc.tukFired || !submitted) return; doc.tukFired = true;
       try{ clearInterval(sp); }catch(e){}
       try {
         var parentDoc = window.parent.document;
@@ -823,10 +834,11 @@
       } catch(e){}
     }
 
-    /* Primary signal: observe the actual POST to the ticket endpoint. After it
-       succeeds we confirm it wasn't a validation re-render before firing. */
+    /* Primary signal: observe the actual POST to the ticket endpoint. Only
+       after it succeeds, and only if it wasn't a validation re-render. */
     var w = frame.contentWindow;
     function confirmAndFire(){
+      markSubmitted();
       setTimeout(function(){
         try{
           var sd = scope.querySelector('.success.alert-success') || scope.querySelector('.alert-success');
@@ -846,6 +858,7 @@
           var m=((init&&init.method)||(input&&input.method)||'GET').toUpperCase();
           var pr=of.apply(this,arguments);
           if(/new-support-ticket/i.test(url) && m==='POST'){
+            markSubmitted();
             try{ pr.then(function(resp){ if(resp && resp.status<400) confirmAndFire(); }); }catch(e){}
           }
           return pr;
@@ -855,23 +868,25 @@
         w._tukX=1; var XP=w.XMLHttpRequest.prototype, oo=XP.open, osd=XP.send;
         XP.open=function(method,url){ this._tukM=(method||'').toUpperCase(); this._tukU=url||''; return oo.apply(this,arguments); };
         XP.send=function(){ var x=this;
-          try{ x.addEventListener('load',function(){ if(/new-support-ticket/i.test(x._tukU||'') && x._tukM==='POST' && x.status<400) confirmAndFire(); }); }catch(e){}
+          try{
+            if(/new-support-ticket/i.test(x._tukU||'') && x._tukM==='POST') markSubmitted();
+            x.addEventListener('load',function(){ if(/new-support-ticket/i.test(x._tukU||'') && x._tukM==='POST' && x.status<400) confirmAndFire(); });
+          }catch(e){}
           return osd.apply(this,arguments);
         };
       }
     }catch(e){}
 
-    /* Backup signal: poll the form's own UI in case the network hook is missed. */
-    var formWasVisible = false;
+    /* Backup signal: only active AFTER a submit, in case the network hook is
+       missed. Fires on the form's success alert appearing or the form being
+       removed — never before the user has submitted. */
     var sp=setInterval(function(){
       try{
-        var card = sCard();
-        if(!formWasVisible){ if(card && card.offsetHeight>0) formWasVisible=true; return; }
+        if(!submitted) return;
         var successDiv = scope.querySelector('.success.alert-success') || scope.querySelector('.alert-success');
         var successVisible = !!(successDiv && successDiv.offsetHeight>0);
         var formRemoved = formEl && !doc.contains(formEl);
-        var cardHidden  = card && card.style.display==='none';
-        if(successVisible || formRemoved || cardHidden) fireDone();
+        if(successVisible || formRemoved) fireDone();
       }catch(e){clearInterval(sp);}
     },500);
     setTimeout(function(){clearInterval(sp);},300000);
