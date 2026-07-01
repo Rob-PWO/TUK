@@ -807,14 +807,15 @@
     },300);
     setTimeout(function(){clearInterval(t);},15000);
 
-    /* Record that the user has actually submitted (button click / form submit).
-       Used only as an extra guard — the real trigger is the success alert. */
+    /* Record that the user has actually submitted (button click / form submit),
+       so nothing can confirm before a real submission. */
     var submitted=false;
     try{
       if(formEl && formEl.addEventListener) formEl.addEventListener('submit', function(){ submitted=true; }, true);
       var sbtn = scope.querySelector && (scope.querySelector('button[type=submit]')||scope.querySelector('.btn-primary')||scope.querySelector('button'));
       if(sbtn && sbtn.addEventListener) sbtn.addEventListener('click', function(){ submitted=true; }, true);
     }catch(e){}
+    var preMsg = (msg && msg.value) || '';
 
     /* Show our "submitted, we'll be in touch" panel on the parent page. */
     function fireDone(){
@@ -832,21 +833,56 @@
       } catch(e){}
     }
 
-    /* The ONLY trigger: the form's own success alert becoming visible with its
-       "successfully submitted" text. The form shows this only after the ticket
-       has been accepted by the server, so the panel can never appear early or
-       interrupt the submission. Requires a prior submit as a belt-and-braces
-       guard. Deliberately does NOT react to the form node moving/re-rendering,
-       which was causing the confirmation to fire before the ticket was sent. */
+    /* Primary trigger: read the server's response to the ticket POST. A genuine
+       success comes back WITHOUT ASP.NET validation-error markers; a validation
+       re-render contains them. This only runs after the POST completes, so it
+       can never fire before the ticket has actually been sent. */
+    function judgeBody(body){
+      try{
+        if(!submitted) return;
+        if(/input-validation-error|field-validation-error/i.test(body||'')) return; /* validation failed */
+        fireDone();
+      }catch(e){ if(submitted) fireDone(); }
+    }
+    var w = frame.contentWindow;
+    try{
+      if(w && w.fetch && !w._tukF){
+        w._tukF=1; var of=w.fetch;
+        w.fetch=function(input,init){
+          var url=(typeof input==='string'?input:(input&&input.url))||'';
+          var m=((init&&init.method)||(input&&input.method)||'GET').toUpperCase();
+          var pr=of.apply(this,arguments);
+          if(/new-support-ticket/i.test(url) && m==='POST'){
+            try{ pr.then(function(resp){
+              if(!resp || resp.status>=400) return;
+              try{ resp.clone().text().then(judgeBody).catch(function(){ if(submitted) fireDone(); }); }
+              catch(e){ if(submitted) fireDone(); }
+            }); }catch(e){}
+          }
+          return pr;
+        };
+      }
+      if(w && w.XMLHttpRequest && !w._tukX){
+        w._tukX=1; var XP=w.XMLHttpRequest.prototype, oo=XP.open, os=XP.send;
+        XP.open=function(method,url){ this._tukM=(method||'').toUpperCase(); this._tukU=url||''; return oo.apply(this,arguments); };
+        XP.send=function(){ var x=this;
+          try{ x.addEventListener('load',function(){ if(/new-support-ticket/i.test(x._tukU||'') && x._tukM==='POST' && x.status<400) judgeBody(x.responseText||''); }); }catch(e){}
+          return os.apply(this,arguments);
+        };
+      }
+    }catch(e){}
+
+    /* Backup triggers (only after a real submit, so never early): the form's
+       success alert becomes visible, or the pre-filled message field is reset
+       (both happen only once the server has accepted the ticket). */
     var sp=setInterval(function(){
       try{
         if(!submitted) return;
         var sd = scope.querySelector('.success.alert-success') || scope.querySelector('.alert-success');
-        if(sd && sd.offsetHeight>0 && /submit|received|thank/i.test((sd.textContent||''))){
-          fireDone();
-        }
+        if(sd && sd.offsetHeight>0 && /submit|received|thank|success/i.test(sd.textContent||'')){ fireDone(); return; }
+        if(preMsg && msg && msg.value===''){ fireDone(); return; } /* form reset on success */
       }catch(e){ clearInterval(sp); }
-    },400);
+    },500);
     setTimeout(function(){ try{clearInterval(sp);}catch(e){} },300000);
   }
   function bind(){
