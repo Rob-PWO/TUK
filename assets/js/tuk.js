@@ -9,7 +9,7 @@
   "use strict";
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
-  const money = (n) => "£" + n.toFixed(2);
+  const money = (n) => "£" + n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const FREE_DELIVERY = 150;
 
   /* ---- tiny global store (persisted) ---------------------------------- */
@@ -55,7 +55,7 @@
       const show = () => sug.classList.add("open");
       const hide = () => sug.classList.remove("open");
       input.addEventListener("focus", show);
-      input.addEventListener("input", () => { input.value.length ? show() : show(); });
+      input.addEventListener("input", show); // panel is useful even when empty (popular searches)
       document.addEventListener("click", (e) => { if (!search.contains(e.target)) hide(); });
       input.addEventListener("keydown", (e) => { if (e.key === "Escape") { hide(); input.blur(); } });
     }
@@ -91,6 +91,8 @@
     $$(".modal.open").forEach((m) => m.classList.remove("open"));
     $$(".filters.open").forEach((f) => f.classList.remove("open"));
     $$(".menu-drawer.open").forEach((m) => m.classList.remove("open"));
+    const hb = $(".hamburger");
+    hb && hb.setAttribute("aria-expanded", "false");
     overlay && overlay.classList.remove("open");
     document.body.style.overflow = "";
   }
@@ -109,6 +111,8 @@
     burger.className = "hamburger";
     burger.type = "button";
     burger.setAttribute("aria-label", "Open menu");
+    burger.setAttribute("aria-expanded", "false");
+    burger.setAttribute("aria-controls", "mobileMenu");
     burger.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
     hostRow.insertBefore(burger, hostRow.firstChild);
 
@@ -141,6 +145,9 @@
 
     const md = document.createElement("aside");
     md.className = "menu-drawer";
+    md.id = "mobileMenu";
+    md.setAttribute("role", "dialog");
+    md.setAttribute("aria-modal", "true");
     md.setAttribute("aria-label", "Main menu");
     md.innerHTML =
       '<div class="md-head"><a href="index.html" class="logo"><img src="assets/img/logo-white.webp" alt="TackleUK - the home of fishing" height="34"></a>' +
@@ -157,6 +164,7 @@
 
     burger.addEventListener("click", () => {
       md.classList.add("open");
+      burger.setAttribute("aria-expanded", "true");
       overlay && overlay.classList.add("open");
       document.body.style.overflow = "hidden";
     });
@@ -194,16 +202,22 @@
   }
   function chQty(i, d) { const c = store.cart; if (!c[i]) return; c[i].qty = Math.max(1, c[i].qty + d); store.cart = c; afterCart(); renderDrawer(); }
 
-  function afterCart() { syncCount(); syncProgress(); }
+  function afterCart() {
+    syncCount(); syncProgress();
+    // keep an already-open drawer live (e.g. upsell "Add" clicked inside it)
+    if (drawer && drawer.classList.contains("open")) renderDrawer();
+  }
 
   function addToCart(p, openIt = true) {
+    p.variant = p.variant == null ? null : p.variant; // normalise so null/undefined dedupe as one line
     const c = store.cart;
-    const ex = c.find((i) => i.id === p.id && i.variant === p.variant);
+    const ex = c.find((i) => i.id === p.id && (i.variant == null ? null : i.variant) === p.variant);
     if (ex) ex.qty += p.qty || 1; else c.push({ ...p, qty: p.qty || 1 });
     store.cart = c;
     afterCart();
-    toast(p.name + " added to basket", "Total " + money(cartTotal()));
+    // the drawer opening IS the confirmation; only toast when it stays shut
     if (openIt) openDrawer();
+    else toast(p.name + " added to basket", "Total " + money(cartTotal()));
   }
 
   /* ---- add-to-cart buttons (data-attrs) -------------------------------- */
@@ -290,6 +304,17 @@
     }));
   });
 
+  /* ---- anchors that target a tab panel: activate the tab first -------- */
+  $$('a[href^="#"]').forEach((a) => a.addEventListener("click", (e) => {
+    const id = a.getAttribute("href").slice(1);
+    const panel = id && document.getElementById(id);
+    if (!panel || !panel.classList.contains("tabpanel")) return;
+    e.preventDefault();
+    const btn = $('[data-tab="' + panel.dataset.panel + '"]');
+    btn && btn.click();
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }));
+
   /* ---- filter accordions + mobile filter toggle ----------------------- */
   $$(".filter-group h5").forEach((h) => h.addEventListener("click", () => h.parentElement.classList.toggle("collapsed")));
   $$("[data-filter-toggle]").forEach((b) => b.addEventListener("click", () => {
@@ -323,12 +348,8 @@
 
   /* ---- "viewing now" social proof ------------------------------------- */
   $$("[data-viewing]").forEach((el) => {
-    const base = 6 + Math.floor(Math.random() * 18);
-    el.querySelector("[data-viewing-n]").textContent = base;
-    setInterval(() => {
-      const n = Math.max(3, base + Math.floor(Math.random() * 7) - 3);
-      const t = el.querySelector("[data-viewing-n]"); if (t) t.textContent = n;
-    }, 4000);
+    // stable per page-load: a number that jumps every few seconds reads as fake
+    el.querySelector("[data-viewing-n]").textContent = 6 + Math.floor(Math.random() * 18);
   });
 
   /* ---- hero slider ----------------------------------------------------- */
@@ -343,8 +364,10 @@
       dots.forEach((d, k) => d.classList.toggle("active", k === idx));
     }
     if (slides.length > 1) {
-      dots.forEach((d, k) => d.addEventListener("click", () => go(k)));
-      go(0); setInterval(() => go(idx + 1), 6000);
+      // stop auto-rotation once the user takes control of the dots
+      const auto = setInterval(() => go(idx + 1), 6000);
+      dots.forEach((d, k) => d.addEventListener("click", () => { clearInterval(auto); go(k); }));
+      go(0);
     }
   }
 
@@ -398,6 +421,54 @@
   if (btt) {
     window.addEventListener("scroll", () => btt.classList.toggle("show", window.scrollY > 600), { passive: true });
     btt.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  }
+
+  /* ---- static basket page: make the demo rows behave like a real cart - */
+  const bRows = $$("[data-cart-row]");
+  if (bRows.length) {
+    const basketRecalc = () => {
+      let count = 0, rrp = 0, total = 0;
+      const rows = $$("[data-cart-row]");
+      rows.forEach((r) => {
+        const inp = $("input", r);
+        const q = Math.max(1, +(inp && inp.value) || 1);
+        const unit = +r.dataset.unit;
+        const rr = +(r.dataset.rrp || r.dataset.unit);
+        count += q; total += unit * q; rrp += rr * q;
+        const lp = $("[data-line-price]", r); if (lp) lp.textContent = money(unit * q);
+        const lw = $("[data-line-was]", r); if (lw) lw.textContent = money(rr * q);
+      });
+      const save = rrp - total;
+      const freeDel = total >= FREE_DELIVERY;
+      const grand = total + (freeDel ? 0 : 4.99);
+      $$("[data-sum-count]").forEach((e) => e.textContent = count);
+      $$("[data-sum-rrp]").forEach((e) => e.textContent = money(rrp));
+      $$("[data-sum-save]").forEach((e) => { e.textContent = "-" + money(save); const row = e.closest(".sumline"); if (row) row.style.display = save > 0 ? "" : "none"; });
+      $$("[data-sum-save-tag]").forEach((e) => { e.textContent = "You're saving " + money(save) + " on this order"; const w = e.closest(".savings-tag"); if (w) w.style.display = save > 0 ? "" : "none"; });
+      $$("[data-sum-del]").forEach((e) => { e.textContent = freeDel ? "FREE" : money(4.99); e.classList.toggle("free", freeDel); });
+      $$("[data-sum-total]").forEach((e) => e.textContent = money(grand));
+      $$("[data-sum-klarna]").forEach((e) => e.textContent = money(grand / 3));
+      const bb = $("[data-basket-ship-bar]");
+      if (bb) bb.style.width = Math.min(100, (total / FREE_DELIVERY) * 100) + "%";
+      const bm = $("[data-basket-ship-msg]");
+      if (bm) bm.innerHTML = freeDel
+        ? '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="var(--green-600)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your order qualifies for <b style="margin-left:3px">FREE next-day delivery!</b>'
+        : 'Add <b>' + money(FREE_DELIVERY - total) + '</b> more for FREE next-day delivery';
+      if (!rows.length) {
+        const wrap = $(".cart-items");
+        if (wrap) wrap.innerHTML = '<div style="text-align:center;padding:56px 20px;color:var(--ink-500)">' +
+          '<p style="font-weight:800;color:var(--navy-900);font-family:var(--display);font-size:1.2rem">Your basket is empty</p>' +
+          '<p style="font-size:.9rem;margin:8px 0 20px">Let\'s fix that - the new season gear is in.</p>' +
+          '<a href="category.html" class="btn btn-primary">Start shopping</a></div>';
+      }
+    };
+    bRows.forEach((r) => {
+      $$("[data-qminus],[data-qplus]", r).forEach((b) => b.addEventListener("click", basketRecalc));
+      const inp = $("input", r); inp && inp.addEventListener("input", basketRecalc);
+      const rm = $("[data-row-remove]", r); rm && rm.addEventListener("click", () => { r.remove(); basketRecalc(); toast("Item removed from basket"); });
+      const sv = $("[data-row-save]", r); sv && sv.addEventListener("click", () => toast("Saved for later ❤"));
+    });
+    basketRecalc();
   }
 
   /* ---- frequently bought together: add the whole bundle --------------- */

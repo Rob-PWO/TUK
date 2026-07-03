@@ -8,11 +8,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 <link rel="stylesheet" href="assets/css/tuk.css">
 </head>
 <body>
 
-<div class="announce"><div class="container"><div class="announce-rot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span>FREE next-day delivery on orders over <b>£150</b> · Order before 3pm</span></div><div class="announce-side"><a href="#">Shop Finder</a><a href="#">Help</a><a href="#">My Account</a></div></div></div>
+<div class="announce"><div class="container"><div class="announce-rot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span>FREE next-day delivery on orders over <b>£150</b><span class="announce-cut"> · Order before 3pm</span></span></div><div class="announce-side"><a href="#">Shop Finder</a><a href="#">Help</a><a href="#">My Account</a></div></div></div>
 
 <div class="trustbar"><div class="container">
   <div class="ti"><span class="tp-stars"><span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9 16 14 18 21 12 17 6 21 8 14 2 9 9 9"/></svg></span><span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9 16 14 18 21 12 17 6 21 8 14 2 9 9 9"/></svg></span><span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9 16 14 18 21 12 17 6 21 8 14 2 9 9 9"/></svg></span><span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9 16 14 18 21 12 17 6 21 8 14 2 9 9 9"/></svg></span><span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9 16 14 18 21 12 17 6 21 8 14 2 9 9 9"/></svg></span></span> <b>Excellent</b> 4.7/5</div>
@@ -44,9 +45,9 @@
     <!-- ITEMS -->
     <div>
       <div class="cart-items">
-        <div class="ch"><h3>2 items in your basket</h3><span class="stock text-sm">All in stock</span></div>
+        <div class="ch"><h3><span data-sum-count>2</span> items in your basket</h3><span class="stock text-sm">All in stock</span></div>
 
-        <div class="cart-row">
+        <div class="cart-row" data-cart-row data-unit="674.99" data-rrp="749.99">
           <div class="ph"><img src="assets/img/prod-bivvy.svg" alt="Fox Frontier II XL Bivvy"></div>
           <div class="ci">
             <span class="bn">Fox</span>
@@ -54,18 +55,18 @@
             <div class="text-sm muted">Colour: Khaki Green · MPN: CUM273</div>
             <div class="stock text-sm mt-1">In stock - dispatched today</div>
             <div class="actions">
-              <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Remove</button>
-              <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Save for later</button>
+              <button data-row-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Remove</button>
+              <button data-row-save><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Save for later</button>
             </div>
           </div>
           <div class="rp">
-            <div class="lp">£674.99</div>
-            <div class="was">£749.99</div>
+            <div class="lp" data-line-price>£674.99</div>
+            <div class="was" data-line-was>£749.99</div>
             <div class="qty" data-qty><button data-qminus aria-label="Decrease">−</button><input type="text" value="1" inputmode="numeric" aria-label="Quantity"><button data-qplus aria-label="Increase">+</button></div>
           </div>
         </div>
 
-        <div class="cart-row">
+        <div class="cart-row" data-cart-row data-unit="89.99">
           <div class="ph"><img src="assets/img/prod-reel.svg" alt="Shimano Baitrunner DL Reel"></div>
           <div class="ci">
             <span class="bn">Shimano</span>
@@ -73,12 +74,12 @@
             <div class="text-sm muted">MPN: BTRDL6000</div>
             <div class="stock text-sm mt-1">In stock - dispatched today</div>
             <div class="actions">
-              <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Remove</button>
-              <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Save for later</button>
+              <button data-row-remove><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Remove</button>
+              <button data-row-save><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Save for later</button>
             </div>
           </div>
           <div class="rp">
-            <div class="lp">£89.99</div>
+            <div class="lp" data-line-price>£89.99</div>
             <div class="qty" data-qty><button data-qminus aria-label="Decrease">−</button><input type="text" value="1" inputmode="numeric" aria-label="Quantity"><button data-qplus aria-label="Increase">+</button></div>
           </div>
         </div>
@@ -102,17 +103,17 @@
         <div class="sc-head">Order Summary</div>
         <div class="sc-body">
           <div class="ship-progress" style="background:none;border:none;padding:0;margin-bottom:16px">
-            <div class="msg"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your order qualifies for <b style="margin-left:3px">FREE next-day delivery!</b></div>
-            <div class="bar"><span style="width:100%"></span></div>
+            <div class="msg" data-basket-ship-msg><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your order qualifies for <b style="margin-left:3px">FREE next-day delivery!</b></div>
+            <div class="bar"><span data-basket-ship-bar style="width:100%"></span></div>
           </div>
 
           <form data-voucher class="voucher"><input class="input" placeholder="Discount code or voucher"><button class="btn btn-navy" type="submit">Apply</button></form>
 
-          <div class="sumline"><span>Subtotal (2 items)</span><span>£764.98</span></div>
-          <div class="sumline"><span>Bivvy saving</span><span class="sale">−£75.00</span></div>
-          <div class="sumline"><span>Delivery</span><span class="free">FREE</span></div>
-          <div class="savings-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> You're saving £75.00 on this order</div>
-          <div class="sumline total"><span>Total</span><span>£764.98</span></div>
+          <div class="sumline"><span>Subtotal (RRP)</span><span data-sum-rrp>£839.98</span></div>
+          <div class="sumline"><span>Saving vs RRP</span><span class="sale" data-sum-save>−£75.00</span></div>
+          <div class="sumline"><span>Delivery</span><span class="free" data-sum-del>FREE</span></div>
+          <div class="savings-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> <span data-sum-save-tag>You're saving £75.00 on this order</span></div>
+          <div class="sumline total"><span>Total</span><span data-sum-total>£764.98</span></div>
           <div class="text-xs muted" style="text-align:right;margin-top:2px">Inc. VAT</div>
 
           <a href="checkout.html" class="btn btn-primary btn-block btn-lg mt-3">
@@ -142,7 +143,7 @@
       </div>
 
       <!-- klarna -->
-      <div class="klarna-box" style="margin:0"><span class="kl">Klarna.</span><p>Pay in 3 from <b>£254.99</b>/mo or spread over 36 months.</p><a href="#">More</a></div>
+      <div class="klarna-box" style="margin:0"><span class="kl">Klarna.</span><p>Pay in 3 from <b data-sum-klarna>£254.99</b>/mo or spread over 36 months.</p><a href="#">More</a></div>
 
       <!-- trust -->
       <div class="trust-checkout">
@@ -170,13 +171,13 @@
 </div></footer>
 
 <div class="overlay" id="overlay"></div>
-<aside class="drawer" id="cartDrawer" aria-label="Shopping basket">
+<aside class="drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-label="Shopping basket">
   <div class="drawer-head"><h3><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Your Basket</h3><button class="drawer-close" data-close aria-label="Close"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
   <div class="ship-progress"><div class="msg" data-ship-msg></div><div class="bar"><span data-ship-bar style="width:0%"></span></div></div>
   <div class="drawer-body" data-cart-body></div>
   <div class="drawer-foot"><div class="sub"><span class="lbl">Subtotal</span><span class="val" data-cart-sub>£0.00</span></div><div class="vat">Inc. VAT · Delivery calculated at checkout</div><a href="basket.html" class="btn btn-ghost btn-block mb-2">View basket</a><a href="checkout.html" class="btn btn-primary btn-block btn-lg">Secure checkout</a></div>
 </aside>
-<div class="modal" id="quickView" aria-label="Quick view"><div class="modal-card"><button class="modal-close" data-close aria-label="Close"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button><div class="qv"><div class="qv-media"><img data-qv-img src="" alt=""></div><div class="qv-info"><span class="brand-name" data-qv-brand></span><h3 data-qv-name style="margin:6px 0 10px"></h3><div class="price-block" style="margin-bottom:14px"><span class="now" data-qv-price style="font-size:1.8rem"></span></div><p class="muted" data-qv-desc style="margin-bottom:18px"></p><button class="btn btn-primary btn-lg btn-block" data-qv-add>Add to basket</button></div></div></div></div>
+<div class="modal" id="quickView" role="dialog" aria-modal="true" aria-label="Quick view"><div class="modal-card"><button class="modal-close" data-close aria-label="Close"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button><div class="qv"><div class="qv-media"><img data-qv-img src="" alt=""></div><div class="qv-info"><span class="brand-name" data-qv-brand></span><h3 data-qv-name style="margin:6px 0 10px"></h3><div class="price-block" style="margin-bottom:14px"><span class="now" data-qv-price style="font-size:1.8rem"></span></div><p class="muted" data-qv-desc style="margin-bottom:18px"></p><button class="btn btn-primary btn-lg btn-block" data-qv-add>Add to basket</button></div></div></div></div>
 <button class="back-to-top" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></button>
 <nav class="mobile-nav">
   <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Home</a>
