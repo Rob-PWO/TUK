@@ -250,6 +250,7 @@
       const addBtn = $("[data-qv-add]", qvModal);
       addBtn.dataset.add = d.quickview; addBtn.dataset.name = d.name;
       addBtn.dataset.price = d.price; addBtn.dataset.img = d.img;
+      if (d.variant) addBtn.dataset.variant = d.variant; else delete addBtn.dataset.variant;
       qvModal.classList.add("open"); overlay && overlay.classList.add("open");
       document.body.style.overflow = "hidden";
     });
@@ -257,7 +258,7 @@
   if (qvModal) {
     const addBtn = $("[data-qv-add]", qvModal);
     addBtn && addBtn.addEventListener("click", () => {
-      addToCart({ id: addBtn.dataset.add, name: addBtn.dataset.name, price: +addBtn.dataset.price, img: addBtn.dataset.img, qty: 1 }, false);
+      addToCart({ id: addBtn.dataset.add, name: addBtn.dataset.name, price: +addBtn.dataset.price, img: addBtn.dataset.img, variant: addBtn.dataset.variant, qty: 1 }, false);
       closeAll(); setTimeout(openDrawer, 260);
     });
   }
@@ -274,6 +275,20 @@
     if (i > -1) { w.splice(i, 1); toast("Removed from wishlist"); } else { w.push(id); toast("Saved to wishlist ❤"); }
     store.wish = w; syncWish();
   }));
+
+  /* ---- PDP colour/variant swatches: carry selection into the cart ------ */
+  const buySwatches = $(".buybox .swatches");
+  if (buySwatches) {
+    const opts = $$(".swatch", buySwatches);
+    const applyVariant = (v) => $$(".buybox [data-add], .sticky-bar [data-add]").forEach((b) => { b.dataset.variant = v; });
+    opts.forEach((s) => s.addEventListener("click", () => {
+      opts.forEach((x) => x.classList.remove("on"));
+      s.classList.add("on");
+      applyVariant(s.title);
+    }));
+    const initial = $(".swatch.on", buySwatches);
+    if (initial) applyVariant(initial.title);
+  }
 
   /* ---- qty steppers (generic) ----------------------------------------- */
   $$("[data-qty]").forEach((q) => {
@@ -477,7 +492,7 @@
     const wrap = btn.closest("[data-bundle]") || document;
     $$("[data-bundle-item]", wrap).forEach((it) => {
       const d = it.dataset;
-      addToCart({ id: d.id, name: d.name, price: +d.price, img: d.img, qty: 1 }, false);
+      addToCart({ id: d.id, name: d.name, price: +d.price, img: d.img, variant: d.variant, qty: 1 }, false);
     });
     openDrawer();
   }));
