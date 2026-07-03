@@ -232,6 +232,13 @@
         qty: qtyEl ? +qtyEl.value || 1 : 1,
       }, d.silent !== "true");
       pushRecent(d);
+      // brief success state on the button itself
+      if (!btn.classList.contains("added")) {
+        const prev = btn.innerHTML;
+        btn.classList.add("added");
+        btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' + (btn.textContent.trim() ? " Added" : "");
+        setTimeout(() => { btn.classList.remove("added"); btn.innerHTML = prev; }, 1300);
+      }
     });
   });
 
@@ -306,6 +313,18 @@
       t.classList.add("active");
       const img = $("img", t); if (img && main) main.src = img.src.replace("w=160", "w=900");
     }));
+  }
+
+  /* ---- PDP gallery hover-zoom (pointer devices only) -------------------- */
+  const zoomBox = $(".gallery .main");
+  if (zoomBox && window.matchMedia("(hover:hover)").matches) {
+    const zImg = $("img", zoomBox);
+    zoomBox.addEventListener("mousemove", (e) => {
+      const r = zoomBox.getBoundingClientRect();
+      zImg.style.transformOrigin = ((e.clientX - r.left) / r.width) * 100 + "% " + ((e.clientY - r.top) / r.height) * 100 + "%";
+      zImg.style.transform = "scale(1.9)";
+    });
+    zoomBox.addEventListener("mouseleave", () => { zImg.style.transform = ""; });
   }
 
   /* ---- tabs ------------------------------------------------------------ */
@@ -496,6 +515,26 @@
     });
     openDrawer();
   }));
+
+  /* ---- rotating announcement messages (skipped for reduced motion) ----- */
+  const annSpan = $(".announce-rot > span");
+  if (annSpan && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const msgs = [
+      annSpan.innerHTML,
+      '<b>Price match promise</b> - found it cheaper? We\'ll match it',
+      'Rated <b>4.7/5 Excellent</b> on Trustpilot - 28,668 reviews',
+    ];
+    let ai = 0;
+    annSpan.style.transition = "opacity .35s ease";
+    setInterval(() => {
+      annSpan.style.opacity = "0";
+      setTimeout(() => {
+        ai = (ai + 1) % msgs.length;
+        annSpan.innerHTML = msgs[ai];
+        annSpan.style.opacity = "1";
+      }, 360);
+    }, 5000);
+  }
 
   /* ---- PWA service worker (HTTPS or localhost only) -------------------- */
   if ("serviceWorker" in navigator &&
