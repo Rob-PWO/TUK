@@ -281,6 +281,73 @@
     store.wish = w; syncWish();
   }));
 
+  /* ---- desktop mega menu: hover intent, instant switching, indicator --- */
+  (function megaMenu() {
+    const nav = $("nav.nav");
+    if (!nav) return;
+    const links = $$(".nav-link", nav);
+    if (!links.length) return;
+
+    // sliding underline that follows the pointer
+    const ind = document.createElement("span");
+    ind.className = "nav-ind";
+    nav.appendChild(ind);
+    function moveInd(link) {
+      const r = link.getBoundingClientRect(), n = nav.getBoundingClientRect();
+      ind.style.width = r.width + "px";
+      ind.style.transform = "translateX(" + (r.left - n.left) + "px)";
+      ind.classList.toggle("red", link.classList.contains("clearance"));
+      ind.classList.add("on");
+    }
+    links.forEach((l) => l.addEventListener("mouseenter", () => moveInd(l)));
+    nav.addEventListener("mouseleave", () => ind.classList.remove("on"));
+
+    const withMega = $$(".nav-item", nav).filter((i) => $(".mega", i));
+    if (!withMega.length) return;
+
+    const dim = document.createElement("div");
+    dim.className = "nav-dim";
+    document.body.appendChild(dim);
+
+    let current = null, openT = null, closeT = null;
+    function snap(item) { // suppress the entrance/exit animation for one frame
+      const m = $(".mega", item);
+      m.classList.add("no-anim");
+      requestAnimationFrame(() => m.classList.remove("no-anim"));
+    }
+    function openItem(item) {
+      if (current === item) return;
+      if (current) { snap(current); current.classList.remove("open"); snap(item); }
+      item.classList.add("open");
+      dim.classList.add("on");
+      current = item;
+    }
+    function closeMega() {
+      clearTimeout(openT); clearTimeout(closeT);
+      if (current) current.classList.remove("open");
+      current = null;
+      dim.classList.remove("on");
+    }
+    withMega.forEach((item) => {
+      item.addEventListener("mouseenter", () => {
+        clearTimeout(closeT); clearTimeout(openT);
+        openT = setTimeout(() => openItem(item), current ? 0 : 70); // hover intent
+      });
+      item.addEventListener("mouseleave", () => {
+        clearTimeout(openT);
+        closeT = setTimeout(closeMega, 170); // forgiving diagonal travel
+      });
+      const link = $(".nav-link", item);
+      link && link.addEventListener("focus", () => openItem(item));
+    });
+    $$(".nav-item", nav).filter((i) => !$(".mega", i)).forEach((i) =>
+      i.addEventListener("mouseenter", () => { clearTimeout(closeT); closeT = setTimeout(closeMega, 60); }));
+    nav.addEventListener("mouseleave", () => { clearTimeout(openT); closeT = setTimeout(closeMega, 130); });
+    nav.addEventListener("focusout", (e) => { if (!nav.contains(e.relatedTarget)) closeMega(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMega(); });
+    window.addEventListener("resize", () => ind.classList.remove("on"));
+  })();
+
   /* ---- PDP colour/variant swatches: carry selection into the cart ------ */
   const buySwatches = $(".buybox .swatches");
   if (buySwatches) {
