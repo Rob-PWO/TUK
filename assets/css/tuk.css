@@ -965,3 +965,8 @@ h4{font-size:1.05rem;font-weight:700}
 .save-note{color:var(--green-700);font-weight:600;font-size:.92rem;margin-bottom:5px}
 .klarna-box{background:#fff;border:1px solid var(--line)}
 .klarna-box .kl{background:var(--klarna);padding:5px 11px;border-radius:7px;font-size:.9rem}
+
+/* monthly-price affordability line */
+.monthly{font-size:.92rem;color:var(--ink-600);margin:6px 0 2px}
+.monthly b{color:var(--navy-900)}
+.sticky-bar .sb-info .p .mo{font-size:.78rem;color:var(--ink-500);font-weight:500;margin-left:6px}
