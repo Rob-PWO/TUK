@@ -55,7 +55,7 @@
       const show = () => sug.classList.add("open");
       const hide = () => sug.classList.remove("open");
       input.addEventListener("focus", show);
-      input.addEventListener("input", show); // panel is useful even when empty (popular searches)
+      input.addEventListener("input", show);
       document.addEventListener("click", (e) => { if (!search.contains(e.target)) hide(); });
       input.addEventListener("keydown", (e) => { if (e.key === "Escape") { hide(); input.blur(); } });
     }
@@ -215,7 +215,6 @@
     if (ex) ex.qty += p.qty || 1; else c.push({ ...p, qty: p.qty || 1 });
     store.cart = c;
     afterCart();
-    // the drawer opening IS the confirmation; only toast when it stays shut
     if (openIt) openDrawer();
     else toast(p.name + " added to basket", "Total " + money(cartTotal()));
   }
@@ -232,8 +231,7 @@
         qty: qtyEl ? +qtyEl.value || 1 : 1,
       }, d.silent !== "true");
       pushRecent(d);
-      // brief success state on the button itself
-      if (!btn.classList.contains("added")) {
+        if (!btn.classList.contains("added")) {
         const prev = btn.innerHTML;
         btn.classList.add("added");
         btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' + (btn.textContent.trim() ? " Added" : "");

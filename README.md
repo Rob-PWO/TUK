@@ -16,7 +16,7 @@ conversion best practice.
 |------|------|-----------|
 | `index.html` | **Homepage** | Hero slider, image-rich **mega menu**, predictive search, category tiles, new-products carousel, **deal-of-the-week countdown**, brand rail, social proof, newsletter |
 | `category.html` | **Category / PLP** | Faceted **filters** (brand, price, capacity, colour, rating, stock), sort, grid/list toggle, **active-filter chips**, quick-add / quick-view, inline Klarna promo, load-more + pagination, SEO copy |
-| `product.html` | **Product / PDP** | Gallery + thumbs, conversion-optimised buy box, **dispatch countdown**, "people viewing now", Klarna messaging, **sticky buy bar**, trust block, tabbed details, ratings breakdown + reviews, related products |
+| `product.html` | **Product / PDP** | Gallery + thumbs, conversion-optimised buy box, **dispatch countdown**, Klarna messaging, **sticky buy bar**, trust block, tabbed details, ratings breakdown + reviews, related products |
 | `basket.html` | **Basket** | Line items with qty steppers, **free-delivery progress**, savings callout, voucher, delivery-method selector, express PayPal, cross-sell ("complete your setup") |
 | `checkout.html` | **Checkout** | Distraction-reduced single-page flow, **express checkout** (PayPal/Klarna), guest checkout, address lookup, payment **accordion**, sticky order summary, trust reinforcement |
 

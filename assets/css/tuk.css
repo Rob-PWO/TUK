@@ -785,11 +785,11 @@ h4{font-size:1.05rem;font-weight:700}
 }
 @media(max-width:860px){
   :root{--header-h:64px}
-  .trustbar,.nav,.announce-side,.search .s-cat,.mega{display:none}
+  .trustbar,.nav,.announce-side,.search .s-cat,.mega,.header-tools{display:none}
   .header .hamburger{display:flex;order:0}
   .header-main .container{height:auto;flex-wrap:wrap;gap:10px 12px;padding-block:11px}
-  .logo{order:1;margin-right:auto}
-  .header-tools{order:2}
+  .logo{order:1;margin-inline:auto}
+  .header-main .container:has(.hamburger)::after{content:"";width:44px;order:2}
   .search{order:3;flex-basis:100%;max-width:100%;width:100%}
   .search input{padding:11px 0}
   .tool .lbl{display:none}
@@ -827,8 +827,7 @@ h4{font-size:1.05rem;font-weight:700}
 }
 
 /* ==========================================================================
-   22. ADDED COMPONENTS — logo script, mobile menu, key points, express pay,
-       frequently-bought-together
+   22. MOBILE MENU, KEY POINTS, EXPRESS PAY, BOUGHT-TOGETHER
    ========================================================================== */
 
 /* hamburger trigger (hidden on desktop; shown <=860 in the media query above) */
@@ -863,7 +862,7 @@ h4{font-size:1.05rem;font-weight:700}
 .md-foot a svg{width:21px;height:21px;color:var(--ink-400)}
 .md-foot a:hover{color:var(--blue-600)}
 
-/* PDP — key points box */
+/* PDP - key points box */
 .key-points{background:var(--sky-50);border:1px solid var(--sky-100);border-radius:var(--r);padding:15px 17px;margin:2px 0 18px}
 .key-points .kp-title{font-family:var(--display);font-weight:800;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-700);margin-bottom:11px;display:flex;align-items:center;gap:7px}
 .key-points .kp-title svg{width:15px;height:15px}
@@ -881,13 +880,13 @@ h4{font-size:1.05rem;font-weight:700}
 .applepay-btn:hover{background:#1c1c1e}
 .applepay-btn svg{height:20px;width:auto;margin-bottom:2px}
 
-/* PDP — accepted payment row */
+/* PDP - accepted payment row */
 .pay-accept{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:14px;font-size:.78rem;color:var(--ink-500)}
 .pay-accept .marks{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .pay-accept .marks .pay{height:26px;background:#fff;border:1px solid var(--line);border-radius:5px;padding:3px 6px;display:flex;align-items:center}
 .pay-accept .marks .pay svg{height:18px;width:auto}
 
-/* PDP — frequently bought together */
+/* PDP - frequently bought together */
 .fbt{display:grid;grid-template-columns:1fr 290px;gap:30px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:24px}
 .fbt-items{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .fbt-item{display:flex;flex-direction:column;align-items:center;gap:7px;width:124px;text-align:center}
@@ -911,13 +910,13 @@ h4{font-size:1.05rem;font-weight:700}
 @media(max-width:860px){ .logo img{height:40px} }
 
 /* ==========================================================================
-   23. REVISIT FIXES - rendered-audit round
+   23. SMALL-SCREEN FIXES & MOTION PREFERENCES
    ========================================================================== */
 
-/* "Hover to zoom" is meaningless on touch devices */
+/* zoom affordance is pointer-only */
 @media (hover:none){ .gallery .main .zoom{display:none} }
 
-/* basket rows: price/qty column was clipped off-screen at phone widths */
+/* basket rows reflow on small screens */
 @media(max-width:640px){
   .cart-items .ch{flex-wrap:wrap;gap:6px}
   .cart-row{grid-template-columns:80px 1fr;gap:14px}
@@ -928,7 +927,7 @@ h4{font-size:1.05rem;font-weight:700}
   .cart-row .rp .lp{font-size:1.15rem}
 }
 
-/* announce bar fits one line on phones (full copy returns >=600px) */
+/* shorter announce copy on phones */
 @media(max-width:600px){
   .announce-cut{display:none}
   .announce .container{height:34px}
@@ -940,12 +939,12 @@ h4{font-size:1.05rem;font-weight:700}
   html{scroll-behavior:auto}
 }
 
-/* mobile filters panel: visible Done button (was display:none inline) */
+/* mobile filters Done button */
 .filters-done{display:none}
 @media(max-width:980px){ .filters .filters-done{display:inline-flex} }
 
 /* ==========================================================================
-   24. DESIGN POLISH ROUND
+   24. GALLERY ZOOM & FEEDBACK STATES
    ========================================================================== */
 
 /* PDP gallery: real hover-zoom */
@@ -961,7 +960,7 @@ h4{font-size:1.05rem;font-weight:700}
 }
 
 /* ==========================================================================
-   25. PROFESSIONAL RESTRAINT - calmer buy box & promos
+   25. BUY BOX & PROMO REFINEMENTS
    ========================================================================== */
 .save-note{color:var(--green-700);font-weight:600;font-size:.92rem;margin-bottom:5px}
 .klarna-box{background:#fff;border:1px solid var(--line)}
