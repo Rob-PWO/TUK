@@ -77,7 +77,7 @@
     $$("[data-ship-bar]").forEach((b) => (b.style.width = pct + "%"));
     $$("[data-ship-msg]").forEach((m) => {
       m.innerHTML = remain <= 0
-        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your order qualifies for <b>FREE delivery</b>!'
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your order qualifies for <b>free next-day delivery</b>'
         : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> Add <b>' + money(remain) + '</b> more for FREE delivery';
     });
   }
@@ -279,7 +279,7 @@
   $$("[data-wish]").forEach((b) => b.addEventListener("click", (e) => {
     e.preventDefault(); e.stopPropagation();
     const id = b.dataset.wish; const w = store.wish; const i = w.indexOf(id);
-    if (i > -1) { w.splice(i, 1); toast("Removed from wishlist"); } else { w.push(id); toast("Saved to wishlist ❤"); }
+    if (i > -1) { w.splice(i, 1); toast("Removed from wishlist"); } else { w.push(id); toast("Saved to wishlist"); }
     store.wish = w; syncWish();
   }));
 
@@ -380,12 +380,6 @@
     tick(); setInterval(tick, 1000);
   });
 
-  /* ---- "viewing now" social proof ------------------------------------- */
-  $$("[data-viewing]").forEach((el) => {
-    // stable per page-load: a number that jumps every few seconds reads as fake
-    el.querySelector("[data-viewing-n]").textContent = 6 + Math.floor(Math.random() * 18);
-  });
-
   /* ---- hero slider ----------------------------------------------------- */
   const hero = $("[data-hero]");
   if (hero) {
@@ -447,7 +441,7 @@
 
   /* ---- newsletter demo ------------------------------------------------- */
   $$("[data-newsletter]").forEach((form) => form.addEventListener("submit", (e) => {
-    e.preventDefault(); toast("You're subscribed! 🎣", "Check your inbox for 10% off"); form.reset();
+    e.preventDefault(); toast("You're subscribed", "Check your inbox for 10% off your next order"); form.reset();
   }));
 
   /* ---- back to top ----------------------------------------------------- */
@@ -486,13 +480,13 @@
       if (bb) bb.style.width = Math.min(100, (total / FREE_DELIVERY) * 100) + "%";
       const bm = $("[data-basket-ship-msg]");
       if (bm) bm.innerHTML = freeDel
-        ? '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="var(--green-600)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your order qualifies for <b style="margin-left:3px">FREE next-day delivery!</b>'
+        ? '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="var(--green-600)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your order qualifies for <b style="margin-left:3px">free next-day delivery</b>'
         : 'Add <b>' + money(FREE_DELIVERY - total) + '</b> more for FREE next-day delivery';
       if (!rows.length) {
         const wrap = $(".cart-items");
         if (wrap) wrap.innerHTML = '<div style="text-align:center;padding:56px 20px;color:var(--ink-500)">' +
           '<p style="font-weight:800;color:var(--navy-900);font-family:var(--display);font-size:1.2rem">Your basket is empty</p>' +
-          '<p style="font-size:.9rem;margin:8px 0 20px">Let\'s fix that - the new season gear is in.</p>' +
+          '<p style="font-size:.9rem;margin:8px 0 20px">Browse the range to get started.</p>' +
           '<a href="category.html" class="btn btn-primary">Start shopping</a></div>';
       }
     };
@@ -500,7 +494,7 @@
       $$("[data-qminus],[data-qplus]", r).forEach((b) => b.addEventListener("click", basketRecalc));
       const inp = $("input", r); inp && inp.addEventListener("input", basketRecalc);
       const rm = $("[data-row-remove]", r); rm && rm.addEventListener("click", () => { r.remove(); basketRecalc(); toast("Item removed from basket"); });
-      const sv = $("[data-row-save]", r); sv && sv.addEventListener("click", () => toast("Saved for later ❤"));
+      const sv = $("[data-row-save]", r); sv && sv.addEventListener("click", () => toast("Saved for later"));
     });
     basketRecalc();
   }
@@ -515,26 +509,6 @@
     });
     openDrawer();
   }));
-
-  /* ---- rotating announcement messages (skipped for reduced motion) ----- */
-  const annSpan = $(".announce-rot > span");
-  if (annSpan && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const msgs = [
-      annSpan.innerHTML,
-      '<b>Price match promise</b> - found it cheaper? We\'ll match it',
-      'Rated <b>4.7/5 Excellent</b> on Trustpilot - 28,668 reviews',
-    ];
-    let ai = 0;
-    annSpan.style.transition = "opacity .35s ease";
-    setInterval(() => {
-      annSpan.style.opacity = "0";
-      setTimeout(() => {
-        ai = (ai + 1) % msgs.length;
-        annSpan.innerHTML = msgs[ai];
-        annSpan.style.opacity = "1";
-      }, 360);
-    }, 5000);
-  }
 
   /* ---- PWA service worker (HTTPS or localhost only) -------------------- */
   if ("serviceWorker" in navigator &&
