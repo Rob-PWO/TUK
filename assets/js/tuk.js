@@ -348,18 +348,46 @@
     window.addEventListener("resize", () => ind.classList.remove("on"));
   })();
 
-  /* ---- PDP colour/variant swatches: carry selection into the cart ------ */
-  const buySwatches = $(".buybox .swatches");
-  if (buySwatches) {
-    const opts = $$(".swatch", buySwatches);
-    const applyVariant = (v) => $$(".buybox [data-add], .sticky-bar [data-add]").forEach((b) => { b.dataset.variant = v; });
-    opts.forEach((s) => s.addEventListener("click", () => {
-      opts.forEach((x) => x.classList.remove("on"));
-      s.classList.add("on");
-      applyVariant(s.title);
-    }));
-    const initial = $(".swatch.on", buySwatches);
-    if (initial) applyVariant(initial.title);
+  /* ---- PDP option pills: selection drives price, SKU and cart variant -- */
+  const optGroups = $$(".buybox .opt-group");
+  if (optGroups.length) {
+    const els = {
+      now: $(".price-block .now"), was: $(".price-block .was"), save: $(".price-block .save-note"),
+      monthly: $(".buybox .monthly"), vat: $(".buybox .vat-line"), sku: $(".rate-row .sku"),
+      klarna: $(".klarna-box p"), badge: $(".gallery .badges .badge-sale"), sticky: $(".sticky-bar .sb-info .p"),
+    };
+    function applySelection() {
+      const vals = []; let price = null, rrp = null, sku = null;
+      optGroups.forEach((g) => {
+        const s = $(".opt-pill.sel", g);
+        if (!s) return;
+        vals.push(s.dataset.value);
+        if (s.dataset.price) { price = +s.dataset.price; rrp = +(s.dataset.rrp || s.dataset.price); sku = s.dataset.sku; }
+      });
+      const variant = vals.join(" · ");
+      if (price != null) {
+        const save = rrp - price, mo = money(price / 36);
+        els.now && (els.now.textContent = money(price));
+        els.was && (els.was.textContent = money(rrp), els.was.style.display = save > 0 ? "" : "none");
+        els.save && (els.save.textContent = "You save " + money(save), els.save.style.display = save > 0 ? "" : "none");
+        els.monthly && (els.monthly.innerHTML = "or from <b>" + mo + "/mo</b> over 36 months with Klarna");
+        els.vat && (els.vat.textContent = "Inc. VAT · RRP " + money(rrp));
+        els.sku && sku && (els.sku.textContent = "MPN: " + sku);
+        els.klarna && (els.klarna.innerHTML = "Pay in 3 interest-free instalments of <b>" + money(price / 3) + "</b> or spread over 36 months.");
+        els.badge && (els.badge.textContent = "Save " + money(save), els.badge.style.display = save > 0 ? "" : "none");
+        els.sticky && (els.sticky.innerHTML = money(price) + ' <span class="was">' + money(rrp) + '</span><span class="mo">· from ' + mo + "/mo</span>");
+      }
+      $$(".buybox [data-add], .sticky-bar [data-add]").forEach((b) => {
+        b.dataset.variant = variant;
+        if (price != null) b.dataset.price = price;
+      });
+    }
+    optGroups.forEach((g) => $$(".opt-pill", g).forEach((p) => p.addEventListener("click", () => {
+      $$(".opt-pill", g).forEach((x) => x.classList.remove("sel"));
+      p.classList.add("sel");
+      applySelection();
+    })));
+    applySelection();
   }
 
   /* ---- qty steppers (generic) ----------------------------------------- */
