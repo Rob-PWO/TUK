@@ -1089,3 +1089,7 @@ h4{font-size:1.05rem;font-weight:700}
 
 /* USP strip stacks on small phones (2-up was overflowing < 400px) */
 @media(max-width:560px){ .usp-strip{grid-template-columns:1fr} }
+
+/* MPN line under the price */
+.mpn-line{font-size:.8rem;color:var(--ink-500);margin-top:3px}
+.mpn-line b{color:var(--ink-700);font-weight:600;letter-spacing:.02em}

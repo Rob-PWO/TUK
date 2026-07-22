@@ -353,7 +353,7 @@
   if (optGroups.length) {
     const els = {
       now: $(".price-block .now"), was: $(".price-block .was"), save: $(".price-block .save-note"),
-      monthly: $(".buybox .monthly"), vat: $(".buybox .vat-line"), sku: $(".rate-row .sku"),
+      monthly: $(".buybox .monthly"), vat: $(".buybox .vat-line"), sku: $(".buybox [data-sku-val]"),
       klarna: $(".klarna-box p"), badge: $(".gallery .badges .badge-sale"), sticky: $(".sticky-bar .sb-info .p"),
     };
     function applySelection() {
@@ -372,7 +372,7 @@
         els.save && (els.save.textContent = "You save " + money(save), els.save.style.display = save > 0 ? "" : "none");
         els.monthly && (els.monthly.innerHTML = "or from <b>" + mo + "/mo</b> over 36 months with Klarna");
         els.vat && (els.vat.textContent = "Inc. VAT · RRP " + money(rrp));
-        els.sku && sku && (els.sku.textContent = "MPN: " + sku);
+        els.sku && sku && (els.sku.textContent = sku);
         els.klarna && (els.klarna.innerHTML = "Pay in 3 interest-free instalments of <b>" + money(price / 3) + "</b> or spread over 36 months.");
         els.badge && (els.badge.textContent = "Save " + money(save), els.badge.style.display = save > 0 ? "" : "none");
         els.sticky && (els.sticky.innerHTML = money(price) + ' <span class="was">' + money(rrp) + '</span><span class="mo">· from ' + mo + "/mo</span>");
