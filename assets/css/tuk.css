@@ -993,3 +993,99 @@ h4{font-size:1.05rem;font-weight:700}
 .opt-pill .dot{width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.15)}
 .opt-pill:hover{border-color:var(--blue-400)}
 .opt-pill.sel{border-color:var(--blue-500);box-shadow:0 0 0 1px var(--blue-500);background:var(--sky-50)}
+
+/* ==========================================================================
+   26. LARGE-SCREEN / 4K SCALING
+   ========================================================================== */
+@media(min-width:1560px){ :root{--container:1480px;--gutter:36px} }
+@media(min-width:1800px){
+  :root{--container:1680px}
+  html{font-size:16.5px}
+  .products{grid-template-columns:repeat(5,1fr)}
+}
+@media(min-width:2200px){
+  :root{--container:2040px}
+  html{font-size:17.5px}
+}
+@media(min-width:2700px){
+  :root{--container:2460px}
+  html{font-size:19px}
+  .products{grid-template-columns:repeat(6,1fr)}
+  .cat-showcase{grid-auto-rows:minmax(250px,1fr)}
+  .section{padding:clamp(70px,6vw,120px) 0}
+}
+@media(min-width:3300px){
+  :root{--container:2980px}
+  html{font-size:21px}
+  .cat-showcase{grid-auto-rows:minmax(310px,1fr)}
+}
+
+/* ==========================================================================
+   27. HOMEPAGE CATEGORY MOSAIC
+   ========================================================================== */
+.cat-showcase{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(196px,1fr);gap:16px}
+.cat-card{position:relative;overflow:hidden;border-radius:var(--r-lg);display:flex;align-items:flex-end;padding:24px;isolation:isolate;min-height:196px;color:#fff;box-shadow:var(--sh-xs);transition:box-shadow var(--t),transform var(--t)}
+.cat-card:hover{box-shadow:var(--sh-md);transform:translateY(-3px)}
+.cat-card.feat{grid-column:span 2;grid-row:span 2}
+.cat-card.wide{grid-column:span 2}
+.cat-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .65s cubic-bezier(.2,.7,.2,1)}
+.cat-card::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(4,16,29,0) 34%,rgba(4,16,29,.55) 72%,rgba(4,16,29,.88) 100%)}
+.cat-card:hover img{transform:scale(1.07)}
+.cat-card .cc{transform:translateY(4px);transition:transform .3s ease}
+.cat-card:hover .cc{transform:translateY(0)}
+.cat-card .cc .k{display:block;font-family:var(--display);font-weight:700;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.72);margin-bottom:6px}
+.cat-card h3{color:#fff;font-size:1.5rem;letter-spacing:-.02em;line-height:1.05}
+.cat-card.feat h3{font-size:clamp(2rem,3vw,2.9rem)}
+.cat-card .cc p{font-size:.92rem;color:rgba(255,255,255,.86);margin-top:6px;max-width:38ch;display:none}
+.cat-card.feat .cc p,.cat-card.wide .cc p{display:block}
+.cat-card .go{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-weight:700;font-size:.9rem;margin-top:14px;color:#fff}
+.cat-card .go svg{width:16px;height:16px;transition:transform .25s}
+.cat-card:hover .go svg{transform:translateX(5px)}
+.cat-card .flag{position:absolute;top:16px;left:16px;z-index:1}
+.cat-card.sale::after{background:linear-gradient(180deg,rgba(90,8,12,0) 30%,rgba(90,8,12,.5) 68%,rgba(120,10,15,.9) 100%)}
+@media(max-width:900px){
+  .cat-showcase{grid-template-columns:repeat(2,1fr);grid-auto-rows:minmax(158px,1fr);gap:12px}
+  .cat-card.feat{grid-column:span 2;grid-row:span 1}
+  .cat-card.wide{grid-column:span 2}
+}
+@media(max-width:520px){
+  .cat-showcase{grid-template-columns:1fr}
+  .cat-card.feat,.cat-card.wide{grid-column:span 1}
+}
+
+/* ==========================================================================
+   28. KLARNA FINANCE STRIP (category, inline, no CTA)
+   ========================================================================== */
+.finance-strip{grid-column:1/-1;display:flex;align-items:center;gap:22px;background:linear-gradient(115deg,#fff 60%,var(--sky-50));border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 26px}
+.finance-strip .fs-ic{width:54px;height:54px;border-radius:14px;background:var(--sky-100);color:var(--blue-700);display:flex;align-items:center;justify-content:center;flex:none}
+.finance-strip .fs-ic svg{width:27px;height:27px}
+.finance-strip .fs-body{flex:1;min-width:0}
+.finance-strip .fs-body strong{font-family:var(--display);font-weight:800;font-size:1.08rem;color:var(--navy-900);display:block;letter-spacing:-.01em}
+.finance-strip .fs-body p{font-size:.9rem;color:var(--ink-600);margin-top:3px}
+.finance-strip .fs-body p b{color:var(--navy-900);font-weight:700}
+.finance-strip .fs-schedule{display:flex;align-items:center;gap:0;flex:none}
+.finance-strip .fs-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--blue-400);background:#fff}
+.finance-strip .fs-dot.fill{background:var(--blue-500);border-color:var(--blue-500)}
+.finance-strip .fs-bar{width:26px;height:2px;background:var(--blue-300)}
+.finance-strip .fs-brand{font-family:var(--display);font-weight:800;font-size:1.05rem;color:#0A0A0A;letter-spacing:-.01em;flex:none}
+@media(max-width:720px){
+  .finance-strip{flex-wrap:wrap;gap:16px;padding:18px 20px}
+  .finance-strip .fs-body{flex:1 1 100%;order:3}
+  .finance-strip .fs-schedule{display:none}
+}
+
+/* footer note lines (store / need help) */
+.footer-note{color:rgba(255,255,255,.7);font-size:.88rem;line-height:1.5}
+.footer-note b{color:#fff;font-weight:700}
+.footer-note a{color:var(--blue-300)}
+.footer-note+.footer-note{margin-top:14px}
+
+/* trustpilot widget spacing */
+.tp-live{min-height:150px;margin-top:8px}
+
+/* review grids collapse on small screens */
+@media(max-width:820px){ .products.cols-3{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:560px){ .products.cols-3{grid-template-columns:1fr} }
+
+/* USP strip stacks on small phones (2-up was overflowing < 400px) */
+@media(max-width:560px){ .usp-strip{grid-template-columns:1fr} }
