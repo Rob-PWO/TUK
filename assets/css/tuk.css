@@ -591,6 +591,28 @@ h4{font-size:1.05rem;font-weight:700}
 .buy-reassure .r{display:flex;gap:11px;align-items:center;font-size:.86rem;color:var(--ink-700)}
 .buy-reassure .r svg{width:20px;height:20px;color:var(--green-600);flex:none}
 .buy-reassure .r b{color:var(--navy-900)}
+/* buy-box verified review snippet */
+.bb-review{display:block;margin-top:16px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r);background:#fff;transition:var(--t-fast)}
+.bb-review:hover{border-color:var(--blue-300);background:var(--sky-50)}
+.bb-review .stars{font-size:1rem;letter-spacing:2px;margin-bottom:6px}
+.bb-review p{font-size:.9rem;color:var(--ink-800);line-height:1.4;font-style:italic;margin-bottom:8px}
+.bb-review .by{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:.8rem;color:var(--ink-600)}
+.bb-review .by b{color:var(--navy-900)}
+.bb-review .by .vf{display:inline-flex;align-items:center;gap:4px;color:var(--green-600);font-weight:600}
+.bb-review .by .vf svg{width:12px;height:12px}
+.bb-review .more{display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-family:var(--display);font-weight:700;font-size:.82rem;color:var(--blue-600)}
+.bb-review .more svg{width:14px;height:14px}
+.bb-review:hover .more{color:var(--blue-700)}
+/* Trustpilot banner (PDP bottom) */
+.tp-banner{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px 22px;padding:20px 26px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--bg-soft);transition:var(--t-fast)}
+.tp-banner:hover{box-shadow:var(--sh-sm);background:#fff}
+.tp-brand{display:inline-flex;align-items:center;gap:7px;font-family:var(--display);font-weight:800;font-size:1.18rem;color:var(--navy-900);letter-spacing:-.01em}
+.tp-brand .tp-star{width:22px;height:22px;color:#00b67a}
+.tp-banner .tp-stars{display:inline-flex;gap:3px}
+.tp-banner .tp-stars span{background:#00b67a;width:27px;height:27px;display:inline-flex;align-items:center;justify-content:center;border-radius:3px}
+.tp-banner .tp-stars svg{width:17px;height:17px;color:#fff}
+.tp-banner .tp-txt{font-size:.96rem;color:var(--ink-700)}
+.tp-banner .tp-txt b{color:var(--navy-900);font-weight:700}
 .dispatch{display:flex;gap:11px;align-items:center;background:#EAF7EF;border:1px solid #BFE6CD;border-radius:var(--r);padding:13px 16px;margin-bottom:16px;font-size:.88rem;color:var(--green-700)}
 .dispatch svg{width:20px;height:20px;flex:none}
 .dispatch b{color:var(--green-700)}
