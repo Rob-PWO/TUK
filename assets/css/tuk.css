@@ -562,6 +562,7 @@ h4{font-size:1.05rem;font-weight:700}
 .buybox h1{font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:12px}
 .buybox .rate-row{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
 .buybox .rate-row .sku{font-size:.8rem;color:var(--ink-400)}
+.buybox .rate-row .mpn-line{margin:0 0 0 auto}
 .price-block{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:6px}
 .price-block .now{font-family:var(--display);font-weight:800;font-size:2.5rem;color:var(--navy-900);line-height:1}
 .price-block .now.on-sale{color:var(--red-600)}
