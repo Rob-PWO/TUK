@@ -559,8 +559,8 @@ h4{font-size:1.05rem;font-weight:700}
 
 .buybox .bb-brand{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .buybox .bb-brand .b{font-family:var(--display);font-weight:800;color:var(--ink-500);letter-spacing:.04em;text-transform:uppercase;font-size:.8rem}
-.buybox h1{font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:12px}
-.buybox .rate-row{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.buybox h1{font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:8px}
+.buybox .rate-row{display:flex;align-items:center;gap:14px;margin-bottom:11px;flex-wrap:wrap}
 .buybox .rate-row .sku{font-size:.8rem;color:var(--ink-400)}
 .buybox .rate-row .mpn-line{margin:0 0 0 auto}
 .price-block{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:6px}
@@ -570,15 +570,15 @@ h4{font-size:1.05rem;font-weight:700}
 .price-block .save{margin-bottom:6px}
 .vat-line{font-size:.8rem;color:var(--ink-400);margin-bottom:3px}
 .mpn-line{font-size:.8rem;color:var(--ink-400);margin-bottom:12px}
-.stock-line{display:inline-flex;align-items:center;gap:9px;font-size:.92rem;font-weight:700;color:var(--green-700);margin:0 0 14px}
+.stock-line{display:inline-flex;align-items:center;gap:9px;font-size:.92rem;font-weight:700;color:var(--green-700);margin:0 0 9px}
 .stock-line .dot{width:9px;height:9px;border-radius:50%;background:var(--green-500);box-shadow:0 0 0 3px rgba(26,160,90,.18);flex:none}
 .stock-line.is-out{color:var(--ink-500)}
 .stock-line.is-out .dot{background:var(--ink-400);box-shadow:none}
-.quick-benefits{margin:0 0 18px;padding:15px 17px;background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--r)}
-.quick-benefits ul{list-style:none;display:flex;flex-direction:column;gap:9px}
-.quick-benefits li{display:flex;align-items:center;gap:10px;font-size:.88rem;font-weight:600;color:var(--navy-900);line-height:1.25}
+.quick-benefits{margin:2px 0 12px;padding:0}
+.quick-benefits ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+.quick-benefits li{display:flex;align-items:center;gap:10px;font-size:.88rem;font-weight:600;color:var(--navy-900);line-height:1.2}
 .quick-benefits li svg{width:16px;height:16px;color:var(--green-600);flex:none}
-.qb-more{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-family:var(--display);font-weight:700;font-size:.83rem;color:var(--blue-600)}
+.qb-more{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-family:var(--display);font-weight:700;font-size:.83rem;color:var(--blue-600)}
 .qb-more svg{width:15px;height:15px;transition:transform .2s}
 .qb-more:hover{color:var(--blue-700)}
 .qb-more:hover svg{transform:translateX(3px)}
@@ -587,7 +587,7 @@ h4{font-size:1.05rem;font-weight:700}
 .klarna-box p{font-size:.82rem;color:#222;flex:1}
 .klarna-box a{font-weight:700;text-decoration:underline;color:#000}
 
-.buy-actions{display:flex;gap:12px;margin:20px 0 14px}
+.buy-actions{display:flex;gap:12px;margin:11px 0 14px}
 .buy-actions .qty{height:54px}
 .buy-actions .qty button{height:54px}
 .buy-actions .qty input{height:54px}
@@ -618,7 +618,7 @@ h4{font-size:1.05rem;font-weight:700}
 .tp-banner .tp-stars svg{width:17px;height:17px;color:#fff}
 .tp-banner .tp-txt{font-size:.96rem;color:var(--ink-700)}
 .tp-banner .tp-txt b{color:var(--navy-900);font-weight:700}
-.dispatch{display:flex;gap:11px;align-items:center;background:#EAF7EF;border:1px solid #BFE6CD;border-radius:var(--r);padding:13px 16px;margin-bottom:16px;font-size:.88rem;color:var(--green-700)}
+.dispatch{display:flex;gap:11px;align-items:center;background:#EAF7EF;border:1px solid #BFE6CD;border-radius:var(--r);padding:9px 14px;margin-bottom:12px;font-size:.88rem;color:var(--green-700)}
 .dispatch svg{width:20px;height:20px;flex:none}
 .dispatch b{color:var(--green-700)}
 .dispatch .cd{font-variant-numeric:tabular-nums;font-weight:800;color:var(--navy-900)}
@@ -1053,7 +1053,7 @@ h4{font-size:1.05rem;font-weight:700}
 .klarna-box .kl{background:var(--klarna);padding:5px 11px;border-radius:7px;font-size:.9rem}
 
 /* monthly-price affordability line */
-.monthly{font-size:.92rem;color:var(--ink-600);margin:6px 0 2px}
+.monthly{font-size:.92rem;color:var(--ink-600);margin:3px 0 2px}
 .monthly b{color:var(--navy-900)}
 .sticky-bar .sb-info .p .mo{font-size:.78rem;color:var(--ink-500);font-weight:500;margin-left:6px}
 
@@ -1066,11 +1066,11 @@ h4{font-size:1.05rem;font-weight:700}
 @media(prefers-reduced-motion:reduce){.nav-ind{transition:none}}
 
 /* PDP option pills (model / colour selectors) */
-.opt-group{margin-bottom:16px}
+.opt-group{margin-bottom:11px}
 .opt-group>label{display:block;font-size:.82rem;font-weight:600;color:var(--ink-700);margin-bottom:8px}
 .opt-group>label .req{color:var(--red-600)}
 .opt-pills{display:flex;gap:10px;flex-wrap:wrap}
-.opt-pill{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:118px;padding:11px 18px;background:#fff;border:1.5px solid var(--line);border-radius:var(--r-sm);cursor:pointer;transition:var(--t-fast);text-align:center}
+.opt-pill{display:flex;flex-direction:column;align-items:center;gap:1px;min-width:118px;padding:8px 16px;background:#fff;border:1.5px solid var(--line);border-radius:var(--r-sm);cursor:pointer;transition:var(--t-fast);text-align:center}
 .opt-pill b{display:flex;align-items:center;gap:8px;font-size:.92rem;font-weight:700;color:var(--navy-900)}
 .opt-pill span{font-size:.88rem;color:var(--ink-700)}
 .opt-pill small{font-size:.7rem;color:var(--ink-400)}
