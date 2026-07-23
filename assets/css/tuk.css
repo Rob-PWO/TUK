@@ -569,9 +569,14 @@ h4{font-size:1.05rem;font-weight:700}
 .price-block .save{margin-bottom:6px}
 .vat-line{font-size:.8rem;color:var(--ink-400);margin-bottom:3px}
 .mpn-line{font-size:.8rem;color:var(--ink-400);margin-bottom:16px}
-.quick-benefits{list-style:none;display:flex;flex-direction:column;gap:9px;margin:0 0 18px;padding:15px 17px;background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--r)}
+.quick-benefits{margin:0 0 18px;padding:15px 17px;background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--r)}
+.quick-benefits ul{list-style:none;display:flex;flex-direction:column;gap:9px}
 .quick-benefits li{display:flex;align-items:center;gap:10px;font-size:.88rem;font-weight:600;color:var(--navy-900);line-height:1.25}
 .quick-benefits li svg{width:16px;height:16px;color:var(--green-600);flex:none}
+.qb-more{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-family:var(--display);font-weight:700;font-size:.83rem;color:var(--blue-600)}
+.qb-more svg{width:15px;height:15px;transition:transform .2s}
+.qb-more:hover{color:var(--blue-700)}
+.qb-more:hover svg{transform:translateX(3px)}
 .klarna-box{display:flex;align-items:center;gap:12px;background:var(--klarna);border-radius:var(--r);padding:12px 16px;margin-bottom:20px}
 .klarna-box .kl{font-family:var(--display);font-weight:800;font-size:1rem;color:#0a0a0a}
 .klarna-box p{font-size:.82rem;color:#222;flex:1}
@@ -603,7 +608,7 @@ h4{font-size:1.05rem;font-weight:700}
 .sticky-bar .sb-info .n{font-weight:700;font-size:.92rem;color:var(--navy-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sticky-bar .sb-info .p{font-family:var(--display);font-weight:800;color:var(--navy-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sticky-bar .sb-info .p .mo{font-size:.76rem;color:var(--ink-500);font-weight:600;margin-left:6px}
-@media(max-width:640px){.sticky-bar .container{gap:12px}.sticky-bar .sb-info .p{font-size:.98rem}.sticky-bar .sb-info .p .mo{display:none}.sticky-bar .sb-actions .btn .sb-btn-txt{display:none}.sticky-bar .sb-actions .btn{padding:12px 16px}}
+@media(max-width:640px){.sticky-bar .container{gap:11px}.sticky-bar .sb-info .p{font-size:1.05rem}.sticky-bar .sb-info .p .mo,.sticky-bar .sb-info .p .was{display:none}.sticky-bar .sb-actions .btn{padding:12px 18px;font-size:.92rem}}
 .sticky-bar .sb-info .p .was{font-size:.8rem;color:var(--ink-400);text-decoration:line-through;margin-left:6px}
 .sticky-bar .sb-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
 
@@ -739,7 +744,7 @@ h4{font-size:1.05rem;font-weight:700}
 .express{text-align:center;margin:16px 0}
 .express .or{display:flex;align-items:center;gap:14px;color:var(--ink-400);font-size:.8rem;margin:14px 0}
 .express .or::before,.express .or::after{content:"";flex:1;height:1px;background:var(--line)}
-.paypal-btn{background:var(--paypal);border-radius:var(--r-sm);height:50px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;color:#142C8E;font-style:italic;font-size:1.05rem}
+.paypal-btn{background:var(--paypal);border-radius:var(--r-sm);height:40px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;color:#142C8E;font-style:italic;font-size:.9rem}
 .secure-note{display:flex;align-items:center;justify-content:center;gap:8px;font-size:.78rem;color:var(--ink-500);margin-top:14px}
 .secure-note svg{width:15px;height:15px;color:var(--green-600)}
 
@@ -929,10 +934,10 @@ h4{font-size:1.05rem;font-weight:700}
 .express-pay{display:flex;flex-direction:column;gap:9px}
 .express-pay.row{flex-direction:row}
 .express-pay.row>*{flex:1}
-.express-label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-400);text-align:center;margin-bottom:10px}
-.applepay-btn{background:#000;color:#fff;border-radius:var(--r-sm);height:50px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:600;font-size:1.06rem;cursor:pointer;transition:var(--t-fast);letter-spacing:.01em}
+.express-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-400);text-align:center;margin-bottom:8px}
+.applepay-btn{background:#000;color:#fff;border-radius:var(--r-sm);height:40px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:600;font-size:.9rem;cursor:pointer;transition:var(--t-fast);letter-spacing:.01em}
 .applepay-btn:hover{background:#1c1c1e}
-.applepay-btn svg{height:20px;width:auto;margin-bottom:2px}
+.applepay-btn svg{height:17px;width:auto;margin-bottom:2px}
 
 /* PDP - accepted payment row */
 .pay-accept{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:14px;font-size:.78rem;color:var(--ink-500)}

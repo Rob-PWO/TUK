@@ -443,7 +443,7 @@
   /* ---- anchors that target a tab panel: activate the tab first -------- */
   $$('a[href^="#"]').forEach((a) => a.addEventListener("click", (e) => {
     const id = a.getAttribute("href").slice(1);
-    const panel = id && document.getElementById(id);
+    const panel = id && (document.getElementById(id) || document.querySelector('[data-panel="' + id + '"]'));
     if (!panel || !panel.classList.contains("tabpanel")) return;
     e.preventDefault();
     const btn = $('[data-tab="' + panel.dataset.panel + '"]');
@@ -656,4 +656,35 @@
     if (reduce) { input.placeholder = 'Search for "Korda", "Boilies", "Nash"…'; return; }
     timer = setTimeout(frame, 700);
   });
+})();
+
+/* ---- honest dispatch message: weekend-aware, minute granularity (no ticking seconds) */
+(function () {
+  var el = document.querySelector("[data-dispatch]");
+  if (!el) return;
+  var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  function nextWorkingDay(from) {
+    var d = new Date(from);
+    do { d.setDate(d.getDate() + 1); } while (d.getDay() === 0 || d.getDay() === 6);
+    return d;
+  }
+  function render() {
+    var now = new Date();
+    var weekend = now.getDay() === 0 || now.getDay() === 6;
+    var cutoff = new Date(now); cutoff.setHours(15, 0, 0, 0);
+    if (!weekend && now < cutoff) {
+      var mins = Math.ceil((cutoff - now) / 60000);
+      var h = Math.floor(mins / 60), m = mins % 60, t;
+      if (h > 0) t = h + " hr" + (h > 1 ? "s" : "") + (m > 0 ? " " + m + " min" + (m > 1 ? "s" : "") : "");
+      else t = m + " min" + (m !== 1 ? "s" : "");
+      el.innerHTML = "Order within <b>" + t + "</b> for same-day dispatch";
+    } else {
+      var nd = nextWorkingDay(now);
+      var tom = new Date(now); tom.setDate(tom.getDate() + 1);
+      var label = nd.toDateString() === tom.toDateString() ? "tomorrow" : DAYS[nd.getDay()];
+      el.innerHTML = "Order now for dispatch <b>" + label + "</b>";
+    }
+  }
+  render();
+  setInterval(render, 30000);
 })();
