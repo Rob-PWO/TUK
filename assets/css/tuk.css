@@ -337,9 +337,14 @@ h4{font-size:1.05rem;font-weight:700}
 .mega-promo .badge-sale{align-self:flex-start;margin-bottom:auto}
 .mega-promo h4{color:#fff;font-size:1.25rem;margin-bottom:6px}
 /* Flat A–Z category menu (e.g. Carp) — fills the panel, no promo */
-.mega.mega-flat{display:block;padding-top:38px;padding-bottom:42px}
-.mega-cols{column-count:4;column-gap:44px}
+.mega.mega-flat{display:flex;align-items:stretch;gap:38px;padding-top:34px;padding-bottom:36px}
+.mega-flat .mega-cols{flex:1;column-count:4;column-gap:22px}
 .mega-cols li{break-inside:avoid}
+.mega-flat .mega-cols li a{font-size:.885rem;padding:7px 0}
+.mega-flat .mega-promo{width:268px;flex:none;min-height:0}
+.mega-promo .mp-eyebrow{font-family:var(--display);font-weight:800;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--blue-300);margin-bottom:5px}
+.mega-promo .mp-price{font-weight:800;font-size:1.05rem;margin:1px 0 13px;color:#fff}
+.mega-promo .mp-price s{opacity:.62;font-weight:600;font-size:.84rem;margin-left:7px}
 .mega-promo p{font-size:.82rem;opacity:.85;margin-bottom:12px}
 
 /* 11. HERO -------------------------------------------------------------- */
@@ -1024,47 +1029,34 @@ h4{font-size:1.05rem;font-weight:700}
   :root{--container:2460px}
   html{font-size:19px}
   .products{grid-template-columns:repeat(6,1fr)}
-  .cat-showcase{grid-auto-rows:minmax(250px,1fr)}
   .section{padding:clamp(70px,6vw,120px) 0}
 }
 @media(min-width:3300px){
   :root{--container:2980px}
   html{font-size:21px}
-  .cat-showcase{grid-auto-rows:minmax(310px,1fr)}
 }
 
 /* ==========================================================================
    27. HOMEPAGE CATEGORY MOSAIC
    ========================================================================== */
-.cat-showcase{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(196px,1fr);gap:16px}
-.cat-card{position:relative;overflow:hidden;border-radius:var(--r-lg);display:flex;align-items:flex-end;padding:24px;isolation:isolate;min-height:196px;color:#fff;box-shadow:var(--sh-xs);transition:box-shadow var(--t),transform var(--t)}
-.cat-card:hover{box-shadow:var(--sh-md);transform:translateY(-3px)}
-.cat-card.feat{grid-column:span 2;grid-row:span 2}
-.cat-card.wide{grid-column:span 2}
-.cat-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .65s cubic-bezier(.2,.7,.2,1)}
-.cat-card::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(4,16,29,0) 34%,rgba(4,16,29,.55) 72%,rgba(4,16,29,.88) 100%)}
-.cat-card:hover img{transform:scale(1.07)}
-.cat-card .cc{transform:translateY(4px);transition:transform .3s ease}
-.cat-card:hover .cc{transform:translateY(0)}
-.cat-card .cc .k{display:block;font-family:var(--display);font-weight:700;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.72);margin-bottom:6px}
-.cat-card h3{color:#fff;font-size:1.5rem;letter-spacing:-.02em;line-height:1.05}
-.cat-card.feat h3{font-size:clamp(2rem,3vw,2.9rem)}
-.cat-card .cc p{font-size:.92rem;color:rgba(255,255,255,.86);margin-top:6px;max-width:38ch;display:none}
-.cat-card.feat .cc p,.cat-card.wide .cc p{display:block}
-.cat-card .go{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-weight:700;font-size:.9rem;margin-top:14px;color:#fff}
-.cat-card .go svg{width:16px;height:16px;transition:transform .25s}
-.cat-card:hover .go svg{transform:translateX(5px)}
-.cat-card .flag{position:absolute;top:16px;left:16px;z-index:1}
-.cat-card.sale::after{background:linear-gradient(180deg,rgba(90,8,12,0) 30%,rgba(90,8,12,.5) 68%,rgba(120,10,15,.9) 100%)}
-@media(max-width:900px){
-  .cat-showcase{grid-template-columns:repeat(2,1fr);grid-auto-rows:minmax(158px,1fr);gap:12px}
-  .cat-card.feat{grid-column:span 2;grid-row:span 1}
-  .cat-card.wide{grid-column:span 2}
-}
-@media(max-width:520px){
-  .cat-showcase{grid-template-columns:1fr}
-  .cat-card.feat,.cat-card.wide{grid-column:span 1}
-}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.cat-tile{position:relative;overflow:hidden;border-radius:var(--r-lg);aspect-ratio:4/3;display:flex;align-items:flex-end;background:var(--navy-800);box-shadow:var(--sh-xs)}
+.cat-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;transition:transform .6s cubic-bezier(.2,.7,.3,1);filter:saturate(.9)}
+.cat-tile::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(6,32,59,.9) 6%,rgba(6,32,59,.42) 44%,rgba(6,32,59,.26) 100%)}
+.cat-tile:hover img{transform:scale(1.06)}
+.cat-tile::before{content:"";position:absolute;left:0;bottom:0;z-index:3;height:3px;width:100%;background:var(--blue-500);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.2,.7,.3,1)}
+.cat-tile:hover::before{transform:scaleX(1)}
+.cat-tile .ct-body{position:relative;z-index:2;padding:17px 20px;color:#fff;width:100%}
+.ct-name{display:block;font-family:var(--display);font-weight:800;font-size:1.16rem;letter-spacing:-.01em;line-height:1.08}
+.ct-meta{display:block;font-size:.75rem;color:rgba(255,255,255,.72);margin-top:3px;font-weight:500}
+.ct-go{position:absolute;top:14px;right:14px;z-index:3;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;color:#fff;opacity:0;transform:translateY(-5px);transition:opacity .3s ease,transform .3s ease,background .2s}
+.cat-tile:hover .ct-go{opacity:1;transform:translateY(0);background:var(--blue-500)}
+.ct-go svg{width:16px;height:16px}
+.ct-flag{position:absolute;top:13px;left:13px;z-index:3;background:var(--red-600);color:#fff;font-size:.64rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:5px 10px;border-radius:var(--r-pill)}
+.ct-sale::after{background:linear-gradient(to top,rgba(122,14,20,.9) 6%,rgba(70,22,32,.42) 50%,rgba(6,32,59,.26) 100%)}
+.ct-sale::before{background:var(--red-500)}
+@media(max-width:1024px){.cat-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.cat-grid{grid-template-columns:repeat(2,1fr);gap:11px}}
 
 /* ==========================================================================
    28. KLARNA FINANCE STRIP (category, inline, no CTA)
