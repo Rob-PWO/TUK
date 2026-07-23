@@ -606,9 +606,13 @@ h4{font-size:1.05rem;font-weight:700}
 
 /* tabs / accordion */
 .pdp-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:26px;overflow-x:auto}
-@media(max-width:640px){.pdp-tabs{flex-wrap:wrap;overflow-x:visible;gap:2px 4px}.pdp-tabs button{padding:10px 13px;font-size:.85rem}}
 .pdp-tabs button{padding:14px 20px;font-family:var(--display);font-weight:700;color:var(--ink-500);border-bottom:3px solid transparent;white-space:nowrap;transition:var(--t-fast)}
 .pdp-tabs button.active{color:var(--navy-900);border-bottom-color:var(--blue-500)}
+@media(max-width:640px){
+  .pdp-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;border-bottom:none;overflow:visible;margin-bottom:22px}
+  .pdp-tabs button{padding:12px 10px;font-size:.86rem;text-align:center;white-space:normal;line-height:1.15;color:var(--ink-700);background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--r);transition:var(--t-fast)}
+  .pdp-tabs button.active{color:#fff;background:var(--navy-900);border-color:var(--navy-900)}
+}
 .tabpanel{display:none}
 .tabpanel.active{display:block;animation:fade .3s ease}
 .spec-table{width:100%;border-collapse:collapse}
