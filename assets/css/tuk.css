@@ -568,7 +568,11 @@ h4{font-size:1.05rem;font-weight:700}
 .price-block .was{font-size:1.1rem;color:var(--ink-400);text-decoration:line-through;margin-bottom:4px}
 .price-block .save{margin-bottom:6px}
 .vat-line{font-size:.8rem;color:var(--ink-400);margin-bottom:3px}
-.mpn-line{font-size:.8rem;color:var(--ink-400);margin-bottom:16px}
+.mpn-line{font-size:.8rem;color:var(--ink-400);margin-bottom:12px}
+.stock-line{display:inline-flex;align-items:center;gap:9px;font-size:.92rem;font-weight:700;color:var(--green-700);margin:0 0 14px}
+.stock-line .dot{width:9px;height:9px;border-radius:50%;background:var(--green-500);box-shadow:0 0 0 3px rgba(26,160,90,.18);flex:none}
+.stock-line.is-out{color:var(--ink-500)}
+.stock-line.is-out .dot{background:var(--ink-400);box-shadow:none}
 .quick-benefits{margin:0 0 18px;padding:15px 17px;background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--r)}
 .quick-benefits ul{list-style:none;display:flex;flex-direction:column;gap:9px}
 .quick-benefits li{display:flex;align-items:center;gap:10px;font-size:.88rem;font-weight:600;color:var(--navy-900);line-height:1.25}

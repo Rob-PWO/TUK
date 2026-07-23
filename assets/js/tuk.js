@@ -688,3 +688,14 @@
   render();
   setInterval(render, 30000);
 })();
+
+/* ---- stock level: "N in stock" (1-9), "10+ in stock" (>=10), "Out of stock" (0) */
+(function () {
+  document.querySelectorAll("[data-stock]").forEach(function (el) {
+    var n = parseInt(el.getAttribute("data-stock"), 10);
+    if (isNaN(n)) return;
+    var label = el.querySelector("[data-stock-label]") || el;
+    label.textContent = n <= 0 ? "Out of stock" : (n >= 10 ? "10+ in stock" : n + " in stock");
+    el.classList.toggle("is-out", n <= 0);
+  });
+})();
