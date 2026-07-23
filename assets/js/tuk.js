@@ -153,7 +153,7 @@
       '<div class="md-head"><a href="index.html" class="logo"><img src="assets/img/logo-white.webp" alt="TackleUK - the home of fishing" height="34"></a>' +
       '<button class="drawer-close" type="button" aria-label="Close menu"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>' +
       '<div class="md-usp">' + ic.van + " FREE next-day delivery over £150</div>" +
-      '<div class="md-body">' + cats + "</div>" +
+      '<div class="md-body">' + cats + '<div class="md-cue" aria-hidden="true"><span>Scroll for more</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>' + "</div>" +
       '<div class="md-foot">' +
       '<a href="#">' + ic.account + " My Account</a>" +
       '<a href="#">' + ic.wish + " Wishlist</a>" +
@@ -162,14 +162,23 @@
       "</div>";
     document.body.appendChild(md);
 
+    const mdBody = $(".md-body", md);
+    const updateCue = () => {
+      if (!mdBody) return;
+      const more = mdBody.scrollHeight - mdBody.clientHeight - mdBody.scrollTop > 24;
+      md.classList.toggle("has-more", more);
+    };
+    mdBody && mdBody.addEventListener("scroll", updateCue, { passive: true });
+
     burger.addEventListener("click", () => {
       md.classList.add("open");
       burger.setAttribute("aria-expanded", "true");
       overlay && overlay.classList.add("open");
       document.body.style.overflow = "hidden";
+      requestAnimationFrame(updateCue);
     });
     $(".drawer-close", md).addEventListener("click", closeAll);
-    $$(".menu-cat > button", md).forEach((b) => b.addEventListener("click", () => b.parentElement.classList.toggle("open")));
+    $$(".menu-cat > button", md).forEach((b) => b.addEventListener("click", () => { b.parentElement.classList.toggle("open"); requestAnimationFrame(updateCue); }));
   })();
 
   function renderDrawer() {
@@ -612,4 +621,39 @@
   /* ---- init ------------------------------------------------------------ */
   syncCount(); syncWish(); syncProgress();
   window.TUK = { addToCart, toast, openDrawer };
+})();
+
+/* ---- rotating "typed" search placeholder (real TackleUK search terms) --- */
+(function () {
+  var inputs = [].slice.call(document.querySelectorAll('.search input[type="search"]'));
+  if (!inputs.length) return;
+  var terms = ["Barbless hooks", "Korda", "Float rods", "Boilies", "Preston Innovations",
+    "Frozen bait", "Monofilament", "T-shirts", "Chair", "Nash", "Carp Rods", "Feeder tips",
+    "Top kits", "Leads", "Vouchers", "Floats", "Matrix", "Swivels", "MAP", "Delkim"];
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  inputs.forEach(function (input) {
+    var base = input.getAttribute("placeholder") || "Search…";
+    var ti = 0, ci = 0, deleting = false, timer = null, active = true;
+    function frame() {
+      if (!active) return;
+      var term = terms[ti];
+      if (!deleting) {
+        ci++;
+        input.placeholder = "Search for " + term.slice(0, ci);
+        if (ci >= term.length) { deleting = true; timer = setTimeout(frame, 1600); return; }
+        timer = setTimeout(frame, 62);
+      } else {
+        ci--;
+        input.placeholder = "Search for " + term.slice(0, ci);
+        if (ci <= 0) { deleting = false; ti = (ti + 1) % terms.length; timer = setTimeout(frame, 360); return; }
+        timer = setTimeout(frame, 28);
+      }
+    }
+    input.addEventListener("focus", function () { active = false; clearTimeout(timer); input.placeholder = base; });
+    input.addEventListener("blur", function () {
+      if (!input.value) { active = true; ci = 0; deleting = false; clearTimeout(timer); timer = setTimeout(frame, 220); }
+    });
+    if (reduce) { input.placeholder = 'Search for "Korda", "Boilies", "Nash"…'; return; }
+    timer = setTimeout(frame, 700);
+  });
 })();
