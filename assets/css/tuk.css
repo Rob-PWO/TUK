@@ -408,13 +408,13 @@ h4{font-size:1.05rem;font-weight:700}
 .carousel-nav button svg{width:18px;height:18px}
 
 /* 13. SECTIONS / USP / BRANDS ------------------------------------------ */
-.usp-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.usp{display:flex;align-items:center;gap:14px;padding:20px;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);transition:var(--t)}
-.usp:hover{box-shadow:var(--sh-sm);border-color:transparent}
-.usp .ic{width:46px;height:46px;border-radius:var(--r);background:var(--sky-100);color:var(--blue-600);display:flex;align-items:center;justify-content:center;flex:none}
-.usp .ic svg{width:24px;height:24px}
-.usp .t{font-family:var(--display);font-weight:800;font-size:.95rem;color:var(--navy-900)}
-.usp .d{font-size:.78rem;color:var(--ink-500)}
+/* Reassurance row: hairline-divided, no cards or pastel chips (retail, not SaaS) */
+.usp-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
+.usp{display:flex;align-items:center;gap:13px;padding:18px 24px;background:#fff}
+.usp .ic{flex:none;color:var(--blue-700);display:flex}
+.usp .ic svg{width:25px;height:25px;stroke-width:1.7}
+.usp .t{font-weight:700;font-size:.9rem;color:var(--navy-900);letter-spacing:-.005em;line-height:1.2}
+.usp .d{font-size:.775rem;color:var(--ink-500);margin-top:2px;line-height:1.25}
 
 .brand-rail{display:flex;align-items:center;justify-content:space-between;gap:30px;flex-wrap:wrap}
 .brand-rail a{flex:1;min-width:120px;display:flex;align-items:center;justify-content:center;height:70px;filter:grayscale(1);opacity:.55;transition:var(--t-fast);font-family:var(--display);font-weight:800;font-size:1.25rem;color:var(--navy-800);letter-spacing:.02em}
