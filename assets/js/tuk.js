@@ -379,8 +379,8 @@
         els.now && (els.now.textContent = money(price));
         els.was && (els.was.textContent = money(rrp), els.was.style.display = save > 0 ? "" : "none");
         els.save && (els.save.textContent = "You save " + money(save), els.save.style.display = save > 0 ? "" : "none");
-        els.monthly && (els.monthly.innerHTML = "or from <b>" + mo + "/mo</b> over 36 months with Klarna");
-        els.vat && (els.vat.textContent = "Inc. VAT · RRP " + money(rrp));
+        els.monthly && (els.monthly.innerHTML = "or from <b>" + mo + "/mo</b>");
+        els.vat && (els.vat.textContent = "RRP " + money(rrp));
         els.sku && sku && (els.sku.textContent = sku);
         els.klarna && (els.klarna.innerHTML = "Pay in 3 interest-free instalments of <b>" + money(price / 3) + "</b> or spread over 36 months.");
         els.badge && (els.badge.textContent = "Save " + money(save), els.badge.style.display = save > 0 ? "" : "none");
