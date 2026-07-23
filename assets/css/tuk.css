@@ -336,6 +336,10 @@ h4{font-size:1.05rem;font-weight:700}
 .mega-promo>*{position:relative}
 .mega-promo .badge-sale{align-self:flex-start;margin-bottom:auto}
 .mega-promo h4{color:#fff;font-size:1.25rem;margin-bottom:6px}
+/* Flat A–Z category menu (e.g. Carp) — fills the panel, no promo */
+.mega.mega-flat{display:block;padding-top:38px;padding-bottom:42px}
+.mega-cols{column-count:4;column-gap:44px}
+.mega-cols li{break-inside:avoid}
 .mega-promo p{font-size:.82rem;opacity:.85;margin-bottom:12px}
 
 /* 11. HERO -------------------------------------------------------------- */
@@ -354,6 +358,15 @@ h4{font-size:1.05rem;font-weight:700}
 .hero-dots{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:9px;z-index:3}
 .hero-dots button{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.4);transition:var(--t-fast)}
 .hero-dots button.active{background:#fff;width:28px;border-radius:var(--r-pill)}
+/* Discreet Trustpilot badge over the hero */
+.hero-trust{position:absolute;right:clamp(16px,3.5vw,44px);bottom:24px;z-index:3;display:inline-flex;align-items:center;gap:10px;padding:9px 15px;border-radius:var(--r-pill);background:rgba(6,32,59,.5);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(9px) saturate(1.1);-webkit-backdrop-filter:blur(9px) saturate(1.1);color:#fff;transition:var(--t-fast)}
+.hero-trust:hover{background:rgba(6,32,59,.68);border-color:rgba(255,255,255,.32)}
+.hero-trust .tp-stars{display:inline-flex;gap:2px}
+.hero-trust .tp-stars span{background:#00b67a;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;border-radius:2px}
+.hero-trust .tp-stars svg{width:10px;height:10px;color:#fff}
+.hero-trust .ht-txt{font-size:.79rem;font-weight:600;letter-spacing:.005em;white-space:nowrap}
+.hero-trust .ht-txt b{font-weight:800}
+@media(max-width:640px){.hero-trust{top:14px;bottom:auto;right:12px;padding:7px 11px;gap:8px}.hero-trust .ht-txt{font-size:.72rem}.hero-trust .ht-tp{display:none}}
 
 /* promo tiles */
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
