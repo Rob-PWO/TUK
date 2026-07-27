@@ -695,7 +695,13 @@
     var n = parseInt(el.getAttribute("data-stock"), 10);
     if (isNaN(n)) return;
     var label = el.querySelector("[data-stock-label]") || el;
-    label.textContent = n <= 0 ? "Out of stock" : (n >= 10 ? "10+ in stock" : n + " in stock");
+    var txt;
+    if (n <= 0) txt = "Out of stock";
+    else if (n <= 3) txt = "Only " + n + " left";
+    else if (n >= 10) txt = "10+ in stock";
+    else txt = n + " in stock";
+    label.textContent = txt;
     el.classList.toggle("is-out", n <= 0);
+    el.classList.toggle("is-low", n > 0 && n <= 3);
   });
 })();
