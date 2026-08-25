@@ -2,7 +2,7 @@
    TACKLEUK - Shared interaction layer (vanilla JS, no dependencies)
    Defensive: every feature checks for its elements, so one file powers
    every page. Conversion features: predictive search, cart drawer + free
-   delivery progress, quick-view, sticky buy bar, countdown, toasts,
+   delivery progress, express wallets, sticky buy bar, countdown, toasts,
    wishlist, filters, tabs, recently-viewed.
    ========================================================================== */
 (function () {
@@ -207,6 +207,12 @@
     }
     const sub = $("[data-cart-sub]", drawer);
     if (sub) sub.textContent = money(cartTotal());
+    const kl = $("[data-cart-klarna]", drawer);
+    if (kl) kl.textContent = money(cartTotal() / 3);
+    const klRow = $("[data-cart-klarna-row]", drawer);
+    if (klRow) klRow.style.display = cart.length ? "" : "none";
+    const exp = $("[data-cart-express]", drawer);
+    if (exp) exp.style.display = cart.length ? "" : "none";
     syncProgress();
   }
   function chQty(i, d) { const c = store.cart; if (!c[i]) return; c[i].qty = Math.max(1, c[i].qty + d); store.cart = c; afterCart(); renderDrawer(); }
@@ -248,34 +254,6 @@
       }
     });
   });
-
-  /* ---- quick view ------------------------------------------------------ */
-  const qvModal = $("#quickView");
-  $$("[data-quickview]").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (!qvModal) return;
-      const d = btn.dataset;
-      $("[data-qv-img]", qvModal).src = d.img;
-      $("[data-qv-name]", qvModal).textContent = d.name;
-      $("[data-qv-brand]", qvModal).textContent = d.brand || "";
-      $("[data-qv-price]", qvModal).textContent = money(+d.price);
-      $("[data-qv-desc]", qvModal).textContent = d.desc || "";
-      const addBtn = $("[data-qv-add]", qvModal);
-      addBtn.dataset.add = d.quickview; addBtn.dataset.name = d.name;
-      addBtn.dataset.price = d.price; addBtn.dataset.img = d.img;
-      if (d.variant) addBtn.dataset.variant = d.variant; else delete addBtn.dataset.variant;
-      qvModal.classList.add("open"); overlay && overlay.classList.add("open");
-      document.body.style.overflow = "hidden";
-    });
-  });
-  if (qvModal) {
-    const addBtn = $("[data-qv-add]", qvModal);
-    addBtn && addBtn.addEventListener("click", () => {
-      addToCart({ id: addBtn.dataset.add, name: addBtn.dataset.name, price: +addBtn.dataset.price, img: addBtn.dataset.img, variant: addBtn.dataset.variant, qty: 1 }, false);
-      closeAll(); setTimeout(openDrawer, 260);
-    });
-  }
 
   /* ---- wishlist -------------------------------------------------------- */
   function syncWish() {

@@ -31,7 +31,7 @@ conversion best practice.
 - **Smart discovery** - predictive search with popular terms + product suggestions, and a
   visual **mega menu**.
 - **Trust & social proof** - Trustpilot strip, verified-review cards, ratings breakdown,
-  price-match / 60-day-returns / secure-checkout reassurance, Klarna messaging, payment marks.
+  price-match / 30-day-returns / secure-checkout reassurance, Klarna messaging, payment marks.
 - **Mobile-first** - responsive down to 360px with an app-style bottom nav, off-canvas
   filters, and full-width CTAs.
 

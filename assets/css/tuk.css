@@ -323,7 +323,7 @@ h4{font-size:1.05rem;font-weight:700}
 .nav-cta svg{width:17px;height:17px;color:var(--blue-600)}
 
 /* mega menu */
-.mega{position:absolute;top:100%;left:0;right:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 34px 64px -24px rgba(10,37,64,.28);padding:46px max(calc((100% - 1280px)/2 + 20px),36px) 52px;display:grid;grid-template-columns:1fr 1fr 1fr 300px;gap:56px;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .16s ease,transform .22s cubic-bezier(.2,.7,.3,1),visibility .16s;z-index:65}
+.mega{position:absolute;top:100%;left:0;right:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 34px 64px -24px rgba(10,37,64,.28);padding:46px max(calc((100% - 1280px)/2 + 20px),36px) 52px;display:grid;grid-template-columns:repeat(3,minmax(0,240px));gap:56px;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .16s ease,transform .22s cubic-bezier(.2,.7,.3,1),visibility .16s;z-index:65}
 .nav-item.open .mega{opacity:1;visibility:visible;transform:translateY(0)}
 .nav-item.open>.nav-link{color:var(--blue-600)}
 .mega.no-anim{transition:none!important}
@@ -1172,3 +1172,38 @@ h4{font-size:1.05rem;font-weight:700}
 /* MPN line under the price */
 .mpn-line{font-size:.8rem;color:var(--ink-500);margin-top:3px}
 .mpn-line b{color:var(--ink-700);font-weight:600;letter-spacing:.02em}
+
+/* ---- USP soft band (home, under hero) -------------------------------- */
+.usp-band{background:var(--bg-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.usp-band-in{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:22px 0}
+.usp-band .u{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:0 6px}
+.usp-band .u .ic{color:var(--blue-600);display:flex}
+.usp-band .u .ic svg{width:26px;height:26px;stroke-width:1.8}
+.usp-band .u .t{font-weight:700;font-size:.92rem;color:var(--navy-900);line-height:1.15}
+.usp-band .u .d{font-size:.78rem;color:var(--ink-500);line-height:1.25}
+@media(max-width:680px){.usp-band-in{grid-template-columns:1fr 1fr;gap:20px 12px;padding:20px 0}}
+
+/* ---- PDP brand logo (top of buy box, above MPN) ---------------------- */
+.bb-brand{display:inline-block;margin:0 0 10px}
+.bb-brand img{height:30px;width:auto;display:block}
+
+/* ---- Klarna-compliant on-site banner (category grid) ----------------- */
+.klarna-banner{grid-column:1/-1;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:16px;background:var(--klarna);border-radius:var(--r-lg);padding:15px 22px}
+.klarna-banner .kb-badge{flex:none;font-family:var(--display);font-weight:800;font-size:1rem;color:#0a0a0a;background:#fff;border-radius:8px;padding:5px 12px}
+.klarna-banner .kb-msg{font-size:.92rem;color:#17120f;line-height:1.4;min-width:0}
+.klarna-banner .kb-msg b{font-weight:800}
+.klarna-banner .kb-msg a{font-weight:700;text-decoration:underline;color:#000}
+.klarna-banner .kb-tc{display:block;font-size:.72rem;color:#6a555b;margin-top:3px}
+@media(max-width:520px){.klarna-banner{gap:12px;padding:14px 16px}.klarna-banner .kb-msg{font-size:.86rem}}
+
+/* ---- cart drawer: Klarna line + express wallets ---------------------- */
+.drawer-klarna{display:flex;align-items:center;gap:9px;background:var(--klarna);border-radius:var(--r-sm);padding:9px 12px;margin-bottom:14px;font-size:.82rem;color:#17120f;line-height:1.3}
+.drawer-klarna .kb-badge{flex:none;font-family:var(--display);font-weight:800;font-size:.82rem;color:#0a0a0a;background:#fff;border-radius:6px;padding:3px 8px}
+.drawer-klarna b{font-weight:800}
+.wallet-divider{display:flex;align-items:center;gap:10px;margin:12px 0 10px;color:var(--ink-400);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
+.wallet-divider::before,.wallet-divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.wallet-row{display:flex;gap:8px}
+.wallet-row>*{flex:1;text-decoration:none}
+.gpay-btn{background:#fff;border:1.5px solid #dadce0;border-radius:var(--r-sm);height:40px;display:flex;align-items:center;justify-content:center;gap:5px;font-weight:700;font-size:.9rem;color:#3c4043;cursor:pointer;transition:var(--t-fast)}
+.gpay-btn:hover{background:#f8f9fa}
+.gpay-btn .gp{font-family:var(--display);font-weight:800;letter-spacing:.2px}
