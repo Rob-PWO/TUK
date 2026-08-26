@@ -77,7 +77,7 @@
     $$("[data-ship-bar]").forEach((b) => (b.style.width = pct + "%"));
     $$("[data-ship-msg]").forEach((m) => {
       m.innerHTML = remain <= 0
-        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your order qualifies for <b>free next-day delivery</b>'
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your order qualifies for <b>free delivery</b>'
         : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> Add <b>' + money(remain) + '</b> more for FREE delivery';
     });
   }
@@ -119,21 +119,45 @@
     const chevD = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
     const chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
 
+    const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+    const H = "category.html";
     let cats = "";
-    $$(".nav-item", nav).forEach((item) => {
-      const link = $(".nav-link", item);
-      if (!link) return;
-      const label = link.textContent.trim();
-      const href = link.getAttribute("href") || "category.html";
-      const isClear = link.classList.contains("clearance");
-      const subLinks = $$(".mega ul li a", item);
-      if (subLinks.length) {
-        const subs = subLinks.map((a) => '<a href="' + (a.getAttribute("href") || "category.html") + '">' + a.textContent.trim() + "</a>").join("");
-        cats += '<div class="menu-cat"><button type="button">' + label + chevD + '</button><div class="sub"><a class="all" href="' + href + '">Shop all ' + label + "</a>" + subs + "</div></div>";
-      } else {
-        cats += '<div class="menu-cat"><a class="' + (isClear ? "is-clear" : "") + '" href="' + href + '">' + label + chevR + "</a></div>";
-      }
-    });
+    const NAV = window.TUK_NAV;
+    if (NAV && NAV.length) {
+      // 3-level drill-down (Department -> Subcategory -> Leaf) from the real taxonomy
+      NAV.forEach((dept) => {
+        const name = dept[0], subs = dept[1] || [];
+        let inner = '<a class="all" href="' + H + '">Shop all ' + esc(name) + "</a>";
+        subs.forEach((s) => {
+          const sub = s[0], leaves = s[1] || [];
+          if (leaves.length) {
+            inner += '<div class="menu-sub"><button type="button">' + esc(sub) + chevD + "</button>" +
+              '<div class="subsub"><a class="all" href="' + H + '">All ' + esc(sub) + "</a>" +
+              leaves.map((l) => '<a href="' + H + '">' + esc(l) + "</a>").join("") + "</div></div>";
+          } else {
+            inner += '<a class="lvl2" href="' + H + '">' + esc(sub) + "</a>";
+          }
+        });
+        cats += '<div class="menu-cat"><button type="button">' + esc(name) + chevD + '</button><div class="sub">' + inner + "</div></div>";
+      });
+      cats += '<div class="menu-cat"><a class="is-clear" href="' + H + '">Clearance' + chevR + "</a></div>";
+    } else {
+      // fallback: build from the desktop nav DOM (2-level)
+      $$(".nav-item", nav).forEach((item) => {
+        const link = $(".nav-link", item);
+        if (!link) return;
+        const label = link.textContent.trim();
+        const href = link.getAttribute("href") || "category.html";
+        const isClear = link.classList.contains("clearance");
+        const subLinks = $$(".mega ul li a", item);
+        if (subLinks.length) {
+          const subs = subLinks.map((a) => '<a href="' + (a.getAttribute("href") || "category.html") + '">' + a.textContent.trim() + "</a>").join("");
+          cats += '<div class="menu-cat"><button type="button">' + label + chevD + '</button><div class="sub"><a class="all" href="' + href + '">Shop all ' + label + "</a>" + subs + "</div></div>";
+        } else {
+          cats += '<div class="menu-cat"><a class="' + (isClear ? "is-clear" : "") + '" href="' + href + '">' + label + chevR + "</a></div>";
+        }
+      });
+    }
 
     const ic = {
       account: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
@@ -152,7 +176,7 @@
     md.innerHTML =
       '<div class="md-head"><a href="index.html" class="logo"><img src="assets/img/logo-white.webp" alt="TackleUK - the home of fishing" height="34"></a>' +
       '<button class="drawer-close" type="button" aria-label="Close menu"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>' +
-      '<div class="md-usp">' + ic.van + " FREE next-day delivery over £150</div>" +
+      '<div class="md-usp">' + ic.van + " FREE delivery over £150</div>" +
       '<div class="md-body">' + cats + '<div class="md-cue" aria-hidden="true"><span>Scroll for more</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>' + "</div>" +
       '<div class="md-foot">' +
       '<a href="#">' + ic.account + " My Account</a>" +
@@ -179,6 +203,7 @@
     });
     $(".drawer-close", md).addEventListener("click", closeAll);
     $$(".menu-cat > button", md).forEach((b) => b.addEventListener("click", () => { b.parentElement.classList.toggle("open"); requestAnimationFrame(updateCue); }));
+    $$(".menu-sub > button", md).forEach((b) => b.addEventListener("click", (e) => { e.stopPropagation(); b.parentElement.classList.toggle("open"); requestAnimationFrame(updateCue); }));
   })();
 
   function renderDrawer() {
@@ -395,16 +420,27 @@
     }));
   }
 
-  /* ---- PDP gallery hover-zoom (pointer devices only) -------------------- */
+  /* ---- PDP gallery: tap/click the main image to view it full size ------ */
   const zoomBox = $(".gallery .main");
-  if (zoomBox && window.matchMedia("(hover:hover)").matches) {
+  if (zoomBox) {
     const zImg = $("img", zoomBox);
-    zoomBox.addEventListener("mousemove", (e) => {
-      const r = zoomBox.getBoundingClientRect();
-      zImg.style.transformOrigin = ((e.clientX - r.left) / r.width) * 100 + "% " + ((e.clientY - r.top) / r.height) * 100 + "%";
-      zImg.style.transform = "scale(1.9)";
+    zoomBox.addEventListener("click", () => {
+      if (!zImg) return;
+      let lb = $("#imgLightbox");
+      if (!lb) {
+        lb = document.createElement("div");
+        lb.id = "imgLightbox";
+        lb.className = "img-lightbox";
+        lb.innerHTML = '<button class="ilb-close" type="button" aria-label="Close">×</button><img alt="">';
+        document.body.appendChild(lb);
+        const close = () => { lb.classList.remove("open"); document.body.style.overflow = ""; };
+        lb.addEventListener("click", (e) => { if (e.target === lb || e.target.classList.contains("ilb-close")) close(); });
+        document.addEventListener("keydown", (e) => { if (e.key === "Escape" && lb.classList.contains("open")) close(); });
+      }
+      $("img", lb).src = zImg.currentSrc || zImg.src;
+      lb.classList.add("open");
+      document.body.style.overflow = "hidden";
     });
-    zoomBox.addEventListener("mouseleave", () => { zImg.style.transform = ""; });
   }
 
   /* ---- tabs ------------------------------------------------------------ */
@@ -449,8 +485,8 @@
     function tick() {
       const now = new Date();
       const cutoff = new Date(now); cutoff.setHours(15, 0, 0, 0);
-      let label = "for same-day dispatch";
-      if (now >= cutoff) { cutoff.setDate(cutoff.getDate() + 1); label = "for next-day dispatch"; }
+      let label = "for delivery tomorrow";
+      if (now >= cutoff) { cutoff.setDate(cutoff.getDate() + 1); label = "for delivery in 2 days"; }
       let diff = Math.floor((cutoff - now) / 1000);
       const h = String(Math.floor(diff / 3600)).padStart(2, "0");
       const m = String(Math.floor((diff % 3600) / 60)).padStart(2, "0");
@@ -560,8 +596,8 @@
       if (bb) bb.style.width = Math.min(100, (total / FREE_DELIVERY) * 100) + "%";
       const bm = $("[data-basket-ship-msg]");
       if (bm) bm.innerHTML = freeDel
-        ? '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="var(--green-600)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your order qualifies for <b style="margin-left:3px">free next-day delivery</b>'
-        : 'Add <b>' + money(FREE_DELIVERY - total) + '</b> more for FREE next-day delivery';
+        ? '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="var(--green-600)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your order qualifies for <b style="margin-left:3px">free delivery</b>'
+        : 'Add <b>' + money(FREE_DELIVERY - total) + '</b> more for FREE delivery';
       if (!rows.length) {
         const wrap = $(".cart-items");
         if (wrap) wrap.innerHTML = '<div style="text-align:center;padding:56px 20px;color:var(--ink-500)">' +
@@ -646,21 +682,26 @@
     do { d.setDate(d.getDate() + 1); } while (d.getDay() === 0 || d.getDay() === 6);
     return d;
   }
+  function dayLabel(target, now) {
+    var tom = new Date(now); tom.setDate(tom.getDate() + 1);
+    return target.toDateString() === tom.toDateString() ? "tomorrow" : DAYS[target.getDay()];
+  }
   function render() {
     var now = new Date();
     var weekend = now.getDay() === 0 || now.getDay() === 6;
     var cutoff = new Date(now); cutoff.setHours(15, 0, 0, 0);
     if (!weekend && now < cutoff) {
+      // ordered before today's cut-off -> ships today -> delivered next working day
+      var del = nextWorkingDay(now);
       var mins = Math.ceil((cutoff - now) / 60000);
       var h = Math.floor(mins / 60), m = mins % 60, t;
       if (h > 0) t = h + " hr" + (h > 1 ? "s" : "") + (m > 0 ? " " + m + " min" + (m > 1 ? "s" : "") : "");
       else t = m + " min" + (m !== 1 ? "s" : "");
-      el.innerHTML = "Order within <b>" + t + "</b> for same-day dispatch";
+      el.innerHTML = "Order within <b>" + t + "</b> for delivery <b>" + dayLabel(del, now) + "</b>";
     } else {
-      var nd = nextWorkingDay(now);
-      var tom = new Date(now); tom.setDate(tom.getDate() + 1);
-      var label = nd.toDateString() === tom.toDateString() ? "tomorrow" : DAYS[nd.getDay()];
-      el.innerHTML = "Order now for dispatch <b>" + label + "</b>";
+      // after cut-off / weekend -> ships next working day -> delivered the working day after
+      var del2 = nextWorkingDay(nextWorkingDay(now));
+      el.innerHTML = "Order now for delivery <b>" + dayLabel(del2, now) + "</b>";
     }
   }
   render();

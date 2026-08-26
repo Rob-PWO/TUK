@@ -1,7 +1,7 @@
 {
   "name": "TackleUK - The Home of Fishing",
   "short_name": "TackleUK",
-  "description": "Over 100,000 fishing tackle products in stock for next-day delivery. Carp, coarse, game, sea and predator gear from the brands you trust.",
+  "description": "Over 100,000 fishing tackle products in stock. Carp, coarse, game, sea and predator gear from the brands you trust.",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",
