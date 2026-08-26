@@ -127,12 +127,12 @@
       // 3-level drill-down (Department -> Subcategory -> Leaf) from the real taxonomy
       NAV.forEach((dept) => {
         const name = dept[0], subs = dept[1] || [];
-        let inner = '<a class="all" href="' + H + '">Shop all ' + esc(name) + "</a>";
+        let inner = "";
         subs.forEach((s) => {
           const sub = s[0], leaves = s[1] || [];
           if (leaves.length) {
             inner += '<div class="menu-sub"><button type="button">' + esc(sub) + chevD + "</button>" +
-              '<div class="subsub"><a class="all" href="' + H + '">All ' + esc(sub) + "</a>" +
+              '<div class="subsub">' +
               leaves.map((l) => '<a href="' + H + '">' + esc(l) + "</a>").join("") + "</div></div>";
           } else {
             inner += '<a class="lvl2" href="' + H + '">' + esc(sub) + "</a>";
