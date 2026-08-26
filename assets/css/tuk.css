@@ -1207,3 +1207,76 @@ h4{font-size:1.05rem;font-weight:700}
 .gpay-btn{background:#fff;border:1.5px solid #dadce0;border-radius:var(--r-sm);height:40px;display:flex;align-items:center;justify-content:center;gap:5px;font-weight:700;font-size:.9rem;color:#3c4043;cursor:pointer;transition:var(--t-fast)}
 .gpay-btn:hover{background:#f8f9fa}
 .gpay-btn .gp{font-family:var(--display);font-weight:800;letter-spacing:.2px}
+
+/* ===================================================================
+   Mobile & content refinements (batch 2026-07-23u)
+   =================================================================== */
+
+/* Featured offer banner (home) */
+.promo-feature{display:flex;align-items:stretch;gap:0;background:linear-gradient(120deg,var(--navy-800),var(--blue-600));border-radius:var(--r-lg);overflow:hidden;color:#fff;box-shadow:var(--sh-sm);transition:var(--t-fast)}
+.promo-feature:hover{box-shadow:var(--sh-md);transform:translateY(-2px)}
+.promo-feature .pf-media{flex:0 0 34%;max-width:340px;background:#fff}
+.promo-feature .pf-media img{width:100%;height:100%;object-fit:cover;display:block}
+.promo-feature .pf-body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:26px 30px}
+.promo-feature .pf-eyebrow{font-family:var(--display);font-weight:800;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-300)}
+.promo-feature h3{color:#fff;font-size:1.5rem;line-height:1.12;margin:0}
+.promo-feature .pf-body p{opacity:.92;font-size:.95rem;margin:2px 0 2px}
+.promo-feature .pf-body p b{font-weight:800}
+.promo-feature .pf-body p s{opacity:.6;margin-left:4px}
+.promo-feature .pf-btn{align-self:flex-start;background:#fff;color:var(--navy-800);margin-top:8px}
+@media(max-width:640px){
+  .promo-feature{flex-direction:column}
+  .promo-feature .pf-media{flex:none;max-width:none;aspect-ratio:16/10}
+  .promo-feature .pf-body{padding:18px 20px 22px}
+  .promo-feature h3{font-size:1.2rem}
+}
+
+/* Brand rail: real full-colour logos (no grayscale/dim) */
+.brand-rail a{filter:none;opacity:1;height:56px}
+.brand-rail a:hover{filter:none;opacity:1;transform:translateY(-2px)}
+.brand-rail img{max-height:36px;width:auto;max-width:100%;object-fit:contain}
+@media(max-width:640px){.brand-rail{gap:18px 26px}.brand-rail a{height:44px;min-width:78px}.brand-rail img{max-height:28px}}
+
+/* Card sale price: old price BELOW the live price, not beside it */
+.card .price{flex-wrap:wrap;column-gap:8px;row-gap:0}
+.card .price .was{flex-basis:100%;order:3}
+
+/* Wallet / express-pay buttons: full width, stacked */
+.wallet-row{flex-direction:column}
+.express-pay.row{flex-direction:column}
+
+/* About split stacks on mobile (was one-sided) */
+@media(max-width:768px){
+  .split{grid-template-columns:1fr;gap:22px}
+  .split img{aspect-ratio:16/10}
+}
+
+/* Trustpilot: trim reserved whitespace on mobile */
+@media(max-width:640px){.tp-live{min-height:0}}
+
+/* Reduce stacked-section whitespace on mobile */
+@media(max-width:640px){
+  .section{padding:34px 0}
+  .section-tight{padding:22px 0}
+}
+
+/* Pre-order availability state */
+.stock.pre::before{background:var(--blue-500);box-shadow:0 0 0 3px rgba(19,145,219,.2)}
+.stock.pre{color:var(--blue-600)}
+.badge.badge-pre{background:var(--blue-500);color:#fff}
+
+/* Basket: prominent express checkout at top of summary */
+.express-top{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.express-lbl{font-family:var(--display);font-weight:800;font-size:.98rem;color:var(--navy-900);margin-bottom:10px}
+.express-lbl span{font-family:var(--font);font-weight:600;font-size:.82rem;color:var(--ink-500)}
+.express-top .express-pay{gap:10px}
+.express-top .or{text-align:center;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-400);margin-top:12px}
+/* Continue shopping in summary: mobile only (desktop has the header link) */
+.continue-mobile{display:none}
+@media(max-width:900px){.continue-mobile{display:inline-flex}}
+
+/* Mobile menu: showcase which rows open into subcategories */
+.menu-cat>button svg.chev{width:28px;height:28px;padding:6px;border-radius:50%;background:var(--sky-50);color:var(--blue-600)}
+.menu-cat>button:hover svg.chev{background:var(--sky-100)}
+.menu-cat.open>button svg.chev{background:var(--blue-500);color:#fff}
+.menu-cat.open>button{background:var(--bg-soft)}

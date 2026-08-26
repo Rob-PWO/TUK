@@ -1,9 +1,9 @@
 /* TackleUK prototype service worker.
    Network-first for same-origin GETs so demo updates always show when online;
    falls back to the cache offline. Core pages are pre-cached on install. */
-const CACHE = "tuk-v4";
+const CACHE = "tuk-v5";
 const CORE = [
-  "index.html", "category.html", "product.html", "basket.html", "checkout.html",
+  "index.html", "category.html", "product.html", "basket.html",
   "assets/css/tuk.css", "assets/js/tuk.js",
   "assets/img/logo.webp", "assets/img/logo-white.webp", "assets/img/favicon.svg",
 ];
