@@ -413,9 +413,12 @@
   const gallery = $(".gallery");
   if (gallery) {
     const main = $(".main img", gallery);
+    const mainBox = $(".main", gallery);
     $$(".thumbs button", gallery).forEach((t) => t.addEventListener("click", () => {
       $$(".thumbs button", gallery).forEach((x) => x.classList.remove("active"));
       t.classList.add("active");
+      if (t.hasAttribute("data-video")) { if (mainBox) mainBox.classList.add("show-video"); return; }
+      if (mainBox) mainBox.classList.remove("show-video");
       const img = $("img", t); if (img && main) main.src = img.src.replace("w=160", "w=900");
     }));
   }
@@ -425,7 +428,7 @@
   if (zoomBox) {
     const zImg = $("img", zoomBox);
     zoomBox.addEventListener("click", () => {
-      if (!zImg) return;
+      if (!zImg || zoomBox.classList.contains("show-video")) return;
       let lb = $("#imgLightbox");
       if (!lb) {
         lb = document.createElement("div");
