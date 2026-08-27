@@ -140,7 +140,10 @@
         });
         cats += '<div class="menu-cat"><button type="button">' + esc(name) + chevD + '</button><div class="sub">' + inner + "</div></div>";
       });
-      cats += '<div class="menu-cat"><a class="is-clear" href="' + H + '">Clearance' + chevR + "</a></div>";
+      cats += '<div class="menu-cat"><a href="' + H + '">New' + chevR + "</a></div>";
+        cats += '<div class="menu-cat"><a class="is-clear" href="' + H + '">Clearance' + chevR + "</a></div>";
+        cats += '<div class="menu-cat"><a href="' + H + '">Vouchers' + chevR + "</a></div>";
+        cats += '<div class="menu-cat"><a href="' + H + '">Gifts' + chevR + "</a></div>";
     } else {
       // fallback: build from the desktop nav DOM (2-level)
       $$(".nav-item", nav).forEach((item) => {
@@ -483,21 +486,6 @@
     io.observe(buyAnchor);
   }
 
-  /* ---- countdown to dispatch cut-off (today 15:00) -------------------- */
-  $$("[data-countdown]").forEach((el) => {
-    function tick() {
-      const now = new Date();
-      const cutoff = new Date(now); cutoff.setHours(15, 0, 0, 0);
-      let label = "for delivery tomorrow";
-      if (now >= cutoff) { cutoff.setDate(cutoff.getDate() + 1); label = "for delivery in 2 days"; }
-      let diff = Math.floor((cutoff - now) / 1000);
-      const h = String(Math.floor(diff / 3600)).padStart(2, "0");
-      const m = String(Math.floor((diff % 3600) / 60)).padStart(2, "0");
-      const s = String(diff % 60).padStart(2, "0");
-      el.innerHTML = 'Order within <span class="cd">' + h + ":" + m + ":" + s + '</span> ' + label;
-    }
-    tick(); setInterval(tick, 1000);
-  });
 
   /* ---- hero slider ----------------------------------------------------- */
   const hero = $("[data-hero]");
@@ -675,41 +663,6 @@
   });
 })();
 
-/* ---- honest dispatch message: weekend-aware, minute granularity (no ticking seconds) */
-(function () {
-  var el = document.querySelector("[data-dispatch]");
-  if (!el) return;
-  var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  function nextWorkingDay(from) {
-    var d = new Date(from);
-    do { d.setDate(d.getDate() + 1); } while (d.getDay() === 0 || d.getDay() === 6);
-    return d;
-  }
-  function dayLabel(target, now) {
-    var tom = new Date(now); tom.setDate(tom.getDate() + 1);
-    return target.toDateString() === tom.toDateString() ? "tomorrow" : DAYS[target.getDay()];
-  }
-  function render() {
-    var now = new Date();
-    var weekend = now.getDay() === 0 || now.getDay() === 6;
-    var cutoff = new Date(now); cutoff.setHours(15, 0, 0, 0);
-    if (!weekend && now < cutoff) {
-      // ordered before today's cut-off -> ships today -> delivered next working day
-      var del = nextWorkingDay(now);
-      var mins = Math.ceil((cutoff - now) / 60000);
-      var h = Math.floor(mins / 60), m = mins % 60, t;
-      if (h > 0) t = h + " hr" + (h > 1 ? "s" : "") + (m > 0 ? " " + m + " min" + (m > 1 ? "s" : "") : "");
-      else t = m + " min" + (m !== 1 ? "s" : "");
-      el.innerHTML = "Order within <b>" + t + "</b> for delivery <b>" + dayLabel(del, now) + "</b>";
-    } else {
-      // after cut-off / weekend -> ships next working day -> delivered the working day after
-      var del2 = nextWorkingDay(nextWorkingDay(now));
-      el.innerHTML = "Order now for delivery <b>" + dayLabel(del2, now) + "</b>";
-    }
-  }
-  render();
-  setInterval(render, 30000);
-})();
 
 /* ---- stock level: "N in stock" (1-9), "10+ in stock" (>=10), "Out of stock" (0) */
 (function () {
