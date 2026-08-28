@@ -183,7 +183,6 @@
       '<div class="md-body">' + cats + '<div class="md-cue" aria-hidden="true"><span>Scroll for more</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>' + "</div>" +
       '<div class="md-foot">' +
       '<a href="#">' + ic.account + " My Account</a>" +
-      '<a href="#">' + ic.wish + " Wishlist</a>" +
       '<a href="#">' + ic.help + " Help &amp; Contact</a>" +
       '<a href="#">' + ic.store + " Store Finder</a>" +
       "</div>";
@@ -679,4 +678,38 @@
     el.classList.toggle("is-out", n <= 0);
     el.classList.toggle("is-low", n > 0 && n <= 3);
   });
+})();
+
+/* ---- dispatch countdown: time left to the 1pm cut-off, weekend-aware -- */
+(function () {
+  var el = document.querySelector("[data-dispatch]");
+  if (!el) return;
+  var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  function nextWorkingDay(from) {
+    var d = new Date(from);
+    do { d.setDate(d.getDate() + 1); } while (d.getDay() === 0 || d.getDay() === 6);
+    return d;
+  }
+  function dayLabel(target, now) {
+    var tom = new Date(now); tom.setDate(tom.getDate() + 1);
+    return target.toDateString() === tom.toDateString() ? "tomorrow" : DAYS[target.getDay()];
+  }
+  function render() {
+    var now = new Date();
+    var weekend = now.getDay() === 0 || now.getDay() === 6;
+    var cutoff = new Date(now); cutoff.setHours(13, 0, 0, 0);
+    if (!weekend && now < cutoff) {
+      var del = nextWorkingDay(now);
+      var mins = Math.ceil((cutoff - now) / 60000);
+      var h = Math.floor(mins / 60), m = mins % 60, t;
+      if (h > 0) t = h + " hr" + (h > 1 ? "s" : "") + (m > 0 ? " " + m + " min" + (m > 1 ? "s" : "") : "");
+      else t = m + " min" + (m !== 1 ? "s" : "");
+      el.innerHTML = "Order within <b>" + t + "</b> for delivery <b>" + dayLabel(del, now) + "</b>";
+    } else {
+      var del2 = nextWorkingDay(nextWorkingDay(now));
+      el.innerHTML = "Order now for delivery <b>" + dayLabel(del2, now) + "</b>";
+    }
+  }
+  render();
+  setInterval(render, 30000);
 })();
