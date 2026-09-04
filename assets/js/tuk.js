@@ -1,10 +1,4 @@
-/* ==========================================================================
-   TACKLEUK - Shared interaction layer (vanilla JS, no dependencies)
-   Defensive: every feature checks for its elements, so one file powers
-   every page. Conversion features: predictive search, cart drawer + free
-   delivery progress, express wallets, sticky buy bar, countdown, toasts,
-   wishlist, filters, tabs, recently-viewed.
-   ========================================================================== */
+/* tuk.js - shared JS, one file per page. Each block guards its own DOM. */
 (function () {
   "use strict";
   const $ = (s, c = document) => c.querySelector(s);
